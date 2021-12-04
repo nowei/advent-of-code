@@ -1,4 +1,5 @@
 from collections import defaultdict 
+# Process the lines
 with open('input4.txt', 'r') as f:
     lines = f.readlines()
 inputs = [int(i) for i in lines[0].strip().split(',')]
@@ -9,6 +10,8 @@ for line in lines[1:]:
     else:
         boards[-1].append([int(i) for i in line.strip().split()])
 board_map = {i: boards[i] for i in range(len(boards))}
+
+# Track board state
 count_map = defaultdict(list)
 tracker = {}
 for ind in range(len(boards)):
@@ -22,6 +25,8 @@ for ind in range(len(boards)):
             count_map[val].append(ind)
             board_loc[val] = (i, j)
     tracker[ind] = [board_loc, row_counts, col_counts]
+
+# Find last winner
 chosen_val = -1
 chosen_ind = -1
 seen = set()
@@ -38,6 +43,7 @@ for val in inputs:
             cands.remove(ind)
             chosen_ind = ind
             chosen_val = val
+            # Break if we are the last winner
             if len(cands) == 0:
                 break
     if len(cands) == 0:
