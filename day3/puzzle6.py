@@ -17,10 +17,11 @@ def find_oxygen_generator_rating(cands, co2_scrubber=False):
             cond = ones < zeros
         else:
             cond = ones >= zeros
-        if cond:
-            cands = [c for c in cands if c[ind] == "1"]
-        else:
-            cands = [c for c in cands if c[ind] == "0"]
+        if not (ones == 0 or zeros == 0):
+            if cond:
+                cands = [c for c in cands if c[ind] == "1"]
+            else:
+                cands = [c for c in cands if c[ind] == "0"]
         ind += 1
     return int(cands[0], 2)
 
