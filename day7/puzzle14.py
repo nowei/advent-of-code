@@ -9,10 +9,10 @@ with open(file, 'r') as f:
 # minimize sum((v_i - x)^2 + |v_i - x| for i in range(n))
 
 # Then we take the derivative and set it equal to zero.
-# 2*(-x)*sum(v_i - x for i in range(n)) + sum(sign(v_i - x)) = 0
-# -2 * x * (sum(v_i for i in range(n)) - n * x) + sum(sign(v_i - x)) = 0
-# -2 * x * sum(v_i for i in range(n)) + 2 * n * x^2 + sum(sign(v_i - x)) = 0
-# 2 * n * x^2 + sum(sign(v_i - x)) = 2 * x * sum(v_i for i in range(n))
+# 2*(-x)*sum(v_i - x for i in range(n)) + sum(sign(v_i - x) for i in range(n)) = 0
+# -2 * x * (sum(v_i for i in range(n)) - n * x) + sum(sign(v_i - x) for i in range(n)) = 0
+# -2 * x * sum(v_i for i in range(n)) + 2 * n * x^2 + sum(sign(v_i - x) for i in range(n)) = 0
+# 2 * n * x^2 + sum(sign(v_i - x) for i in range(n)) = 2 * x * sum(v_i for i in range(n))
 # n * x + sum(sign(v_i - x)) / (2 * x) = sum(v_i for i in range(n))
 # x + sum(sign(v_i - x)) / (2 * x * n) = sum(v_i for i in range(n)) / n
 # x +/- (1 / (2 * x)) = sum(v_i for i in range(n)) / n
