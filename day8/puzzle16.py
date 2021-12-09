@@ -40,7 +40,7 @@ for i in range(len(numbers)):
     mapping[3] = next(cand for cand in unknowns[5] if all(m in cand for m in mapping[1]))
     # 6 if not all right side matches 1
     mapping[6] = next(cand for cand in unknowns[6] if not all(m in cand for m in mapping[1]))
-    # 2 if 4 lines matches 6
+    # 2 if 4 lines matches 6 and not 3
     mapping[2] = next(cand for cand in unknowns[5] if cand != mapping[3] and sum([1 if m in cand else 0 for m in mapping[6]]) == 4)
     # 5 is remaining of [2, 3, 5]
     mapping[5] = next(cand for cand in unknowns[5] if cand not in [mapping[2], mapping[3]])
