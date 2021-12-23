@@ -38,5 +38,5 @@ day 25 -
 18 - parsing nested lists is kind of tedious, but applying rules and seeing results is cool
 19 - directions are hard, even if limited to 3d and at 90 degree angles
 21 - Exponential combinations so using memory to store results, basically dp (tabulation) and expressing the state space, but there's a lot of state so it should be done carefully. Just keeps branching and adding on each step. 
-22 - How do we keep track of space and what is the best way to split and keep track of split space? I just ended up splitting up intersected boxes by splitting top and bottom, then front and back, then left and right.
+22 - How do we keep track of space and what is the best way to split and keep track of split space? I just ended up splitting up intersected boxes by splitting top and bottom, then front and back, then left and right. - Something to keep in mind: If processing from reverse, if it's on, it'll always stay on. If it's off, then it will always stay off. So we only need to consider new volumes that haven't been carved out yet.  
 23 - Basically a search problem if you don't know what you're doing (me). I ended up doing an A* search with a heuristic being the cost to get out + cost to move to the right place + cost to get in. Runtime was a bit bad, but it worked.
