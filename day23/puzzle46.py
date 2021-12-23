@@ -185,7 +185,7 @@ heapq.heapify(moves)
 break_heuristic = 30000
 while moves:
     hc, c, s, plopped, turn, history = heapq.heappop(moves)
-    print('considering w/ heuristic {} cost {} turn {} {}               '.format(str(hc).rjust(5), str(c).rjust(5), turn, s), end='\r')
+    print('considering w/ cost_estimate {} cost {} turn {} {}               '.format(str(hc).rjust(5), str(c).rjust(5), turn, s), end='\r')
     if hc > break_heuristic:
         print()
         break_heuristic += 1000
