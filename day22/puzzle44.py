@@ -126,8 +126,7 @@ with open(file, "r") as f:
         y = (y_min, y_max)
         z = (z_min, z_max)
         # best = max(best, abs(x[0]),abs(x[1]), abs(y[0]), abs(y[1]),abs(z[0]), abs(z[1]))
-        if True:#check_within(x, y, z):
-            boundaries.append([instruction, x,y,z])
+        boundaries.append([instruction, x,y,z])
 
 class VolumeTracker:
     def __init__(self):
@@ -145,27 +144,27 @@ class VolumeTracker:
                 for nb in new_boxes:
                     self.boxes.add(nb)
                     num_boxes_changed += 1
-                print('breaking {} into {}'.format(box, new_boxes))
+                # print('breaking {} into {}'.format(box, new_boxes))
             for box in to_remove:
                 self.boxes.remove(box)
         if val:
             self.boxes.add((x,y,z))
             num_boxes_changed += 1
 
-        print('changed {} boxes'.format(num_boxes_changed))
+        # print('changed {} boxes'.format(num_boxes_changed))
 
     def _get_intercepted_boxes(self, x, y, z):
         intercepted_boxes = []
         for box in self.boxes:
             xr, yr, zr = box
             if x[0] > xr[1] or x[1] < xr[0]:
-                print('reject x {} by {} {} {}', box, x, y, z)
+                # print('reject x {} by {} {} {}', box, x, y, z)
                 continue
             if y[0] > yr[1] or y[1] < yr[0]:
-                print('reject y {} by {} {} {}', box, x, y, z)
+                # print('reject y {} by {} {} {}', box, x, y, z)
                 continue
             if z[0] > zr[1] or z[1] < zr[0]:
-                print('reject z {} by {} {} {}', box, x, y, z)
+                # print('reject z {} by {} {} {}', box, x, y, z)
                 continue
             intercepted_boxes.append(box)
         return intercepted_boxes
@@ -191,14 +190,14 @@ class VolumeTracker:
         xr, yr, zr = box
         if zr[1] <= z[1]: return None 
         cand = (xr, yr, (z[1] + 1, zr[1]))
-        print('above', cand)
+        # print('above', cand)
         return cand
 
     def _break_bottom(self, box, x, y, z):
         xr, yr, zr = box
         if z[0] <= zr[0]: return None
         cand = (xr, yr, (zr[0], z[0] - 1))
-        print('bottom', cand)
+        # print('bottom', cand)
         return cand
 
     def _break_front(self, box, x, y, z):
@@ -206,7 +205,7 @@ class VolumeTracker:
         if xr[1] <= x[1]: return None 
         nz = (max(z[0], zr[0]),min(z[1], zr[1]))
         cand = ((x[1] + 1, xr[1]), yr, nz)
-        print('front', cand)
+        # print('front', cand)
         return cand
 
     def _break_back(self, box, x, y, z):
@@ -214,7 +213,7 @@ class VolumeTracker:
         if x[0] <= xr[0]: return None
         nz = (max(z[0], zr[0]),min(z[1], zr[1]))
         cand = ((xr[0], x[0] - 1), yr, nz)
-        print('back', cand)
+        # print('back', cand)
         return cand
 
     def _break_right(self, box, x, y, z):
@@ -223,7 +222,7 @@ class VolumeTracker:
         nz = (max(z[0], zr[0]),min(z[1], zr[1]))
         nx = (max(x[0], xr[0]),min(x[1], xr[1]))
         cand = (nx, (y[1] + 1, yr[1]), nz)
-        print('right', cand)
+        # print('right', cand)
         return cand
 
     def _break_left(self, box, x, y, z):
@@ -232,7 +231,7 @@ class VolumeTracker:
         nz = (max(z[0], zr[0]),min(z[1], zr[1]))
         nx = (max(x[0], xr[0]),min(x[1], xr[1]))
         cand = (nx, (yr[0], y[0] - 1), nz)
-        print('left', cand)
+        # print('left', cand)
         return cand
 
     def get_volume(self):
@@ -274,7 +273,7 @@ for instruction, x, y, z in boundaries:
 
 
 ans = vt.get_volume()
-print(len(cubes), ans)
+# print(len(cubes), ans)
 
 print(ans)
 if sample:
