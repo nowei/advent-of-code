@@ -10,7 +10,6 @@ with open(file, "r") as f:
 rooms = [[level1[i], level2[i]] for i in range(len(level1))]
 room_length = len(rooms[0])
 print(rooms, hallway_length, room_length)
-# BFS until move a piece, then if we moved, know that it was an okay move 
 hallway = '.' * hallway_length
 state = (hallway, rooms)
 print(state)

@@ -12,7 +12,6 @@ level3 = ['D','B','A','C']
 rooms = [[level1[i], level2[i], level3[i], level4[i]] for i in range(len(level1))]
 room_length = len(rooms[0])
 print(rooms, hallway_length, room_length)
-# BFS until move a piece, then if we moved, know that it was an okay move 
 hallway = '.' * hallway_length
 state = (hallway, rooms)
 print(state)
@@ -65,9 +64,6 @@ def estimate_cost_to_rest(state):
             total_cost += curr
     return total_cost 
 
-# estimate_cost_to_rest(state)
-
-# exit()
 
 def get_valid_moves(state, history, cost=0, turn=0):
     hallway, rooms = state
@@ -122,8 +118,7 @@ def get_moves(state, i, cost, room, turn, history):
             new_rooms[i].pop(0)
             new_rooms[goal].insert(0, cand)
             new_state = (hallway, new_rooms)
-            mc = moves * move_cost
-            new_cost = cost + mc
+            new_cost = cost + moves * move_cost
             new_heuristic_cost = new_cost + estimate_cost_to_rest(new_state)
             cand_moves.append([new_heuristic_cost, new_cost, new_state, True, turn, history + [new_state]])
         else:
@@ -135,8 +130,7 @@ def get_moves(state, i, cost, room, turn, history):
                 new_rooms[i].pop(0)
                 new_hallway = hallway[:rest] + cand + hallway[rest + 1:]
                 new_state = (new_hallway, new_rooms)
-                mc = moves * move_cost
-                new_cost = cost + mc
+                new_cost = cost + moves * move_cost
                 new_heuristic_cost = new_cost + estimate_cost_to_rest(new_state) 
                 cand_moves.append([new_heuristic_cost, new_cost, new_state, False, turn + 1, history + [new_state]])
     else:
@@ -147,8 +141,7 @@ def get_moves(state, i, cost, room, turn, history):
             new_rooms[goal].insert(0, cand)
             new_hallway = hallway[:curr_ind] + '.' + hallway[curr_ind + 1:]
             new_state = (new_hallway, new_rooms)
-            mc = moves * move_cost
-            new_cost = cost + mc
+            new_cost = cost + moves * move_cost
             new_heuristic_cost = new_cost + estimate_cost_to_rest(new_state) 
             cand_moves.append([new_heuristic_cost, new_cost, new_state, True, turn, history + [new_state]])
     return cand_moves
@@ -166,34 +159,22 @@ complete_state = ('...........', [['A', 'A', 'A', 'A'], ['B', 'B', 'B', 'B'], ['
 
 import heapq
 
-turn_cost = 1000
-cost = 0
 moves = get_valid_moves(state, [state])
 heapq.heapify(moves)
-break_heuristic = 30000
 seen = {}
 while moves:
     hc, c, s, plopped, turn, history = heapq.heappop(moves)
     print('considering w/ cost_estimate {} cost {} turn {} {}       '.format(str(hc).rjust(5), str(c).rjust(5), turn, s), end='\r')
-    # c, s, plopped, turn, history = heapq.heappop(moves)
-    # print('considering w/ cost {} turn {} {}                       '.format(str(c).rjust(5), turn, s), end='\r')
     tuplized_s = tuple([s[0], tuple(tuple(r) for r in s[1])])
     if tuplized_s in seen:
         continue
     seen[tuplized_s] = c
-    if hc > break_heuristic:
-        print()
-        break_heuristic += 1000
+    next_moves = get_valid_moves(s, history, c, turn)
     if plopped:
-        next_moves = get_valid_moves(s, history, c, turn)
         if not next_moves and validate_end(s): 
             break
-        for m in next_moves:
-            heapq.heappush(moves, m)
-    else:
-        next_moves = get_valid_moves(s, history, c, turn)
-        for m in next_moves:
-            heapq.heappush(moves, m)
+    for m in next_moves:
+        heapq.heappush(moves, m)
 print()
 ans = c
 for h in history:

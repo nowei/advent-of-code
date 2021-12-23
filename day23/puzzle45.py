@@ -9,7 +9,6 @@ with open(file, "r") as f:
     level2 = f.readline().strip().split('#')[1:]
     rooms = [[level1[i], level2[i]] for i in range(len(level1))]
 print(rooms, hallway_length)
-# BFS until move a piece, then if we moved, know that it was an okay move 
 room_length = len(rooms[0])
 hallway = '.' * hallway_length
 state = (hallway, rooms)
@@ -111,24 +110,20 @@ turn_cost = 1000
 cost = 0
 moves = get_valid_moves(state, [state])
 heapq.heapify(moves)
+seen = set()
 while moves:
     c, s, plopped, turn, history = heapq.heappop(moves)
+    tuplized_s = tuple([s[0], tuple(tuple(r) for r in s[1])])
+    if tuplized_s in seen:
+        continue
+    seen.add(tuplized_s)
     print('considering w/ cost {} turn {} {}                '.format(c, turn, s), end='\r')
+    next_moves = get_valid_moves(s, history, c, turn)
     if plopped:
-        # cost += c
-        # print()
-        # print('next moves starting from')
-        # print(s)
-        # moves = get_valid_moves(s)
-        next_moves = get_valid_moves(s, history, c, turn)
         if not next_moves and validate_end(s): 
             break
-        for m in next_moves:
-            heapq.heappush(moves, m)
-    else:
-        next_moves = get_valid_moves(s, history, c, turn)
-        for m in next_moves:
-            heapq.heappush(moves, m)
+    for m in next_moves:
+        heapq.heappush(moves, m)
 print()
 print(c)
 ans = c - turn * turn_cost
