@@ -17,7 +17,7 @@ def generate_files(days):
                 f.write('        pass\n')
 
 def main():
-    generate_files([21])
+    generate_files([22])
 
 if __name__ == '__main__':
     main()
