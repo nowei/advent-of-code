@@ -10,6 +10,7 @@ with open(file, "r") as f:
     rooms = [[level1[i], level2[i]] for i in range(len(level1))]
 print(rooms, hallway_length)
 # BFS until move a piece, then if we moved, know that it was an okay move 
+room_length = len(rooms[0])
 hallway = '.' * hallway_length
 state = (hallway, rooms)
 print(state)
@@ -62,7 +63,7 @@ def get_moves(state, i, cost, room, turn, history):
     nothing_between = hallway_ind_min <= goal_ind <= hallway_ind_max
 
     if room:
-        get_out_moves = 2 if len(rooms[i]) == 1 else 1
+        get_out_moves = room_length + 1 - len(rooms[i])
         # Can't move outside of any room 
         if (len(rooms[goal]) == 0 or (len(rooms[goal]) == 1 and rooms[goal][0] == cand)) and nothing_between:
             get_in_moves = 1 if len(rooms[goal]) == 1 else 2
@@ -74,13 +75,15 @@ def get_moves(state, i, cost, room, turn, history):
             cand_moves.append([cost + moves * move_cost, new_state, True, turn, history + [new_state]])
         else:
             valid_rests = [p for p in [0, 1, 3, 5, 7, 9, 10] if hallway_ind_min <= p <= hallway_ind_max]
-            valid_rests.sort(key=lambda x: abs(x - goal_ind))
             for rest in valid_rests:
                 moves = abs(curr_ind - rest) + get_out_moves
                 new_rooms = [list(l) for l in rooms]
                 new_rooms[i].pop(0)
                 new_hallway = hallway[:rest] + cand + hallway[rest + 1:]
                 new_state = (new_hallway, new_rooms)
+                # Note that this isn't admissible in cases where the
+                # total cost for moving is less than the turn_cost, 
+                # so a sub-optimal solution may be returned.
                 cand_moves.append([cost + moves * move_cost + turn_cost, new_state, False, turn + 1, history + [new_state]])
     else:
         if (len(rooms[goal]) == 0 or (len(rooms[goal]) == 1 and rooms[goal][0] == cand)) and nothing_between:
