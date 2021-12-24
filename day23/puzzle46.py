@@ -164,7 +164,7 @@ heapq.heapify(moves)
 seen = {}
 while moves:
     hc, c, s, plopped, turn, history = heapq.heappop(moves)
-    print('considering w/ cost_estimate {} cost {} turn {} {}       '.format(str(hc).rjust(5), str(c).rjust(5), turn, s), end='\r')
+    # print('considering w/ cost_estimate {} cost {} turn {} {}       '.format(str(hc).rjust(5), str(c).rjust(5), turn, s), end='\r')
     tuplized_s = tuple([s[0], tuple(tuple(r) for r in s[1])])
     if tuplized_s in seen:
         continue

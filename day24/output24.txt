@@ -1,0 +1,252 @@
+inp w       w=w1
+mul x 0     x1=0                
+add x z     x2=0                
+mod x 26    x3=0                
+div z 1     z1=0                
+add x 11    x4=11               
+eql x w     x5=(x4==w1?1:0)     0
+eql x 0     x6=(x5==0?1:0)      1
+mul y 0     y1=0                
+add y 25    y2=25               
+mul y x     y3=(y2*x6)          25
+add y 1     y4=(y3+1)           26
+mul z y     z2=(z1*y4)          0
+mul y 0     y5=0                
+add y w     y6=(y5+w1)          w1
+add y 8     y7=(y6+8)           w1+8
+mul y x     y8=(y7*x6)          w1+8
+add z y     z3=(z2+y8)          w1+8
+inp w       w=w2
+mul x 0     x7=0                
+add x z     x8=(x7+z3)          w1+8
+mod x 26    x9=(x8%26)          w1+8
+div z 1     z4=(z3//1)          w1+8
+add x 12    x10=(x9+12)         w1+20
+eql x w     x11=(x10==w2?1:0)   0
+eql x 0     x12=(x11==0?1:0)    1
+mul y 0     y9=0                
+add y 25    y10=25              
+mul y x     y11=(y10*x12)       25
+add y 1     y12=(y11+1)         26
+mul z y     z5=(z4*y12)         26*(w1+8)
+mul y 0     y13=0               
+add y w     y14=(y13+w2)        w2
+add y 8     y15=(y14+8)         w2+8
+mul y x     y16=(y15*x12)       w2+8
+add z y     z6=(z5+y16)         26*(w1+8)+(w2+8)
+inp w       w=w3
+mul x 0     x13=0               
+add x z     x14=(x13+z6)        26*(w1+8)+(w2+8)
+mod x 26    x15=(x14%26)        (w2+8)
+div z 1     z7=(z6//1)          26*(w1+8)+(w2+8)
+add x 10    x16=(x15+10)        (w2+18)
+eql x w     x17=(x16==w3?1:0)   0
+eql x 0     x18=(x17==0?1:0)    1
+mul y 0     y17=0               
+add y 25    y18=25              
+mul y x     y19=(y18*x18)       25
+add y 1     y20=(y19+1)         26
+mul z y     z8=(z7*y20)         26*(26*(w1+8)+(w2+8))
+mul y 0     y21=0               
+add y w     y22=(y21+w3)        w3
+add y 12    y23=(y22+12)        w3+12
+mul y x     y24=(y23*x18)       w3+12
+add z y     z9=(z8+y24)         26*(26*(w1+8)+(w2+8))+(w3+12)
+inp w       w=w4
+mul x 0     x19=0               
+add x z     x20=(x19+z9)        26*(26*(w1+8)+(w2+8))+(w3+12)
+mod x 26    x21=(x20%26)        w3+12
+div z 26    z10=(z9//26)        26*(w1+8)+(w2+8)
+add x -8    x22=(x21+-8)        w3+4
+eql x w     x23=(x22==w4?1:0)   0 or 1[w3=1..5 and w4=5..9]
+eql x 0     x24=(x23==0?1:0)    1 or 0
+mul y 0     y25=0               
+add y 25    y26=25              
+mul y x     y27=(y26*x24)       25 or 0
+add y 1     y28=(y27+1)         26 or 1
+mul z y     z11=(z10*y28)       [26 or 1 see 61] * 26*(w1+8)+(w2+8)
+mul y 0     y29=0               
+add y w     y30=(y29+w4)        w4
+add y 10    y31=(y30+10)        w4+10
+mul y x     y32=(y31*x24)       (w4+10) or 0
+add z y     z12=(z11+y32)       [(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)
+inp w       w=w5
+mul x 0     x25=0               
+add x z     x26=(x25+z12)       [(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)
+mod x 26    x27=(x26%26)        (w4+10) or (w2+8) see 61
+div z 1     z13=(z12//1)        [(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)
+add x 15    x28=(x27+15)        (w4+25) or (w2+23) see 61
+eql x w     x29=(x28==w5?1:0)   0
+eql x 0     x30=(x29==0?1:0)    1
+mul y 0     y33=0               
+add y 25    y34=25              
+mul y x     y35=(y34*x30)       25
+add y 1     y36=(y35+1)         26
+mul z y     z14=(z13*y36)       26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8))
+mul y 0     y37=0               
+add y w     y38=(y37+w5)        w5
+add y 2     y39=(y38+2)         w5+2
+mul y x     y40=(y39*x30)       w5+2
+add z y     z15=(z14+y40)       26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)
+inp w       w=w6
+mul x 0     x31=0               
+add x z     x32=(x31+z15)       26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)
+mod x 26    x33=(x32%26)        w5+2
+div z 1     z16=(z15//1)        26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)
+add x 15    x34=(x33+15)        w5+17
+eql x w     x35=(x34==w6?1:0)   0
+eql x 0     x36=(x35==0?1:0)    1
+mul y 0     y41=0               
+add y 25    y42=25              
+mul y x     y43=(y42*x36)       25
+add y 1     y44=(y43+1)         26
+mul z y     z17=(z16*y44)       26(26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2))
+mul y 0     y45=0               
+add y w     y46=(y45+w6)        w6
+add y 8     y47=(y46+8)         w6+8
+mul y x     y48=(y47*x36)       w6+8
+add z y     z18=(z17+y48)       26(26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)) + (w6+8)
+inp w       w=w7
+mul x 0     x37=0               
+add x z     x38=(x37+z18)       26(26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)) + (w6+8)
+mod x 26    x39=(x38%26)        w6+8
+div z 26    z19=(z18//26)       26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)
+add x -11   x40=(x39+-11)       w6-3
+eql x w     x41=(x40==w7?1:0)   0 or 1[w6=4..9 and w7=1..6]
+eql x 0     x42=(x41==0?1:0)    1 or 0
+mul y 0     y49=0               
+add y 25    y50=25              
+mul y x     y51=(y50*x42)       25 or 0
+add y 1     y52=(y51+1)         26 or 1
+mul z y     z20=(z19*y52)       [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)]
+mul y 0     y53=0               
+add y w     y54=(y53+w7)        w7
+add y 4     y55=(y54+4)         w7+4
+mul y x     y56=(y55*x42)       w7+4 or 0
+add z y     z21=(z20+y56)       [w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)]
+inp w       w=w8
+mul x 0     x43=0               
+add x z     x44=(x43+z21)       [w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)]
+mod x 26    x45=(x44%26)        w7+4 or w5+2 see 115
+div z 1     z22=(z21//1)        [w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)]
+add x 10    x46=(x45+10)        w7+14 or w5+12 see 115
+eql x w     x47=(x46==w8?1:0)   0
+eql x 0     x48=(x47==0?1:0)    1
+mul y 0     y57=0               
+add y 25    y58=25              
+mul y x     y59=(y58*x48)       25
+add y 1     y60=(y59+1)         26
+mul z y     z23=(z22*y60)       26([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])
+mul y 0     y61=0               
+add y w     y62=(y61+w8)        w8
+add y 9     y63=(y62+9)         w8+9
+mul y x     y64=(y63*x48)       w8+9
+add z y     z24=(z23+y64)       26([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)]) + (w8+9)
+inp w       w=w9
+mul x 0     x49=0               
+add x z     x50=(x49+z24)       26([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)]) + (w8+9)
+mod x 26    x51=(x50%26)        w8+9
+div z 26    z25=(z24//26)       [w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)]
+add x -3    x52=(x51+-3)        w8+6
+eql x w     x53=(x52==w9?1:0)   0 or 1[w8=1..3 and w9=7..9]
+eql x 0     x54=(x53==0?1:0)    1 or 0
+mul y 0     y65=0               
+add y 25    y66=25              
+mul y x     y67=(y66*x54)       25 or 0
+add y 1     y68=(y67+1)         26 or 1
+mul z y     z26=(z25*y68)       [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])
+mul y 0     y69=0               
+add y w     y70=(y69+w9)        w9
+add y 10    y71=(y70+10)        w9+10
+mul y x     y72=(y71*x54)       w9+10 or 0
+add z y     z27=(z26+y72)       [w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])
+inp w       w=w10
+mul x 0     x55=0               
+add x z     x56=(x55+z27)       [w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])
+mod x 26    x57=(x56%26)        w9+10 or [w7+4 or w5+2 see 115] see 151
+div z 1     z28=(z27//1)        [w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])
+add x 15    x58=(x57+15)        w9+25 or [w7+19 or w5+17 see 115] see 151
+eql x w     x59=(x58==w10?1:0)  0
+eql x 0     x60=(x59==0?1:0)    1
+mul y 0     y73=0               
+add y 25    y74=25              
+mul y x     y75=(y74*x60)       25
+add y 1     y76=(y75+1)         26
+mul z y     z29=(z28*y76)       26([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)]))
+mul y 0     y77=0               
+add y w     y78=(y77+w10)       w10
+add y 3     y79=(y78+3)         w10+3
+mul y x     y80=(y79*x60)       w10+3
+add z y     z30=(z29+y80)       w10+3 + 26([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)]))
+inp w       w=w11
+mul x 0     x61=0               
+add x z     x62=(x61+z30)       w10+3 + 26([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)]))
+mod x 26    x63=(x62%26)        w10+3
+div z 26    z31=(z30//26)       [w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])
+add x -3    x64=(x63+-3)        w10
+eql x w     x65=(x64==w11?1:0)  0 or 1[w10=1..9 and x11=1..9]
+eql x 0     x66=(x65==0?1:0)    1 or 0
+mul y 0     y81=0               
+add y 25    y82=25              
+mul y x     y83=(y82*x66)       25 or 0
+add y 1     y84=(y83+1)         26 or 1
+mul z y     z32=(z31*y84)       [26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)]))
+mul y 0     y85=0               
+add y w     y86=(y85+w11)       w11
+add y 7     y87=(y86+7)         w11+7
+mul y x     y88=(y87*x66)       w11+7 or 0 see 187
+add z y     z33=(z32+y88)       [w11+7 or 0 see 187] + [26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)]))
+inp w       w=w12
+mul x 0     x67=0               
+add x z     x68=(x67+z33)       [w11+7 or 0 see 187] + [26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)]))
+mod x 26    x69=(x68%26)        w11+7 or [w9+10 or [w7+4 or w5+2 see 115] see 151] see 187
+div z 26    z34=(z33//26)       ([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26
+add x -1    x70=(x69+-1)        w11+6 or [w9+9 or [w7+3 or w5+1 see 115] see 151] see 187
+eql x w     x71=(x70==w12?1:0)  0 or 1[w11=1..3, w7=1..6, w5=1..8 with w12=7..9,4..9,2..9]
+eql x 0     x72=(x71==0?1:0)    1 or 0
+mul y 0     y89=0               
+add y 25    y90=25              
+mul y x     y91=(y90*x72)       25 or 0
+add y 1     y92=(y91+1)         26 or 1
+mul z y     z35=(z34*y92)       (26 or 1 see 205) * (([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26)
+mul y 0     y93=0               
+add y w     y94=(y93+w12)       w12
+add y 7     y95=(y94+7)         w12+7
+mul y x     y96=(y95*x72)       w12+7 or 0
+add z y     z36=(z35+y96)       [w12+7 or 0 see 205] + [26 or 1 see 205] * (([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26)
+inp w       w=w13
+mul x 0     x73=0               
+add x z     x74=(x73+z36)       [w12+7 or 0 see 205] + [26 or 1 see 205] * (([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26)
+mod x 26    x75=(x74%26)        ([w12+7 or 0 see 205] + [26 or 1 see 205] * (([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26)) % 26
+div z 26    z37=(z36//26)       ([w12+7 or 0 see 205] + [26 or 1 see 205] * (([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26)) // 26
+add x -10   x76=(x75+-10)       ([w12+7 or 0 see 205] + [26 or 1 see 205] * (([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26)) % 26 - 10
+eql x w     x77=(x76==w13?1:0)  ??????????????????????????????
+eql x 0     x78=(x77==0?1:0)    
+mul y 0     y97=0               
+add y 25    y98=25              
+mul y x     y99=(y98*x78)       25 or 0
+add y 1     y100=(y99+1)        26 or 1
+mul z y     z38=(z37*y100)      [26 or 1 see 223] * ([w12+7 or 0 see 205] + [26 or 1 see 205] * (([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26)) // 26
+mul y 0     y101=0              
+add y w     y102=(y101+w13)     w13
+add y 2     y103=(y102+2)       w13+2
+mul y x     y104=(y103*x78)     w13+2 or 0 see 223
+add z y     z39=(z38+y104)      [w13+2 or 0 see 223] + [26 or 1 see 223] * ([w12+7 or 0 see 205] + [26 or 1 see 205] * (([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26)) // 26
+inp w       w=w14
+mul x 0     x79=0               
+add x z     x80=(x79+z39)       [w13+2 or 0 see 223] + [26 or 1 see 223] * ([w12+7 or 0 see 205] + [26 or 1 see 205] * (([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26)) // 26
+mod x 26    x81=(x80%26)        ([w13+2 or 0 see 223] + [26 or 1 see 223] * ([w12+7 or 0 see 205] + [26 or 1 see 205] * (([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26)) // 26) % 26
+div z 26    z40=(z39//26)       ([w13+2 or 0 see 223] + [26 or 1 see 223] * ([w12+7 or 0 see 205] + [26 or 1 see 205] * (([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26)) // 26) // 26
+add x -16   x82=(x81+-16)       ([w13+2 or 0 see 223] + [26 or 1 see 223] * ([w12+7 or 0 see 205] + [26 or 1 see 205] * (([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26)) // 26) % 26 - 16
+eql x w     x83=(x82==w14?1:0)  ???
+eql x 0     x84=(x83==0?1:0)    
+mul y 0     y105=0              
+add y 25    y106=25             
+mul y x     y107=(y106*x84)     25 or 0
+add y 1     y108=(y107+1)       26 or 1
+mul z y     z41=(z40*y108)      [26 or 1 see 241] * [([w13+2 or 0 see 223] + [26 or 1 see 223] * ([w12+7 or 0 see 205] + [26 or 1 see 205] * (([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26)) // 26) // 26]
+mul y 0     y109=0              
+add y w     y110=(y109+w14)     w14
+add y 2     y111=(y110+2)       w14+2
+mul y x     y112=(y111*x84)     [w14+2 or 0 see 241]
+add z y     z42=(z41+y112)      [w14+2 or 0 see 241] + [26 or 1 see 241] * [([w13+2 or 0 see 223] + [26 or 1 see 223] * ([w12+7 or 0 see 205] + [26 or 1 see 205] * (([26 or 1 see 187] * ([w9+10 or 0 see 151] + [26 or 1 see 151] * ([w7+4 or 0 see 115] + [26 or 1 see 115] * [26([(w4+10) or 0 see 61] + [26 or 1 see 61] * 26*(w1+8)+(w2+8)) + (w5+2)])))//26)) // 26) // 26]

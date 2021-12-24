@@ -28,7 +28,7 @@ day 20 - bit convolution w/ infinite image / more of the same; brute force
 day 21 - deterministic dice rolls / quantum dice splitting results; dp
 day 22 - carving spaces in a small, bounded cube / carving space in unbounded volume; ended up splitting each intersected box
 day 23 - best way to place 8 people in 4 rooms / best way to place 16 people in 4 rooms; ended up using A*
-day 24 - 
+day 24 - Feels like debugging assembly / Feels like debugging assembly part 2; Just try to zero things out
 day 25 - 
 
 
@@ -40,3 +40,4 @@ day 25 -
 21 - Exponential combinations so using memory to store results, basically dp (tabulation) and expressing the state space, but there's a lot of state so it should be done carefully. Just keeps branching and adding on each step. 
 22 - How do we keep track of space and what is the best way to split and keep track of split space? I just ended up splitting up intersected boxes by splitting top and bottom, then front and back, then left and right. - Something to keep in mind: If processing from reverse, if it's on, it'll always stay on. If it's off, then it will always stay off. So we only need to consider new volumes that haven't been carved out yet.  
 23 - Basically a search problem if you don't know what you're doing (me). I ended up doing an A* search with a heuristic being the cost to get out + cost to move to the right place + cost to get in. Runtime was a bit bad, but it worked.
+24 - It's easy to see that it performs operations. It's harder to trace what the operations actually do. Some conditions are impossible to fulfill, so we just have to let them happen. Always starting from 9s or 1s is a good idea. The trace becomes easier to debug after looking through it for a while. 
