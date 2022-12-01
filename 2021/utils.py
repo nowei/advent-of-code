@@ -7,7 +7,7 @@ def generate_files(days):
         sample_fn = 'sample{}.txt'.format(d)
         input_fn = 'input{}.txt'.format(d)
         with open(day + "/" + sample_fn, 'w') as f: pass
-        with open(day + "/" + input_fn, 'w') as f: pass 
+        with open(day + "/" + input_fn, 'w') as f: pass
         for i in range(2):
             with open(day + "/" + 'puzzle{}.py'.format(d * 2 - i), 'w') as f:
                 f.write('sample = True\n')
