@@ -1,2 +1,2 @@
 [workspace]
-members = [ "day1/Cargo.toml" ]
+members = [ "day1" ]
