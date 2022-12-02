@@ -1,12 +1,12 @@
 import subprocess
 import toml
 import requests
+import os
 
 days = [2]
 
 def file_contents(d):
-    string = """use std::env;
-use std::fs;
+    string = """use std::fs;
 
 static SAMPLE: bool = true;
 
@@ -15,30 +15,42 @@ static FILENAME: &str = match SAMPLE {
     false => "input.txt",
 };
 
-fn puzzleDAYN1(contents: String) {
-    let result = 0;
-    println!("The result is:\\n{}", result);
+type ContentType = Vec<(char, char)>;
+
+fn parse_input(contents: String) -> ContentType {
+    let mut result = ContentType::new();
+    for line in contents.lines() {
+        
+    }
     return result;
 }
 
-fn puzzleDAYN2(contents: String) {
-    let result = 0;
-    println!("The result is:\\n{}", result);
+fn puzzleDAYN1(contents: &ContentType) -> i32 {
+    let mut result = 0;
+    println!("The result is:\n{}", result);
+    return result;
+}
+
+fn puzzleDAYN2(contents: &ContentType) -> i32 {
+    let mut result = 0;
+    println!("The result is:\n{}", result);
     return result;
 }
 
 fn main() {
     let contents = fs::read_to_string(FILENAME)
         .expect("Should have been able to read the file");
-    let result1 = puzzleDAYN1(contents);
+    let parsed_input = parse_input(contents);
+    let result1 = puzzleDAYN1(&parsed_input);
     if SAMPLE {
         assert_eq!(result1, 0);
     }
-    let result2 = puzzleDAYN2(contents);
+    let result2 = puzzleDAYN2(&parsed_input);
     if SAMPLE {
         assert_eq!(result2, 0);
     }
 }
+
 """
     string = string.replace("DAYN1", str(d * 2))
     string = string.replace("DAYN2", str(d * 2 + 1))
@@ -49,12 +61,16 @@ def generate_files(days):
     seen = set(data["workspace"]["members"])
     for d in days:
         day = "day{}".format(d)
+        # Note, this crashes if it already exists, so we only hit the input endpoint once
         p = subprocess.run(["cargo", "new", "day{}".format(d), "--bin"])
 
         with open(day + "/" + "sample.txt", 'w') as f: pass
-        req = requests.get("https://adventofcode.com/2022/day/{}/input".format(d))
-        with open(day + "/" + "input.txt", 'w') as f:
-            f.write(req.contents)
+        req = requests.get(
+            "https://adventofcode.com/2022/day/{}/input".format(d),
+            cookies={"session": os.environ["AOC_SESSION_ID"]}
+        )
+        with open(day + "/" + "input.txt", 'wb') as f:
+            f.write(req.content)
 
         if p.returncode == 0:
             with open(day + "/" + 'src/main.rs', 'w') as f:
