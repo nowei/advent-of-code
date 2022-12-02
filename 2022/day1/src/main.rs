@@ -47,15 +47,13 @@ fn puzzle2(contents: String) {
     }
     entries.push(current);
     entries.sort();
-    let top3 = &entries[entries.len()-3..];
+    let top3 = &entries[entries.len() - 3..];
     let total: i32 = top3.iter().sum();
     println!("The 3 elves carrying the most Calories total:\n{:?}", total);
 }
 
 fn main() {
-    
-    let contents = fs::read_to_string(FILENAME)
-        .expect("Should have been able to read the file");
+    let contents = fs::read_to_string(FILENAME).expect("Should have been able to read the file");
 
     puzzle1(contents);
     puzzle2(contents);
