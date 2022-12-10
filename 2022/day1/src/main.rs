@@ -1,4 +1,3 @@
-use std::env;
 use std::fs;
 
 static SAMPLE: bool = false;
@@ -55,6 +54,6 @@ fn puzzle2(contents: String) {
 fn main() {
     let contents = fs::read_to_string(FILENAME).expect("Should have been able to read the file");
 
-    puzzle1(contents);
+    puzzle1(contents.clone());
     puzzle2(contents);
 }

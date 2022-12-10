@@ -1,9 +1,7 @@
 import subprocess
 import toml
-import requests
-import os
 
-days = [2]
+days = [3]
 
 def file_contents(d):
     string = """use std::fs;
@@ -27,13 +25,13 @@ fn parse_input(contents: String) -> ContentType {
 
 fn puzzleDAYN1(contents: &ContentType) -> i32 {
     let mut result = 0;
-    println!("The result is:\n{}", result);
+    println!("The result is:\\n{}", result);
     return result;
 }
 
 fn puzzleDAYN2(contents: &ContentType) -> i32 {
     let mut result = 0;
-    println!("The result is:\n{}", result);
+    println!("The result is:\\n{}", result);
     return result;
 }
 
@@ -65,12 +63,7 @@ def generate_files(days):
         p = subprocess.run(["cargo", "new", "day{}".format(d), "--bin"])
 
         with open(day + "/" + "sample.txt", 'w') as f: pass
-        req = requests.get(
-            "https://adventofcode.com/2022/day/{}/input".format(d),
-            cookies={"session": os.environ["AOC_SESSION_ID"]}
-        )
-        with open(day + "/" + "input.txt", 'wb') as f:
-            f.write(req.content)
+        with open(day + "/" + "input.txt", 'wb') as f: pass
 
         if p.returncode == 0:
             with open(day + "/" + 'src/main.rs', 'w') as f:
