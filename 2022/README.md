@@ -14,3 +14,5 @@ day 03 - Checking set intersections of half strings; then checking set intersect
 day 04 - Checking int range containment; then checking int range overlap
 
 day 05 - Rebuild board, then move via pop and push one at a time in order; move slices around (Simulation)
+
+day 06 - Find end index of first 4 distinct; Find end index of first 14 distinct. Just used a sliding window.
