@@ -7,7 +7,7 @@ type ContentType = Directory;
 
 #[derive(Debug)]
 struct File {
-    name: String,
+    _name: String,
     size: u32,
 }
 
@@ -15,7 +15,7 @@ struct File {
 struct Directory {
     name: String,
     children: HashMap<String, Directory>,
-    files: HashMap<String, File>,
+    _files: HashMap<String, File>,
     size: u32,
 }
 
@@ -83,7 +83,7 @@ fn recursive_build_dir(stuff_map: &HashMap<String, Vec<String>>, dir: String) ->
             v => {
                 let name = split[1].to_string();
                 let size = v.parse::<u32>().expect("This should work");
-                files.insert(name.clone(), File { name, size });
+                files.insert(name.clone(), File { _name: name, size });
             }
         }
     }
@@ -97,7 +97,7 @@ fn recursive_build_dir(stuff_map: &HashMap<String, Vec<String>>, dir: String) ->
     return Directory {
         name: dir,
         children,
-        files,
+        _files: files,
         size,
     };
 }
