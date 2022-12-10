@@ -12,3 +12,5 @@ day 02 - some mod math for rock paper scissors as ints; some more mod math for r
 day 03 - Checking set intersections of half strings; then checking set intersections of 3 strings
 
 day 04 - Checking int range containment; then checking int range overlap
+
+day 05 - Rebuild board, then move via pop and push one at a time in order; move slices around (Simulation)

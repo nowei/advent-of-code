@@ -1,7 +1,7 @@
 import subprocess
 import toml
 
-days = [4]
+days = [5]
 
 def file_contents(d):
     string = """use std::fs;
@@ -64,15 +64,15 @@ def generate_files(days):
         # Note, this crashes if it already exists, so we only hit the input endpoint once
         p = subprocess.run(["cargo", "new", "day{}".format(d), "--bin"])
 
-        with open(day + "/" + "sample.txt", 'w') as f: pass
-        with open(day + "/" + "input.txt", 'wb') as f: pass
-
         if p.returncode == 0:
             with open(day + "/" + 'src/main.rs', 'w') as f:
                 f.write(file_contents(d))
 
             if day not in seen:
                 data["workspace"]["members"].append(day)
+
+            with open(day + "/" + "sample.txt", 'w') as f: pass
+            with open(day + "/" + "input.txt", 'wb') as f: pass
     
     with open("Cargo.toml", "w") as toml_file:
         toml.dump(data, toml_file)
