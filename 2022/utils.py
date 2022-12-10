@@ -1,7 +1,7 @@
 import subprocess
 import toml
 
-days = [6]
+days = [7]
 
 def file_contents(d):
     string = """use std::fs;
@@ -42,14 +42,14 @@ fn main() {
     let actual_result_1 = puzzle1(&parsed_input_actual);
     println!("Day DAYN - Puzzle 1");
     println!("The sample result is: {}", sample_result_1);
-    println!("The actual result is: {}", actual_result_1);
+    println!("The result for the input is: {}", actual_result_1);
 
     let sample_result_2 = puzzle2(&parsed_input_sample);
     assert_eq!(sample_result_2, 0);
     let actual_result_2 = puzzle2(&parsed_input_actual);
     println!("Day DAYN - Puzzle 2");
     println!("The sample result is: {}", sample_result_2);
-    println!("The actual result is: {}", actual_result_2);
+    println!("The result for the input is: {}", actual_result_2);
 }
 
 """
