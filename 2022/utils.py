@@ -1,7 +1,7 @@
 import subprocess
 import toml
 
-days = [8]
+days = [9]
 
 def file_contents(d):
     string = """use std::fs;
@@ -9,22 +9,22 @@ def file_contents(d):
 static SAMPLE_INPUT_FILENAME: &str = "sample.txt";
 static INPUT_FILENAME: &str = "input.txt";
 
-type ContentType = Vec<(char, char)>;
+type InputType = Vec<(char, char)>;
 
-fn parse_input(contents: String) -> ContentType {
-    let mut result = ContentType::new();
-    for line in contents.lines() {
+fn parse_input(input: String) -> InputType {
+    let mut result = InputType::new();
+    for line in input.lines() {
         
     }
     return result;
 }
 
-fn puzzle1(contents: &ContentType) -> i32 {
+fn puzzle1(input: &InputType) -> i32 {
     let mut result = 0;
     return result;
 }
 
-fn puzzle2(contents: &ContentType) -> i32 {
+fn puzzle2(input: &InputType) -> i32 {
     let mut result = 0;
     return result;
 }
@@ -39,14 +39,15 @@ fn main() {
 
     let sample_result_1 = puzzle1(&parsed_input_sample);
     assert_eq!(sample_result_1, 0);
+    let sample_result_2 = puzzle2(&parsed_input_sample);
+    assert_eq!(sample_result_2, 0);
+
     let actual_result_1 = puzzle1(&parsed_input_actual);
+    let actual_result_2 = puzzle2(&parsed_input_actual);
+
     println!("Day DAYN - Puzzle 1");
     println!("The sample result is: {}", sample_result_1);
     println!("The result for the input is: {}", actual_result_1);
-
-    let sample_result_2 = puzzle2(&parsed_input_sample);
-    assert_eq!(sample_result_2, 0);
-    let actual_result_2 = puzzle2(&parsed_input_actual);
     println!("Day DAYN - Puzzle 2");
     println!("The sample result is: {}", sample_result_2);
     println!("The result for the input is: {}", actual_result_2);
