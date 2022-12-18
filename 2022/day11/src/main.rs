@@ -5,7 +5,6 @@ static INPUT_FILENAME: &str = "input.txt";
 
 type InputType = Vec<Monkey>;
 
-#[derive(Clone)]
 struct Monkey {
     index: u32,
     items: Vec<u32>,
@@ -18,25 +17,13 @@ struct Monkey {
 
 impl Monkey {
     fn inspect(&self, old: u32) -> u32 {
-        match &self.operation {
-            Operation::Add(a, b) => {
-                a.parse::<u32>().unwrap_or(old) + b.parse::<u32>().unwrap_or(old)
-            }
-            Operation::Mult(a, b) => {
-                a.parse::<u32>().unwrap_or(old) * b.parse::<u32>().unwrap_or(old)
-            }
-        }
+        (self.operation)(old.into()).try_into().unwrap()
     }
 
     fn inspect2(&self, old: u64) -> u64 {
-        match &self.operation {
-            Operation::Add(a, b) => {
-                a.parse::<u64>().unwrap_or(old) + b.parse::<u64>().unwrap_or(old)
-            }
-            Operation::Mult(a, b) => {
-                a.parse::<u64>().unwrap_or(old) * b.parse::<u64>().unwrap_or(old)
-            }
-        }
+        (self.operation)(old.try_into().unwrap())
+            .try_into()
+            .unwrap()
     }
 
     fn test(&self, val: u32) -> bool {
@@ -44,27 +31,22 @@ impl Monkey {
     }
 }
 
-#[derive(Clone)]
-enum Operation {
-    Add(String, String),
-    Mult(String, String),
-}
+type Operation = Box<dyn Fn(i64) -> i64>;
 
 fn parse_operation(op_string: &String) -> Operation {
-    let args = op_string
-        .split(" ")
-        .map(|v| v.to_string())
-        .collect::<Vec<String>>();
-    let a = args.get(0).expect("This arg should exist");
-    let op = args.get(1).expect("This arg should exist");
-    let b = args.get(2).expect("This arg should exist");
-    let op_v = match op.as_str() {
-        "*" => Operation::Mult(a.to_string(), b.to_string()),
-        "+" => Operation::Add(a.to_string(), b.to_string()),
+    let args = op_string.split(" ").collect::<Vec<_>>();
+    match args[..] {
+        ["old", "*", "old"] => return Box::new(move |old| old * old),
+        ["old", "*", y] => {
+            let y: i64 = y.parse().unwrap();
+            return Box::new(move |old| old * y);
+        }
+        ["old", "+", y] => {
+            let y: i64 = y.parse().unwrap();
+            return Box::new(move |old| old + y);
+        }
         _ => panic!("This shouldn't happen"),
     };
-
-    return op_v;
 }
 
 // fn evaluate_operation
@@ -248,18 +230,16 @@ fn puzzle2(mut input: InputType) -> i64 {
 fn main() {
     let contents_sample =
         fs::read_to_string(SAMPLE_INPUT_FILENAME).expect("Should have been able to read the file");
-    let parsed_input_sample = parse_input(contents_sample);
     let contents_actual =
         fs::read_to_string(INPUT_FILENAME).expect("Should have been able to read the file");
-    let parsed_input_actual = parse_input(contents_actual);
 
-    let sample_result_1 = puzzle1(parsed_input_sample.clone());
+    let sample_result_1 = puzzle1(parse_input(contents_sample.clone()));
     assert_eq!(sample_result_1, 10605);
-    let sample_result_2 = puzzle2(parsed_input_sample.clone());
+    let sample_result_2 = puzzle2(parse_input(contents_sample.clone()));
     assert_eq!(sample_result_2, 2713310158);
 
-    let actual_result_1 = puzzle1(parsed_input_actual.clone());
-    let actual_result_2 = puzzle2(parsed_input_actual.clone());
+    let actual_result_1 = puzzle1(parse_input(contents_actual.clone()));
+    let actual_result_2 = puzzle2(parse_input(contents_actual.clone()));
 
     println!("Day 11 - Puzzle 1");
     println!("The sample result is: {}", sample_result_1);
