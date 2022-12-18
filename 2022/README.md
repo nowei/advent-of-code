@@ -24,3 +24,5 @@ day 08 - Rows and Cols got mixed up, but otherwise this was fine. Basically keep
 day 09 - Following a moving point, basically just checked diffs and clamped; extend it and iterate over changes.
 
 day 10 - Really weird instructions, doing math on some instruction cycles then checking if the current position is close enough to the register value.
+
+day 11 - Simulating monkeys passing things around based on some mult/add ops and mod testing; the second part needed to do some modular arithmetic.
