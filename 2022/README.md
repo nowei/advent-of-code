@@ -22,3 +22,5 @@ day 07 - Regrets with Rust. The hard part for me was figuring out how to reconst
 day 08 - Rows and Cols got mixed up, but otherwise this was fine. Basically keeping track of things in a grid. 1.) was seeing if we can see the edge in any direction from each position. 2.) was rolling up to the current height in each direction and seeing how many things there are that we can see in our sightline.
 
 day 09 - Following a moving point, basically just checked diffs and clamped; extend it and iterate over changes.
+
+day 10 - Really weird instructions, doing math on some instruction cycles then checking if the current position is close enough to the register value.
