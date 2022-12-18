@@ -178,7 +178,7 @@ fn puzzle2(mut input: InputType) -> i64 {
     // or a prime larger than that.
     // a % n = b, we keep track of all mods smaller than the largest mod by modding by the product of all prime checks
     // this guarantees that the information for 0..prod capture the mod relation without losing information.
-    // This is
+    // Apparently this is also called the Chinese remainder theorem.
 
     let large_prime: u64 = input.iter().map(|m| m.test_num as u64).product();
     for round in 1..10001 {
