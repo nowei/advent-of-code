@@ -26,3 +26,5 @@ day 09 - Following a moving point, basically just checked diffs and clamped; ext
 day 10 - Really weird instructions, doing math on some instruction cycles then checking if the current position is close enough to the register value.
 
 day 11 - Simulating monkeys passing things around based on some mult/add ops and mod testing; the second part needed to do some modular arithmetic.
+
+day 12 - started using backtracking, then dp to try to get the cost to get to the goal from any path, but I realized that I was doing a DFS rather than a BFS and didn't actually save the shortest path to a single place due to the order in which things are evaluated, then realized that I could just use a BFS.
