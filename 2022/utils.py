@@ -1,7 +1,7 @@
 import subprocess
 import toml
 
-days = [12]
+days = [13]
 
 def file_contents(d):
     string = """use std::fs;
@@ -16,12 +16,12 @@ fn parse_input(input: String) -> InputType {
     return result;
 }
 
-fn part1(input: &InputType) -> i32 {
+fn part1(input: InputType) -> i32 {
     let mut result = 0;
     return result;
 }
 
-fn part2(input: &InputType) -> i32 {
+fn part2(input: InputType) -> i32 {
     let mut result = 0;
     return result;
 }
