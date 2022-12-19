@@ -30,3 +30,5 @@ day 11 - Simulating monkeys passing things around based on some mult/add ops and
 day 12 - started using backtracking, then dp to try to get the cost to get to the goal from any path, but I realized that I was doing a DFS rather than a BFS and didn't actually save the shortest path to a single place due to the order in which things are evaluated, then realized that I could just use a BFS.
 
 day 13 - Nested arrays and comparing nested arrays.
+
+day 14 - Simulation. One grain/one blocked wall piece at a time vs. actually writing out a map/setting for the problem; then the same, but with a floor.
