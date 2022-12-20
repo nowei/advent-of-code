@@ -32,3 +32,5 @@ day 12 - started using backtracking, then dp to try to get the cost to get to th
 day 13 - Nested arrays and comparing nested arrays.
 
 day 14 - Simulation. One grain/one blocked wall piece at a time vs. actually writing out a map/setting for the problem; then the same, but with a floor.
+
+day 15 - Working with ranges and collapsing ranges, then iterating over things, kind of brute-forced for part 2.
