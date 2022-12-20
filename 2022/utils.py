@@ -1,7 +1,7 @@
 import subprocess
 import toml
 
-days = [15]
+days = [16]
 
 def file_contents(d):
     string = """use std::fs;
@@ -12,7 +12,26 @@ type InputType = Vec<(char, char)>;
 
 fn parse_input(input: String) -> InputType {
     let mut result = InputType::new();
-    for line in input.lines() {}
+    let re =
+        Regex::new(r#"Sensor at x=([-]?[0-9]*), y=([-]?[0-9]*): closest beacon is at x=([-]?[0-9]*), y=([-]?[0-9]*)"#).expect("This shouldn't break");
+
+    for line in input.lines() {
+        let _ = re
+            .captures(line)
+            .and_then(|cap| {
+                let group = (cap.get(1), cap.get(2), cap.get(3), cap.get(4));
+                match group {
+                    (Some(sx), Some(sy), Some(bx), Some(by)) => Some((
+                        sx.as_str().parse::<i32>().unwrap(),
+                        sy.as_str().parse::<i32>().unwrap(),
+                        bx.as_str().parse::<i32>().unwrap(),
+                        by.as_str().parse::<i32>().unwrap(),
+                    )),
+                    _ => None,
+                }
+            })
+            .expect("Should work");
+    }
     return result;
 }
 
