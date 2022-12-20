@@ -33,4 +33,4 @@ day 13 - Nested arrays and comparing nested arrays.
 
 day 14 - Simulation. One grain/one blocked wall piece at a time vs. actually writing out a map/setting for the problem; then the same, but with a floor.
 
-day 15 - Working with ranges and collapsing ranges, then iterating over things, kind of brute-forced for part 2.
+day 15 - Working with ranges and collapsing ranges, then iterating over things, kind of brute-forced for part 2. Looked up some ideas off reddit after finishing and came across one that could try to find diagonals with one-pixel gaps between the diamonds, then we can technically use the intersections of all the diagonals to narrow down the location. Combinatorially this sounds not terrible because the number of diagonals of width 1 are likely very small. This means at least an n^2 comparison between rhombuses to get the length of comparisons and where they possibly exist, which is limited by size/length. 
