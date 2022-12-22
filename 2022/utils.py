@@ -1,7 +1,7 @@
 import subprocess
 import toml
 
-days = [17]
+days = [18]
 
 def file_contents(d):
     string = """use std::fs;
