@@ -1,10 +1,11 @@
 import subprocess
 import toml
 
-days = [18]
+days = [19]
 
 def file_contents(d):
     string = """use std::fs;
+use regex::Regex;
 
 static INPUT_FILENAME: &str = "input.txt";
 
