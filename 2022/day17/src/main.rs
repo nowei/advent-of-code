@@ -275,7 +275,8 @@ fn part1(input: InputType) -> i32 {
 
 // Attempt #1 brute-forcing
 // Idea #2: Shapes cycle and the flow eventually cycles, how do we detect the cycles?
-
+//          cycle detection -> with jet cycle
+// Implmentation #3: Cycle tracking with bytes?
 fn part2(input: InputType) -> i64 {
     let mut jet_index = 0;
     let mut blocked: HashSet<Point> = HashSet::new();
@@ -284,16 +285,12 @@ fn part2(input: InputType) -> i64 {
     }
 
     let mut top_height: i64 = 0;
-    let mut prev_height = 0;
-    let mut prev_shape_idx = 0;
     // Cycle detection
-    let mut cycle_detector: Vec<i64> = vec![];
     let mut top_heights: Vec<i64> = vec![];
-    let mut shape_diffs: Vec<i64> = vec![];
 
     let goal = 1000000000000i64;
-    let mut prev_shape_height = 0;
-    'outer: for shape_index in 0..goal {
+    let mut byte_tracking = vec![];
+    for shape_index in 0..goal {
         let shape_type = match shape_index % 5 {
             0 => TetrisLike::HLine,
             1 => TetrisLike::Plus,
@@ -304,35 +301,11 @@ fn part2(input: InputType) -> i64 {
         };
         let mut shape = Shape::init(shape_type, (0, 6), top_height);
         let mut jet = true;
-        let mut to_break = false;
         while !shape.stopped {
             if jet {
                 let j_i = jet_index % input.len();
                 shape.mv(*input.get(j_i).expect("Should be fine"), &mut blocked);
                 jet_index = jet_index + 1;
-                if jet_index % input.len() == 0 {
-                    // println!(
-                    //     "shape index {} {} jet index {} jet iter {} {} {}",
-                    //     shape_index,
-                    //     shape_index - prev_shape_idx,
-                    //     jet_index,
-                    //     jet_index / input.len(),
-                    //     top_height,
-                    //     top_height - prev_height
-                    // );
-                    let height_diff = top_height - prev_height;
-                    if cycle_detector.contains(&height_diff) && jet_index > (input.len() * 1000) {
-                        println!("{:?}", cycle_detector);
-                        println!("{:?}", top_heights);
-                        println!("{:?}", shape_diffs);
-                        to_break = true;
-                    }
-                    cycle_detector.push(top_height - prev_height);
-                    shape_diffs.push(shape_index - prev_shape_idx);
-                    top_heights.push(top_height);
-                    prev_height = top_height;
-                    prev_shape_idx = shape_index;
-                }
             } else {
                 shape.mv(Direction::Down, &mut blocked);
             }
@@ -345,16 +318,21 @@ fn part2(input: InputType) -> i64 {
             .max()
             .expect("max should exist")
             .max(top_height);
-        if shape_index % 1745 == 0 {
-            println!(
-                "prev height: {} curr_height: {} diff: {}",
-                prev_shape_height,
-                top_height,
-                top_height - prev_shape_height
-            );
-            prev_shape_height = top_height;
+        top_heights.push(top_height);
+        let mut byte: u8 = 0;
+        for x in 0..7u8 {
+            if blocked.contains(&Point {
+                x: x as i64,
+                y: top_height,
+            }) {
+                byte |= 1 << x;
+            }
         }
-        if to_break {
+        byte_tracking.push(byte);
+        // Note there are 10092 directions and each piece moves on average 3 times, so
+        // we can probably track 3364 shapes at a time. So we may need to repeat this several times, so
+        // let us track 3364 * 4 shapes to make sure that we can detect a cycle.
+        if byte_tracking.len() == 3364 * 4 {
             break;
         }
     }
@@ -364,94 +342,53 @@ fn part2(input: InputType) -> i64 {
     //      [15, 23, 39, _51_, 61, 70, 78, 92, _104_, 114, 123, 131, 145, _157_, 167, 176, 184, 198, 210, 220]
     // Floyd's algorithm
     // Fast pointer, slow pointer
-    let mut i = 1;
-    let mut j = 2;
-    while i == 0 || cycle_detector[i] != cycle_detector[j] {
+    let mut i = 0;
+    let mut j = 0;
+    let window = 25;
+    while i == 0 || (byte_tracking[i..i + window] != byte_tracking[j..j + window]) {
         i += 1;
         j += 2;
     }
-    println!("{} {} {} {}", i, j, cycle_detector[i], cycle_detector[j]);
+    println!("{} {} {} {}", i, j, byte_tracking[i], byte_tracking[j]);
     i = 0;
-    while cycle_detector[i] != cycle_detector[j] {
+    while byte_tracking[i..i + window] != byte_tracking[j..j + window] {
         j += 1;
         i += 1;
     }
-    println!("{} {} {} {}", i, j, cycle_detector[i], cycle_detector[j]);
+    println!("{} {} {} {}", i, j, byte_tracking[i], byte_tracking[j]);
     j = i + 1;
-    while cycle_detector[i] != cycle_detector[j] {
+    while byte_tracking[i..i + window] != byte_tracking[j..j + window] {
         j += 1;
     }
-    println!("{} {} {} {}", i, j, cycle_detector[i], cycle_detector[j]);
+    println!("{} {} {} {}", i, j, byte_tracking[i], byte_tracking[j]);
+    println!("{:?}", &byte_tracking[i..j]);
+    println!("{:?}", &byte_tracking[i..2 * j - i]);
     let cycle_length = j - i;
-    let mut cycle = vec![];
-    let mut shape_cycle = vec![];
-    for ind in j..j + cycle_length {
-        cycle.push(cycle_detector[ind]);
-        shape_cycle.push(shape_diffs[ind]);
+    println!("{}", cycle_length);
+    let cycle_start = i;
+    let mut height_diffs = vec![];
+    let height_start = top_heights[cycle_start];
+    let mut last = height_start;
+    for i in cycle_start..cycle_start + cycle_length {
+        height_diffs.push(top_heights[i] - last);
+        last = top_heights[i];
     }
-    let cycle_start = j;
-
-    println!("cycle {} {:?}", cycle_length, cycle);
-    println!("shape {} {:?}", cycle_length, shape_cycle);
-
-    let start_height = top_heights[cycle_start - 1];
-    let shape_idx_start: i64 = shape_diffs[..cycle_start].iter().sum();
-    let shapes_per_cycle: i64 = shape_cycle.iter().sum();
-    let cycle_height_diff: i64 = cycle.iter().sum();
+    println!("height diffs: {:?}", height_diffs);
+    let cycle_height: i64 = height_diffs.iter().sum();
+    let num_cycles = (goal - cycle_start as i64) / cycle_length as i64;
+    println!("init height: {}", height_start);
+    println!("length of cycle: {}", cycle_length);
+    println!("cycle height: {}", cycle_height);
+    println!("number of cycles remaining: {}", num_cycles);
+    let remaining_blocks = (goal - cycle_start as i64) % cycle_length as i64;
+    println!("number of blocks remaining: {}", remaining_blocks);
+    let height_after_cycles = height_start + cycle_height * num_cycles;
+    let remaining_height: i64 = height_diffs[..remaining_blocks as usize].iter().sum();
+    let top_height = height_after_cycles + remaining_height;
     println!(
-        "start_height {} cycle height diff {} shapes_per_cycle {} shape_idx_start {}",
-        start_height, cycle_height_diff, shapes_per_cycle, shape_idx_start,
+        "result {} {} {}",
+        height_after_cycles, remaining_height, top_height
     );
-    let cycles = (goal - shape_idx_start) / shapes_per_cycle;
-    let remaining_shapes = (goal - shape_idx_start) % shapes_per_cycle;
-
-    let intermediate_height = start_height + cycle_height_diff * cycles;
-
-    println!("{} {} {}", cycles, intermediate_height, remaining_shapes);
-
-    // Grab the last ten rows of the cycle we've found what we've seen so far and move it up so that the total_height
-    let mut new_blocked: HashSet<Point> = blocked
-        .iter()
-        .filter(|p| p.y >= top_height - 20 && p.y <= top_height)
-        .map(|p| {
-            let diff = top_height - p.y;
-            Point {
-                x: p.x,
-                y: intermediate_height - diff,
-            }
-        })
-        .collect();
-    top_height = intermediate_height;
-
-    for shape_index in (goal - remaining_shapes + 1)..goal {
-        let shape_type = match shape_index % 5 {
-            0 => TetrisLike::HLine,
-            1 => TetrisLike::Plus,
-            2 => TetrisLike::FlipL,
-            3 => TetrisLike::VLine,
-            4 => TetrisLike::Square,
-            _ => panic!("Shouldn't get here"),
-        };
-        let mut shape = Shape::init(shape_type, (0, 6), top_height);
-        let mut jet = true;
-        while !shape.stopped {
-            if jet {
-                let j_i = jet_index % input.len();
-                shape.mv(*input.get(j_i).expect("Should be fine"), &mut new_blocked);
-                jet_index = jet_index + 1;
-            } else {
-                shape.mv(Direction::Down, &mut new_blocked);
-            }
-            jet = !jet;
-        }
-        top_height = shape
-            .points
-            .iter()
-            .map(|p| p.y)
-            .max()
-            .expect("max should exist")
-            .max(top_height);
-    }
 
     // 1591977078505 is too tall
     // 1591977075727 is too short
@@ -459,6 +396,7 @@ fn part2(input: InputType) -> i64 {
     // 1591977077305 is not right
     // 1591977077307 is not right
     // 1591977077352 is right?
+    // 1589684813744
 
     return top_height;
 }
