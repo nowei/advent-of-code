@@ -367,18 +367,18 @@ fn part2(input: InputType) -> i64 {
     println!("{}", cycle_length);
     let cycle_start = i;
     let mut height_diffs = vec![];
-    let height_start = top_heights[cycle_start];
+    let height_start = top_heights[cycle_start - 1];
     let mut last = height_start;
-    for i in cycle_start..cycle_start + cycle_length {
-        height_diffs.push(top_heights[i] - last);
-        last = top_heights[i];
+    for idx in cycle_start..cycle_start + cycle_length {
+        height_diffs.push(top_heights[idx] - last);
+        last = top_heights[idx];
     }
     println!("height diffs: {:?}", height_diffs);
-    let cycle_height: i64 = height_diffs.iter().sum();
+    let cycle_height: i64 = top_heights[i + cycle_length] - top_heights[i];
     let num_cycles = (goal - cycle_start as i64) / cycle_length as i64;
     println!("init height: {}", height_start);
     println!("length of cycle: {}", cycle_length);
-    println!("cycle height: {}", cycle_height);
+    println!("cycle height diff: {}", cycle_height);
     println!("number of cycles remaining: {}", num_cycles);
     let remaining_blocks = (goal - cycle_start as i64) % cycle_length as i64;
     println!("number of blocks remaining: {}", remaining_blocks);
@@ -396,7 +396,6 @@ fn part2(input: InputType) -> i64 {
     // 1591977077305 is not right
     // 1591977077307 is not right
     // 1591977077352 is right?
-    // 1589684813744
 
     return top_height;
 }
