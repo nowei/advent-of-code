@@ -5,7 +5,7 @@ static INPUT_FILENAME: &str = "input.txt";
 
 type InputType = HashSet<Block>;
 
-#[derive(Eq, Hash, PartialEq, Copy, Clone, Debug)]
+#[derive(Eq, Hash, PartialEq, Copy, Clone)]
 struct Block {
     x: i32,
     y: i32,
@@ -101,9 +101,6 @@ impl Block {
                 }
                 None => {}
             }
-        }
-        if uncovered_surfaces != 0 {
-            println!("uncovered {}", uncovered_surfaces);
         }
         return uncovered_surfaces;
     }
@@ -220,15 +217,12 @@ fn part2(input: InputType) -> i32 {
     let mut seen: HashSet<Block> = HashSet::new();
     // 1927 is too low
     // 3316 is too high
+    // 2012 is right
     let mut air_bubble_surfaces = 0;
     for b in &input {
         air_bubble_surfaces += b.check_adjacent(&input, &mut seen, &boundaries);
     }
-    println!("result before {}", result);
     result -= air_bubble_surfaces;
-    println!("air bubble surfaces {}", air_bubble_surfaces);
-    println!("result after {}", result);
-    println!("seen {:?}", seen);
     return result;
 }
 
@@ -273,6 +267,6 @@ mod tests {
             fs::read_to_string("sample2.txt").expect("Should have been able to read the file");
         let parsed_input_sample = parse_input(contents_sample);
         let sample_result_2 = part2(parsed_input_sample);
-        assert_eq!(sample_result_2, 66);
+        assert_eq!(sample_result_2, 58);
     }
 }
