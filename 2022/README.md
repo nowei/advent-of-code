@@ -44,3 +44,5 @@ day 18 - This wasn't too bad. I ended up just modeling each block and checking a
 day 19 - DFS without path tracking. Had a working BFS search, but then that took too long, so switched to DFS with several heuristics/shortcuts to prune states. Like we don't explore one minute at a time, but on worker changes. We also prune things that are impossible to beat what we've seen so far (regardless of resource constraints). We also skip the worker when we have more resources than we can use in a turn. 
 
 day 20 - Basically just circular array math. I got stuck on the fact that there could be duplicates in the input, so I ended up spending way too much time questioning whether my circular array math was correct vs. time inspecting the input :facepalm: Other than that, this was pretty straight-forward. The first soln was shuffling/mixing once and then the second time was just doing it 10 times.
+
+day 21 - Not too bad, basically creating a DAG, then evaluating the DAG. The second part was just evaluating the DAG but keeping a branch unevaluated. Then working backwards to evaluate the unevaluated branch using reverse ops.
