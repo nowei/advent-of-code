@@ -111,6 +111,14 @@ name = "day23"
 version = "0.1.0"
 
 [[package]]
+name = "day24"
+version = "0.1.0"
+dependencies = [
+ "priority-queue",
+ "queue",
+]
+
+[[package]]
 name = "day3"
 version = "0.1.0"
 
