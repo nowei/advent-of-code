@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "aoc2023"
+version = "0.1.0"
+description = "Advent of Code 2023"
+authors = ["Andrew Wei <a.nowei42@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
