@@ -49,11 +49,11 @@ day 21 - deterministic dice rolls / quantum dice splitting results; dp
 
 day 22 - carving spaces in a small, bounded cube / carving space in unbounded volume; ended up splitting each intersected box
 
-day 23 - best way to place 8 people in 4 rooms / best way to place 16 people in 4 rooms; ended up using A*
+day 23 - best way to place 8 people in 4 rooms / best way to place 16 people in 4 rooms; ended up using A\*
 
 day 24 - Feels like debugging assembly / Feels like debugging assembly part 2; Just try to zero things out
 
-day 25 - 
+day 25 - I just played it out, idk where the solution went, I forgot to commit it :c
 
 
 ## Interesting problems (some spoilers)
