@@ -14,6 +14,10 @@ The second part is a forwards/backwards string search for digits or strings repr
 
 ### day 02
 
+The first part defines a game with colored cubes and asks to check if instances of the game are possible with some number of colored cubes.
+
+The second part just asks us to find the minimum cubes per game, multiply them, and add them together.
+
 ### day 03
 
 ### day 04
