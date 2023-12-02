@@ -1,7 +1,8 @@
-import os
+import argparse
 
 base_text = """
 from typing import Any
+import argparse
 
 sample_file_path = "test/{day}.sample"
 input_file_path = "test/{day}.input"
@@ -51,7 +52,10 @@ def main_{day}(only_sample: bool = False):
 
 
 if __name__ == "__main__":
-    main_{day}(only_sample=True)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', '--sample', action='store_true')
+    args = parser.parse_args()
+    main_{day}(only_sample=args.sample)
 """
 
 def generate_files(day: int):
@@ -66,7 +70,13 @@ def generate_files(day: int):
         pass
 
 def main():
-    generate_files(2)
+    parser = argparse.ArgumentParser(prog="generate template")
+    parser.add_argument("-d", "--day")
+    args = parser.parse_args()
+    if not args.day:
+        print("utils script requires a day argument")
+        exit()
+    generate_files(int(args.day))
 
 if __name__ == '__main__':
     main()
