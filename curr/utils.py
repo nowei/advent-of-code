@@ -6,6 +6,9 @@ import argparse
 
 sample_file_path = "test/{day}.sample"
 input_file_path = "test/{day}.input"
+expected_out_part1 = None
+expected_out_part2 = None
+
 
 def parse_file_day{day}(file_path) -> Any:
     with open(file_path, "r") as f:
@@ -31,6 +34,7 @@ def solve_day{day}(file_path: str, check_out: bool):
             print("Sample matched")
     print("Part 1 result:")
     print(out_part1)
+    print()
 
     out_part2 = solve_day{day}_part2(input)
     if check_out:
@@ -44,18 +48,18 @@ def solve_day{day}(file_path: str, check_out: bool):
     print(out_part2)
     print()
 
-def main_{day}(only_sample: bool = False):
+def main_{day}(run_all: bool = False):
     print("Running script for day {day}")
     solve_day{day}(sample_file_path, check_out=True)
-    if not only_sample:
+    if run_all:
         solve_day{day}(input_file_path, check_out=False)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--sample', action='store_true')
+    parser.add_argument('-a', '--actual', action='store_true')
     args = parser.parse_args()
-    main_{day}(only_sample=args.sample)
+    main_{day}(run_all=args.actual)
 """
 
 def generate_files(day: int):
