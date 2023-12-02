@@ -50,8 +50,10 @@ def solve_day{day}(file_path: str, check_out: bool):
 
 def main_{day}(run_all: bool = False):
     print("Running script for day {day}")
+    print("Sample input")
     solve_day{day}(sample_file_path, check_out=True)
     if run_all:
+        print("Actual input")
         solve_day{day}(input_file_path, check_out=False)
 
 
