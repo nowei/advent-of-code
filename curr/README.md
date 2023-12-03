@@ -20,6 +20,10 @@ The second part just asks us to find the minimum cubes per game, multiply them, 
 
 ### day 03
 
+The first part is parsing numbers from a grid and checking to see if they neighbor any non-`.` and non-digit symbols, e.g. `*`, `@`, `:`, etc... We accomplish by just doing a scan for each row and col. Notice that we will always see the start of the digit if we iterate across the columns on the inner loop. This means that we can check the next columns until we reach the end of the number and then check the adjacent coordinates for non-`.` and non-digit symbols.
+
+The second part instead looks for `*` and for `*` that border exactly two numbers. We notice that a number uniquely borders a `*` based on contiguity along the rows, i.e. if it is contiguous, it is part of the same number. If it is not, it is a new numbers. We reject checking `*` indicies where there were more or less than two bordering numbers. To get the number, we can simply go left and go right as far as we can across the columns given a starting coordinate and read from left to right to reconstruct the number.
+
 ### day 04
 
 ### day 05
