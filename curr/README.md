@@ -26,6 +26,10 @@ The second part instead looks for `*` and for `*` that border exactly two number
 
 ### day 04
 
+The first part is just doing like a 2^(num matching - 1) or 0 for each game card and adding them up.
+
+The second part just adds copies of the next game cards based on the number of matching numbers in the current game card. So like if card `n` has 3 matching numbers and we have `c` copies of `n`, then we add `c` more copies of cards `n+1`, `n+2`, `n+3` where `n+x` is capped by the number of cards we started with.
+
 ### day 05
 
 ### day 06
