@@ -1,7 +1,6 @@
 import argparse
 
-base_text = """
-from typing import Any
+base_text = """from typing import Any
 import argparse
 
 sample_file_path = "test/{day}.sample"
