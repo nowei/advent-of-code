@@ -5,7 +5,22 @@ import bisect
 sample_file_path = "test/05.sample"
 input_file_path = "test/05.input"
 expected_out_part1 = 35
-expected_out_part2 = None
+expected_out_part2 = 46
+
+def check_overlap(curr, collapsed) -> bool:
+    if not collapsed:
+        return False
+    prev_start, prev_end, _ = collapsed[-1]
+    start, end, _ = curr
+    #  | curr |
+    #     | prev |
+    if start <= prev_start <= end:
+        return True
+    #     | curr |
+    # | prev |
+    if prev_start <= start <= prev_end:
+        return True
+    return False
 
 class Conversion_05:
     from_type: str
@@ -17,28 +32,30 @@ class Conversion_05:
         self.from_type = from_type
         self.to_type = to_type
         self.ranges = ranges
-        self.converted_range = {}
+        self.converted_range = []
         for r in self.ranges:
             source, destination, range_length = r
-            self.converted_range[(source, source + range_length - 1)] = destination - source
+            self.converted_range.append((source, source + range_length - 1, destination - source))
+        self.converted_range.sort()
 
     def convert(self, number: int):
         # Right binary search so that the index can be the number
         # We use filler numbers for the converted range and range length so it only pays attention
         # to the first number.
-        insert_index = bisect.bisect_right(self.ranges, (number, -float('inf'), -float('inf')))
-        prev_range_index = insert_index - 1
+        insert_index = bisect.bisect_left(self.ranges, (number, float('inf'), float('inf')))
         # return number as the index because there is no converted range
-        if prev_range_index < 0:
+        if insert_index < 0:
             return number
-        source, destination, range_length = self.ranges[prev_range_index]
+        insert_index -= 1
+        source, destination, range_length = self.ranges[insert_index]
         from_range_end = source + range_length
+        ret = number
         if number >= source and from_range_end > number:
             diff = number - source
-            return destination + diff
-        else:
-            return number
+            ret = destination + diff
+        return ret
     
+
     # Part 2, the idea is that we can convert ranges by determining the start
     # And end ranges and figuring out how to map between those. 
     # E.g.
@@ -61,74 +78,52 @@ class Conversion_05:
     # [[93, 96], -37]
     # [[97,100], 0]
     # Note that ranges are inclusive
-    def invert(self, other_ranges: Dict[Tuple[int, int], int]) -> Dict[Tuple[int, int], int]:
-        print(self.converted_range)
-        print(other_ranges)
-        new_ranges = {}
-        self_ranges = self.converted_range
-        sorted_other_keys = sorted(other_ranges.keys())
-        sorted_self_keys = sorted(self.converted_range.keys())
-        other_idx = 0
-        idx = 0
-        # We want to move up one index at a time, but only update the indicies when we 
-        # have consumed all the values in the range
-        while other_idx < len(sorted_other_keys) and idx < len(sorted_self_keys):
-            # Possible cases where:
-            # a            b
-            # |----self----|
-            # and 
-            # c         d
-            # |--other--|
-            # * there is overlap
-            # Cases:
-            #   * End of self is in other -> consume self, keep other
-            #   |---self---|
-            #        |---other---|
-            #   * Start of self is in other -> consume other, keep self
-            #        |---self---|
-            #   |---other---|
-            #   * Self is inside of other -> consume other up to the end of self, update self
-            #     |--self--|
-            #   |---other---|
-            #   * Other is inside of self -> consume self up to other, update other
-            #     |---self---|
-            #       |-other-|
-            #   * They match exactly -> update both
-            #     |---self---|
-            #     |--other---|
-            # * there is no overlap -> add smallest range to new_ranges and add
-            # End of self is less than the start of other, so we add self
-            # |----self----|
-            #                |--other--|
-            # Otherwise, we add other
-            #                |--self--|
-            # |----other----|
-            self_key = sorted_self_keys[idx]
-            a, b = self_key
-            self_diff = self_ranges[self_key]
-            other_key = sorted_other_keys[other_idx]
-            c, d = other_key
-            other_diff = other_ranges[other_key]
-            if a == c and b == d:
-                diff = self_diff + other_diff
-                new_ranges[self_key] = diff
-                idx += 1
-                other_idx += 1
-            elif 
-            else:
-                if b < c:
-                    new_ranges[self_key] = self_ranges[self_key]
-                    idx += 1
-                else:
-                    new_ranges[other_key] = other_ranges[other_key]
-                    other_idx += 1
-        while other_idx < len(sorted_other_keys):
-            key = sorted_other_keys[other_idx]
-            new_ranges[key] = sorted_other_keys[key]
-        while idx < len(sorted_self_keys):
-            key = sorted_self_keys[idx]
-            new_ranges[key] = sorted_self_keys[key]
-        return new_ranges
+    def invert(self, other_ranges: List[Tuple[int, int, int]]) -> List[Tuple[int, int, int]]:
+        # start with other_ranges
+        # combine with ranges as we go
+        ranges_copy = other_ranges.copy()
+        for r in self.converted_range:
+            bisect.insort_left(ranges_copy, r)
+        # collapse
+        print("rp", ranges_copy)
+        # Note that these ranges will have at most 2 things starting with the same start index
+        # [(0, 68, 1), (56, 92, 4), (69, 69, -69), (93, 96, -37)]
+        # [(0, 55, 1), (56, 68, 5), (69, 69, -65), (70, 92, 4), (93, 96, -37)]
+        # So special handling only really needs to happen between the current and previous blocks
+        collapsed = []
+        for curr in ranges_copy:
+            start, end, shift = curr
+            to_merge = []
+            # If there is overlap with the previous thing, handle it.
+            # Collapsed items should be non-overlapping here
+            while check_overlap(curr, collapsed):
+                to_merge.append(collapsed.pop())
+            to_merge.reverse()
+            while to_merge: 
+                prev_start, prev_end, prev_shift = to_merge.pop()
+                # (69, 92, 4) + (69, 69, -69) = (69, 69, -65) + (70, 92, 4)
+                if prev_start == start:
+                    # e.g. [[1, 5, 2]] + [1, 9, 4]
+                    # [1, 5, 2] + [1, 9, 4] = [1, 5, 6] + [6, 9, 4]
+                    start = min(prev_end, end) + 1
+                    first_cut = start - 1
+                    curr_shift = prev_shift + shift
+                    collapsed.append((prev_start, first_cut, curr_shift))
+                    end = max(prev_end, end)
+                    shift = prev_shift
+                elif prev_start < start and start < prev_end:
+                    # e.g. [[1, 5, 2]] + [2, 9, 4]
+                    # [1, 5, 2] + [2, 9, 4] = [1, 1, 2] + [2, 5, 6] + [6, 9, 4]
+                    collapsed.append((prev_start, start - 1, prev_shift))
+                    collapsed.append((start, prev_end, prev_shift + shift))
+                    start = prev_end + 1
+            collapsed.append((start, end, shift))
+            print(collapsed)
+
+            # print(curr, collapsed)
+        print(self.to_type, self.from_type, collapsed)
+        return collapsed
+
 
     def __repr__(self):
         inside = "from={},to={},ranges={}".format(self.from_type, self.to_type, self.ranges)
@@ -146,11 +141,15 @@ class Almanac_05:
         self.seed_list = seed_list
         self.seed_ranges = []
         for i in range(0, len(seed_list), 2):
-            self.seed_ranges.append((seed_list[i],seed_list[i] + seed_list[i+1]))
+            self.seed_ranges.append((seed_list[i], seed_list[i] + seed_list[i+1]))
         self.conversion_dict = conversion_dict
         reverse_dict = {conversion_dict[key].to_type: conversion_dict[key] for key in conversion_dict}
-        last_conversion_dict = reverse_dict["location"]
-        reverse_dict[last_conversion_dict.from_type].invert(last_conversion_dict.converted_range)
+        key = "location"
+        current_list = []
+        while key in reverse_dict:
+            last_conversion_dict = reverse_dict[key]
+            current_list = last_conversion_dict.invert(current_list)
+            key = last_conversion_dict.from_type
 
 
 
@@ -191,8 +190,9 @@ def solve_day05_part1(input: Almanac_05) -> int:
         convert_type = conversion.to_type
     return min(curr)
 
-def solve_day05_part2(input: Any) -> Any:
-    return None
+def solve_day05_part2(input: Almanac_05) -> int:
+    ans = 0
+    return 0
 
 def solve_day05(file_path: str, check_out: bool):
     input = parse_file_day05(file_path)

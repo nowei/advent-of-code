@@ -14,11 +14,11 @@ def parse_file_day{day}(file_path) -> Any:
         for line in f:
             pass
 
-def solve_day{day}_part1(input: Any) -> Any:
-    return None
+def solve_day{day}_part1(input: Any) -> int:
+    return 0
 
-def solve_day{day}_part2(input: Any) -> Any:
-    return None
+def solve_day{day}_part2(input: Any) -> int:
+    return 0
 
 def solve_day{day}(file_path: str, check_out: bool):
     input = parse_file_day{day}(file_path)
