@@ -32,6 +32,42 @@ The second part just adds copies of the next game cards based on the number of m
 
 ### day 05
 
+The first part was doing number conversions if they fell in a range, given as
+`dest, start, range` which can be translated to `a = start, b = start + range - 1, shift = dest - start`
+i.e. for `(a, b, shift)`, if for `c` in `a <= c <= b`, we add shift.
+
+The second part was the same as above, but for ranges.
+We do this by checking each range and subdividing the range based on the specific
+shifts that it is a part of, i.e. overlaps with. For example, if we have a range `[1, 7]` and we have a range shift of `6` inside of `[2, 6]`, we would keep the ranges: `[1, 1], [2+6, 6+6]=[8,12], [7, 7]`. Then finding them minimum was generally trivial by checking the first index. In reality we only care about min edges and min edges of overlaps because all shifts maintain an increasing series.
+
+We originally rabbit-holed on trying to do this by constructing a reverse conversion map by walking the conversion ranges backwards from destination to source, but I eventually learned that this wouldn't work after trying to code this for a while because the shifts are dependent, e.g. it jumps from one range region to another based on the previous one, so the transformations were not easily directly composable or invertible.
+
+Instead of composing them, it's more like tracking how we can get from one region to another over time, e.g. landing on 2 in the given example can hop you to 8. There can be a many-to-one relationship in the conversion layers.
+
+Like
+
+```
+1->1
+2->2
+3->3
+4->4
+5->5
+6->6
+```
+
+with a range shift of `2` from `[1, 3]` becomes
+
+```
+1->3
+2->4
+3->5
+4->4
+5->5
+6->6
+```
+
+Although the examples given only had swaps between the layers and it was still a 1:1 relationship, but it doesn't necessarily have to be.
+
 ### day 06
 
 ### day 07
