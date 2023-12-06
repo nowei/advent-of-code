@@ -70,6 +70,8 @@ Although the examples given only had swaps between the layers and it was still a
 
 ### day 06
 
+This is just binary search on the left and right to figure out what the transition points are to no longer score high enough to beat the designated score threshold.
+
 ### day 07
 
 ### day 08
