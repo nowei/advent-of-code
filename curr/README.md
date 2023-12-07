@@ -74,6 +74,10 @@ This is just binary search on the left and right to figure out what the transiti
 
 ### day 07
 
+Just a parsing/ranking problem based on a string. We consider the hand type and then the individual ranks of cards if there is a tie.
+
+The first part uses 2->A. The second part replaces the Jack with a wildcard Joker. We just enumerate all possibilities with the wildcard since there is a limited set of outcomes. Another way to do this would be to pose this as a search problem and trying out the different ways we can add the cards if we have `x` wildcard jokers, e.g. if we have 2 pairs already, what is the best outcome we can get if we have 1 joker. Or if we have 4 jokers, what is the best possible outcome from our starting point? One observation that could help with this is that it is always optimal to only increment numbers for things we already have, e.g. if we have 3 jokers and `{2: 1, 5: 1}`, we would never put the jokers into something that we didn't already have, e.g. `3`. Another way to make this more complex would be to rank the jokers based on what cards they imitate, assuming optimal ordering.
+
 ### day 08
 
 ### day 09
