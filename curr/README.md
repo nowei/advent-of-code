@@ -80,6 +80,16 @@ The first part uses 2->A. The second part replaces the Jack with a wildcard Joke
 
 ### day 08
 
+The first part is just following the instructions and cycles.
+
+The second part is doing that and tracking multiple nodes at the same time. The key observation is that there had to be cycles to continuously follow the path or there had to be overlaps (multiple Z's) in the cycles if multiple nodes enter the same cycles. It could've been the latter, because the setting wasn't particularly strict: "the number of nodes with names ending in A is equal to the number ending in Z!" But it wasn't so we got a little lucky.
+
+The next thing to determine is where each cycle starts and when it hits the Z locations wrt the instruction steps (keeping track of the instruction step and locations are important).
+
+Note that the pre-cycle path couldn't have had a different number of nodes from the end-cycle path, since for there to be a cycle, the same number of steps must've been taken/repeated at some point to get to the same number for it to cycle later on. Therefore the cycle start must've been the same for us to detect that there was a cycle.
+
+One other observation is that all the Z nodes started the cycle of instructions over again, i.e. `steps % len(instructions) == 0`, but the result being a multiple of the number of instructions may have been necessary for it to cycle properly based on the number of instructions so it can always get back to the same spot and for us to detect that there was a cycle (by repeating a step with the same instruction).
+
 ### day 09
 
 ### day 10

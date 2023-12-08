@@ -1,7 +1,7 @@
 from typing import List, Dict, Optional
 
 sample_file_path = "test/01.sample"
-sample_file_path_part2 = "test/01.sample2"
+sample_part2_file_path = "test/01.sample2"
 input_file_path = "test/01.input"
 
 expected_out_part1 = 142
@@ -126,7 +126,7 @@ def solve_day01(file_path: str, check_out: bool = False):
     print(out_part1)
 
     if "sample" in file_path:
-        input = parse_file_day01("test/01.sample2")
+        input = parse_file_day01(sample_part2_file_path)
     out_part2 = solve_day01_part2(input)
     if check_out:
         if out_part2 != expected_out_part2:
