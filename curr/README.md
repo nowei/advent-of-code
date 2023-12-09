@@ -92,6 +92,8 @@ One other observation is that all the Z nodes started the cycle of instructions 
 
 ### day 09
 
+Get diff between consecutive numbers and like their rate(s) of changes and then extrapolating the next number. The next part is the same as the previous by trying to extrapolate the previous number.
+
 ### day 10
 
 ### day 11
