@@ -96,6 +96,146 @@ Get diff between consecutive numbers and like their rate(s) of changes and then 
 
 ### day 10
 
+Create a map and just do a BFS of the possible pipe paths.
+
+Second part was more fun, I ended up expanding the (valid, connected) pipe map so that it was easier to figure out what spaces were actually inside vs. outside of the pipes, e.g. I expanded
+
+```
+F
+```
+
+into
+
+```
+...
+.F-
+.|.
+```
+
+Such that something like
+
+```
+F-7
+|.|
+L-J
+```
+
+becomes
+
+```
+.........
+.F-----7.
+.|.....|.
+.|.....|.
+.|.....|.
+.|.....|.
+.|.....|.
+.L-----J.
+.........
+```
+
+then we simply had to count all the inside 3x3 squares that were all `I`'s.
+
+Like their example of:
+
+```
+.F----7F7F7F7F-7....
+.|F--7||||||||FJ....
+.||.FJ||||||||L7....
+FJL7L7LJLJ||LJ.L-7..
+L--J.L7...LJS7F-7L7.
+....F-J..F7FJ|L7L7L7
+....L7.F7||L7|.L7L7|
+.....|FJLJ|FJ|F7|.LJ
+....FJL-7.||.||||...
+....L---J.LJ.LJLJ...
+```
+
+becomes
+
+```
+.F----7F7F7F7F-7....
+.|F--7||||||||FJ....
+.||.FJ||||||||L7....
+FJL7L7LJLJ||LJ.L-7..
+L--J.L7...LJS7F-7L7.
+....F-J..F7FJ|L7L7L7
+....L7.F7||L7|.L7L7|
+.....|FJLJ|FJ|F7|.LJ
+....FJL-7.||.||||...
+....L---J.LJ.LJLJ...
+```
+
+which when expanded becomes
+
+```
+............................................................
+....F--------------7..F--7..F--7..F--7..F-----7.............
+....|..............|..|..|..|..|..|..|..|.....|.............
+....|..............|..|..|..|..|..|..|..|.....|.............
+....|..F--------7..|..|..|..|..|..|..|..|..F--J.............
+....|..|........|..|..|..|..|..|..|..|..|..|................
+....|..|........|..|..|..|..|..|..|..|..|..|................
+....|..|.....F--J..|..|..|..|..|..|..|..|..L--7.............
+....|..|.....|.....|..|..|..|..|..|..|..|.....|.............
+....|..|.....|.....|..|..|..|..|..|..|..|.....|.............
+.F--J..L--7..L--7..L--J..L--J..|..|..L--J.....L-----7.......
+.|........|.....|..............|..|.................|.......
+.|........|.....|..............|..|..|..............|.......
+.L--------J.....L--7...........L--J.-S--7..F-----7..L--7....
+...................|.................|..|..|.....|.....|....
+...................|.................|..|..|.....|.....|....
+.............F-----J........F--7..F--J..|..L--7..L--7..L--7.
+.............|..............|..|..|.....|.....|.....|.....|.
+.............|..............|..|..|.....|.....|.....|.....|.
+.............L--7.....F--7..|..|..L--7..|.....L--7..L--7..|.
+................|.....|..|..|..|.....|..|........|.....|..|.
+................|.....|..|..|..|.....|..|........|.....|..|.
+................|..F--J..L--J..|..F--J..|..F--7..|.....L--J.
+................|..|...........|..|.....|..|..|..|..........
+................|..|...........|..|.....|..|..|..|..........
+.............F--J..L-----7.....|..|.....|..|..|..|..........
+.............|...........|.....|..|.....|..|..|..|..........
+.............|...........|.....|..|.....|..|..|..|..........
+.............L-----------J.....L--J.....L--J..L--J..........
+............................................................
+```
+
+then when marked, it becomes:
+
+```
+OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+OOOOF--------------7OOF--7OOF--7OOF--7OOF-----7OOOOOOOOOOOOO
+OOOO|IIIIIIIIIIIIII|OO|II|OO|II|OO|II|OO|IIIII|OOOOOOOOOOOOO
+OOOO|IIIIIIIIIIIIII|OO|II|OO|II|OO|II|OO|IIIII|OOOOOOOOOOOOO
+OOOO|IIF--------7II|OO|II|OO|II|OO|II|OO|IIF--JOOOOOOOOOOOOO
+OOOO|II|OOOOOOOO|II|OO|II|OO|II|OO|II|OO|II|OOOOOOOOOOOOOOOO
+OOOO|II|OOOOOOOO|II|OO|II|OO|II|OO|II|OO|II|OOOOOOOOOOOOOOOO
+OOOO|II|OOOOOF--JII|OO|II|OO|II|OO|II|OO|IIL--7OOOOOOOOOOOOO
+OOOO|II|OOOOO|IIIII|OO|II|OO|II|OO|II|OO|IIIII|OOOOOOOOOOOOO
+OOOO|II|OOOOO|IIIII|OO|II|OO|II|OO|II|OO|IIIII|OOOOOOOOOOOOO
+OF--JIIL--7OOL--7IIL--JIIL--JII|OO|IIL--JIIIIIL-----7OOOOOOO
+O|IIIIIIII|OOOOO|IIIIIIIIIIIIII|OO|IIIIIIIIIIIIIIIII|OOOOOOO
+O|IIIIIIII|OOOOO|IIIIIIIIIIIIII|OO|II|IIIIIIIIIIIIII|OOOOOOO
+OL--------JOOOOOL--7IIIIIIIIIIIL--JI-S--7IIF-----7IIL--7OOOO
+OOOOOOOOOOOOOOOOOOO|IIIIIIIIIIIIIIIII|OO|II|OOOOO|IIIII|OOOO
+OOOOOOOOOOOOOOOOOOO|IIIIIIIIIIIIIIIII|OO|II|OOOOO|IIIII|OOOO
+OOOOOOOOOOOOOF-----JIIIIIIIIF--7IIF--JOO|IIL--7OOL--7IIL--7O
+OOOOOOOOOOOOO|IIIIIIIIIIIIII|OO|II|OOOOO|IIIII|OOOOO|IIIII|O
+OOOOOOOOOOOOO|IIIIIIIIIIIIII|OO|II|OOOOO|IIIII|OOOOO|IIIII|O
+OOOOOOOOOOOOOL--7IIIIIF--7II|OO|IIL--7OO|IIIIIL--7OOL--7II|O
+OOOOOOOOOOOOOOOO|IIIII|OO|II|OO|IIIII|OO|IIIIIIII|OOOOO|II|O
+OOOOOOOOOOOOOOOO|IIIII|OO|II|OO|IIIII|OO|IIIIIIII|OOOOO|II|O
+OOOOOOOOOOOOOOOO|IIF--JOOL--JOO|IIF--JOO|IIF--7II|OOOOOL--JO
+OOOOOOOOOOOOOOOO|II|OOOOOOOOOOO|II|OOOOO|II|OO|II|OOOOOOOOOO
+OOOOOOOOOOOOOOOO|II|OOOOOOOOOOO|II|OOOOO|II|OO|II|OOOOOOOOOO
+OOOOOOOOOOOOOF--JIIL-----7OOOOO|II|OOOOO|II|OO|II|OOOOOOOOOO
+OOOOOOOOOOOOO|IIIIIIIIIII|OOOOO|II|OOOOO|II|OO|II|OOOOOOOOOO
+OOOOOOOOOOOOO|IIIIIIIIIII|OOOOO|II|OOOOO|II|OO|II|OOOOOOOOOO
+OOOOOOOOOOOOOL-----------JOOOOOL--JOOOOOL--JOOL--JOOOOOOOOOO
+OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+```
+
 ### day 11
 
 ### day 12

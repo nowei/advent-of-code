@@ -1,13 +1,10 @@
 import argparse
 
-base_text = """from typing import Any
+base_text = """from typing import Any, Optional
 import argparse
 
 sample_file_path = "test/{day}.sample"
 input_file_path = "test/{day}.input"
-expected_out_part1 = None
-expected_out_part2 = None
-
 
 def parse_file_day{day}(file_path) -> Any:
     with open(file_path, "r") as f:
@@ -20,15 +17,17 @@ def solve_day{day}_part1(input: Any) -> int:
 def solve_day{day}_part2(input: Any) -> int:
     return 0
 
-def solve_day{day}(file_path: str, check_out: bool):
+def solve_day{day}(file_path: str, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
+    print("---------------------------------")
+    print("Input file:", file_path)
     input = parse_file_day{day}(file_path)
     out_part1 = solve_day{day}_part1(input)
 
-    if check_out:
-        if out_part1 != expected_out_part1:
+    if expected_pt1 is not None:
+        if out_part1 != expected_pt1:
             print("Sample results do not match")
             print("Sample expected:")
-            print(expected_out_part1)
+            print(expected_pt1)
         else:
             print("Sample matched")
     print("Part 1 result:")
@@ -36,11 +35,11 @@ def solve_day{day}(file_path: str, check_out: bool):
     print()
 
     out_part2 = solve_day{day}_part2(input)
-    if check_out:
-        if out_part2 != expected_out_part2:
+    if expected_pt2 is not None:
+        if out_part2 != expected_pt2:
             print("Sample results do not match")
             print("Sample expected:")
-            print(expected_out_part2)
+            print(expected_pt2)
         else:
             print("Sample matched")
     print("Part 2 result:")
@@ -50,11 +49,13 @@ def solve_day{day}(file_path: str, check_out: bool):
 def main_{day}(run_all: bool = False):
     print("Running script for day {day}")
     print("Sample input")
-    solve_day{day}(sample_file_path, check_out=True)
+    expected_out_part1 = None
+    expected_out_part2 = None
+    solve_day{day}(sample_file_path, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2)
     if run_all:
         print("---------------------------------")
         print("Actual input")
-        solve_day{day}(input_file_path, check_out=False)
+        solve_day{day}(input_file_path)
 
 
 if __name__ == "__main__":
