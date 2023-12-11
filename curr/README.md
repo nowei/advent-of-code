@@ -238,6 +238,8 @@ OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 
 ### day 11
 
+This is just manhattan distance with extra steps. Part two is just manhattan distance but crossing certain rows or columns requires additional cost. The second part could've been optimized with like a binary search to get all indicies between the rows, and we can just get the diff to the the number. But I didn't want to fiddle around with the boundaries until it worked so I just ran a range and checked inclusion in the set.
+
 ### day 12
 
 ### day 13
