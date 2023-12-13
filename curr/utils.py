@@ -6,10 +6,15 @@ import argparse
 sample_file_path = "test/{day}.sample"
 input_file_path = "test/{day}.input"
 
-def parse_file_day{day}(file_path) -> Any:
-    with open(file_path, "r") as f:
-        for line in f:
-            pass
+def parse_file_day{day}(file_path, example: str = "") -> Any:
+    if example:
+        lines = [example]
+    else:
+        with open(file_path, "r") as f:
+            lines = f.readlines()
+    for line in lines:
+        pass
+    return None
 
 def solve_day{day}_part1(input: Any) -> int:
     return 0
@@ -17,10 +22,7 @@ def solve_day{day}_part1(input: Any) -> int:
 def solve_day{day}_part2(input: Any) -> int:
     return 0
 
-def solve_day{day}(file_path: str, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
-    print("---------------------------------")
-    print("Input file:", file_path)
-    input = parse_file_day{day}(file_path)
+def solve_day{day}(input: Any, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
     out_part1 = solve_day{day}_part1(input)
 
     if expected_pt1 is not None:
@@ -46,16 +48,26 @@ def solve_day{day}(file_path: str, expected_pt1: Optional[int] = None, expected_
     print(out_part2)
     print()
 
-def main_{day}(run_all: bool = False):
+def main_{day}(run_all: bool = False, example: Optional[str] = None):
+    if example:
+        print("Testing input from cmd line")
+        input = parse_file_day{day}("", example=example)
+        solve_day{day}(input)
+        exit(0)
     print("Running script for day {day}")
     print("Sample input")
     expected_out_part1 = None
     expected_out_part2 = None
-    solve_day{day}(sample_file_path, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2)
+    print("---------------------------------")
+    print("Input file:", sample_file_path)
+    input = parse_file_day{day}(sample_file_path)
+    solve_day{day}(input, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2)
     if run_all:
         print("---------------------------------")
         print("Actual input")
-        solve_day{day}(input_file_path)
+        print("Input file:", input_file_path)
+        input = parse_file_day{day}(input_file_path)
+        solve_day{day}(input)
 
 
 if __name__ == "__main__":
