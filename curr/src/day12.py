@@ -1,9 +1,9 @@
 from typing import Any, Optional, List
 import argparse
 import itertools
+import functools 
 
 debug=False
-debug=True
 
 sample_file_path = "test/12.sample"
 input_file_path = "test/12.input"
@@ -27,7 +27,8 @@ class Record12:
         for cand in fill_possibilities(self.row):
             checks = [len(v) for v in cand.split(".") if v != ""]
             if checks == self.reqs:
-                print("ayo", cand)
+                if debug:
+                    print("ayo", cand)
                 ans += 1
         return ans
     
@@ -39,7 +40,6 @@ class Record12:
             curr, curr_reqs, locked = cands.pop()
             last_of_curr = curr.pop()
             for last_cand in fill_possibilities(last_of_curr):
-                # print(last_cand)
                 req_clone = curr_reqs.copy()
                 vals = [len(v) for v in last_cand.split(".") if v != ""]
                 failed = False
@@ -68,50 +68,53 @@ class Record12:
         return count
 
     def dfs_permutations(self):
-        print(self.row)
+        if debug:
+            print(self.row, self.reqs)
         char_array = [c for c in self.row]
         reqs = self.reqs.copy()
-
-        def go_deep(curr, i, req_i, contiguous):
-            if i == len(char_array):
-                print(curr)
-                if all(r == 0 for r in reqs):
-                    return 1
+        @functools.lru_cache(maxsize=None)
+        def go_deep(i, req_i, contiguous=False):
+            # if more # than the amount of things in reqs, not feasible, return early
+            if char_array[i:].count("#") > sum(reqs):
+                return 0
+            if req_i == len(reqs):
+                if "#" in char_array[i:]:
+                    return 0
                 else:
-                    return 0
+                    return 1
+            if i == len(char_array):
+                return 0
             if char_array[i] == ".":
-                if contiguous:
-                    if reqs[req_i] != 0:
-                        return 0
-                    req_i += 1
-                return go_deep(curr + ".", i + 1, req_i, contiguous=False)
+                while i < len(char_array) and char_array[i] == ".":
+                    i += 1
+                return go_deep(i, req_i, contiguous=False)
             elif char_array[i] == "#":
-                if reqs[req_i] == 0:
+                if contiguous or i + reqs[req_i] > len(char_array) or "." in char_array[i:i+reqs[req_i]]:
                     return 0
-                reqs[req_i] -= 1
-                res = go_deep(curr + "#", i + 1, req_i, contiguous=True)
-                reqs[req_i] += 1
+                res = go_deep(i + reqs[req_i], req_i + 1, contiguous=True)
                 return res
             else: # char_array[index] == "?"
                 # Try both paths:
                 p_res = 0
-                if contiguous and reqs[req_i] == 0:
-                    p_res = go_deep(curr + ".", i + 1, req_i + 1, contiguous=False)
-                else:
-                    p_res = go_deep(curr + ".", i + 1, req_i, contiguous=False)
+                # get next char that is not "."
+                next_p = i + 1
+                while next_p < len(char_array) and char_array[next_p] == ".":
+                    next_p += 1
+                p_res = go_deep(next_p, req_i)
                 s_res = 0
-                if reqs[req_i] != 0:
-                    reqs[req_i] -= 1
-                    s_res = go_deep(curr + "#", i + 1, req_i, contiguous=True)
-                    reqs[req_i] -= 1
-                return p_res + s_res
-        result = go_deep("", 0, 0, False)
+                if not (contiguous or i + reqs[req_i] > len(char_array) or "." in char_array[i:i+reqs[req_i]]):
+                    s_res = go_deep(i + reqs[req_i], req_i + 1, contiguous=True)
 
-        actual = self.valid_permutations() 
-        if actual != result:
-            print(actual, result)
-            print(self.row, self.reqs,)
+                return p_res + s_res
+        result = go_deep(0, 0, False)
+
+        if debug:
+            actual = self.valid_permutations() 
+            if actual != result:
+                print(actual, result)
+                print(self.row, self.reqs,)
         return result
+
 class Springs12:
     records: List[Record12]
 
@@ -120,9 +123,15 @@ class Springs12:
     
     def solve_summed(self) -> int:
         permutations = 0
+        i = 0
+        from multiprocessing.pool import ThreadPool
         for record in self.records:
-            permutations += record.dfs_permutations()
+            res = record.dfs_permutations()
+            permutations += res
+            i += 1
+            print(i, record.row, res)
         return permutations
+        
 
 def parse_file_day12(file_path, example: str = "") -> Springs12:
     records = []
@@ -142,7 +151,7 @@ def solve_day12_part1(input: Springs12) -> int:
     return input.solve_summed()
 
 def solve_day12_part2(input: Springs12) -> int:
-    return 0
+    # return 0
     return input.solve_summed()
 
 def solve_day12(input: Springs12, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
@@ -180,6 +189,8 @@ def solve_day12(input: Springs12, expected_pt1: Optional[int] = None, expected_p
 
 def main_12(run_all: bool = False, example: Optional[str] = None):
     if example:
+        global debug
+        debug = True
         print("Testing input from cmd line")
         input = parse_file_day12("", example=example)
         solve_day12(input)

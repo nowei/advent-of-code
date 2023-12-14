@@ -242,6 +242,22 @@ This is just manhattan distance with extra steps. Part two is just manhattan dis
 
 ### day 12
 
+This took me too long :skull:. The first thought that came into my head was to try everything permutation, so we used like `itertools.product`, which would've worked, but is slow because this is exponential in the number of permutations, i.e. `2^(# of '?')`. Then I thought about doing it as a search using BFS, then I made another search using DFS where it tried every possibility. Then I was like, "This isn't how it should be done, this is taking too long to run", so I looked up hints on reddit: https://www.reddit.com/r/adventofcode/comments/18hbbxe/2023_day_12python_stepbystep_tutorial_with_bonus/
+
+I didn't read all of it, but part-way into reading it, I learned two major things that helped me get to a solution:
+
+- Each requirement of like `n` `#` symbols requires the next `n` characters to be either `#` or `?` and if it was `.`, we could return early because it was not feasible.
+- that I should cache my DFS search with like `functools.lru_cache` to cache values that were visited.
+
+What I realized afterwards:
+
+- I can just skip all the consecutive `.` symbols as well to get to the next ambiguous character `?` or to the next group I need to consider (i.e. all groups start with `#`).
+- if more `#` than the sum of reqs, it's not feasible, and we can return early
+
+This meant that the only things I had to track were the current index, `i`, and the current group/requirement index `req_i`, which could've been easily memoized with like a dict, but we use `functools.lru_cache` to cache/memoize the inputs.
+
+The main thing that helped run the large input for part 2 was memoizing the inner dfs search function.
+
 ### day 13
 
 ### day 14
