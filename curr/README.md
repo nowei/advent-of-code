@@ -260,6 +260,8 @@ The main thing that helped run the large input for part 2 was memoizing the inne
 
 ### day 13
 
+Basically just checking for pallindrome-like rows/columns. We do this by checking the original and the zipped (flipped) inputs and check each match. Then the second part was checking for like exactly one character off, which we could do by counting the diffs we find when looking for palindromic rows. Basically being able to suffer exactly one mismatch when looking for matching rows/cols.
+
 ### day 14
 
 ### day 15
