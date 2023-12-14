@@ -260,9 +260,11 @@ The main thing that helped run the large input for part 2 was memoizing the inne
 
 ### day 13
 
-Basically just checking for pallindrome-like rows/columns. We do this by checking the original and the zipped (flipped) inputs and check each match. Then the second part was checking for like exactly one character off, which we could do by counting the diffs we find when looking for palindromic rows. Basically being able to suffer exactly one mismatch when looking for matching rows/cols.
+Basically just checking for palindrome-like rows/columns. We do this by checking the original and the zipped (flipped) inputs and check each match. Then the second part was checking for like exactly one character off, which we could do by counting the diffs we find when looking for palindromic rows. Basically being able to suffer exactly one mismatch when looking for matching rows/cols.
 
 ### day 14
+
+The first part is like a falling rocks simulation problem. Assuming we face north, we cycle by rotating and then shift north which is equivalent to shifting "west", we do this 3 times to simulate a cycle. Then the large number was a hint that this cycled eventually, so we basically just had to find when it started the cycle and when it started to cycle, then simulate `(large number - cycle_start) % cycle_length` in order to get the final orientation + load.
 
 ### day 15
 

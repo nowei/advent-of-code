@@ -75,7 +75,7 @@ def solve_day13_part1(input: List[Pattern13]) -> int:
             ans += (best_col + 1)
     return ans
 
-def solve_day13_part2(input: Any) -> int:
+def solve_day13_part2(input: List[Pattern13]) -> int:
     ans = 0
     for pattern in input:
         num_match_row, best_row = check_symmetry(pattern.orig, required_diffs=1)
