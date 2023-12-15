@@ -1,6 +1,6 @@
 import argparse
 
-base_text = """from typing import Any, Optional
+base_text = """from typing import Any, Optional, List
 import argparse
 
 sample_file_path = "test/{day}.sample"
@@ -54,14 +54,16 @@ def main_{day}(run_all: bool = False, example: Optional[str] = None):
         input = parse_file_day{day}("", example=example)
         solve_day{day}(input)
         exit(0)
+
     print("Running script for day {day}")
     print("Sample input")
+    print("---------------------------------")
     expected_out_part1 = None
     expected_out_part2 = None
-    print("---------------------------------")
     print("Input file:", sample_file_path)
     input = parse_file_day{day}(sample_file_path)
     solve_day{day}(input, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2)
+
     if run_all:
         print("---------------------------------")
         print("Actual input")

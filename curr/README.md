@@ -268,6 +268,10 @@ The first part is like a falling rocks simulation problem. Assuming we face nort
 
 ### day 15
 
+Implement a small hashing thing on strings. Then it asks you to only hash part of the string and add or replace labels and values while maintaining order.
+
+The hardest part about this problem was probably reading the problem.
+
 ### day 16
 
 ### day 17
