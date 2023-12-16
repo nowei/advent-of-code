@@ -274,6 +274,10 @@ The hardest part about this problem was probably reading the problem.
 
 ### day 16
 
+Basically a light and mirror problem, but we want to count the number of squares the light crosses.
+
+The second part is the same thing but we change the initial position. This could be parallelized with multiprocessing (work is mostly compute-bound so multithreading will just thrash for execution time).
+
 ### day 17
 
 ### day 18
