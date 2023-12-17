@@ -1,10 +1,16 @@
 import argparse
+import os.path
 
-base_text = """from typing import Any, Optional, List
+base_text = """from typing import Any, Optional, List, Tuple
 import argparse
 
 sample_file_path = "test/{day}.sample"
 input_file_path = "test/{day}.input"
+
+class Setting{day}:
+
+    def __init__(self):
+        pass
 
 def parse_file_day{day}(file_path, example: str = "") -> Any:
     if example:
@@ -13,16 +19,16 @@ def parse_file_day{day}(file_path, example: str = "") -> Any:
         with open(file_path, "r") as f:
             lines = f.readlines()
     for line in lines:
-        pass
+        line.strip()
     return None
 
-def solve_day{day}_part1(input: Any) -> int:
+def solve_day{day}_part1(input: Setting{day}) -> int:
     return 0
 
-def solve_day{day}_part2(input: Any) -> int:
+def solve_day{day}_part2(input: Setting{day}) -> int:
     return 0
 
-def solve_day{day}(input: Any, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
+def solve_day{day}(input: Setting{day}, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
     out_part1 = solve_day{day}_part1(input)
 
     if expected_pt1 is not None:
@@ -81,6 +87,10 @@ if __name__ == "__main__":
 
 def generate_files(day: int):
     day_dict = {"day": "{:02d}".format(day)}
+    if os.path.isfile("src/day{day}.py".format_map(day_dict)):
+        v = input("are you sure? y/n\n")
+        if v != "y":
+            exit(1)
     with open("src/day{day}.py".format_map(day_dict), "w") as f:
         out = base_text.format_map(day_dict)
         f.write(out)

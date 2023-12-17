@@ -280,6 +280,10 @@ The second part is the same thing but we change the initial position. This could
 
 ### day 17
 
+The first part was like a BFS, but we could only go in a certain direction 3 times in a row.
+
+The second part was like the first, but with the requirement that we could only go in a certain direction at least 4 or at most 10 times in a row.
+
 ### day 18
 
 ### day 19
