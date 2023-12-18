@@ -286,6 +286,12 @@ The second part was like the first, but with the requirement that we could only 
 
 ### day 18
 
+This is similar to the pipe one from day 10, but this time instead of space-filling, I checked the horizontal crossings by checking if the above or bottom had a crossing and only switched inside/outside if both a `#` was seen above and below in a sequence of `#`. Then I just counted the number of `#` to get the answer.
+
+The second one had much larger coordinates, so I ended up just using Pick's Theorem + the Shoelace formula to get the answer. Although Pick's theorem says that it's supposed to be `A = i + b/2 - 1` for the area, but my solution involves a `+ 1` instead of a `- 1`. This is probably due to an overcount somewhere, possibly in the perimeter, but that means I overcounted by 4 and I'm unsure where that would come from.
+
+I ended up reading about Green's theorem again and I think I should've taken better notes in Calculus.
+
 ### day 19
 
 ### day 20
