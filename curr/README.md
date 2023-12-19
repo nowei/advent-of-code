@@ -294,6 +294,10 @@ I ended up reading about Green's theorem again and I think I should've taken bet
 
 ### day 19
 
+Part 1 is like sorting groups into accepted or rejected based on their contents and some workflow rules (some part of the group is greater than or less than some number), so like the workflow rules could point to other workflow rules or it can point to accepted or rejected. Everything ends up being accepted or rejected. Then we were just asked to sum all the accepted groups' items
+
+Then part 2 asks us to do the same thing, but for valid ranges `[1, 4000]^4`. So we had to partition the ranges based on the workflow rules and figure out how to properly partition the ranges according to the rules. We did this by doing an iterative algorithm for advancing ranges. E.g. we would do this in levels and evaluating the levels created the next level. The next level was trimmed down by expiring the rejected and accepted lists. This will eventually terminate because all roads lead to acceptance or rejection.
+
 ### day 20
 
 ### day 21
