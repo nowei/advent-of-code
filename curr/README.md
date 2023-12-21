@@ -300,6 +300,8 @@ Then part 2 asks us to do the same thing, but for valid ranges `[1, 4000]^4`. So
 
 ### day 20
 
+The first part was just simulation. The second part required analyzing the input to figure out what triggered the `rx` module. I tried running a simulation and hashed the output to try to find a cycle but after running it for a while and trying an input, I realized that I probably wouldn't be able to find it in time, so I looked at reddit and learned that the input was actually like 4 independent cycles. This let us break the graph into four subgraphs where we could just pay attention to when each subgraph cycle sent a high energy packet to the final `dt` module. Then it just became an LCM problem.
+
 ### day 21
 
 ### day 22

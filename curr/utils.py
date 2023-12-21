@@ -1,7 +1,7 @@
 import argparse
 import os.path
 
-base_text = """from typing import Any, Optional, List, Tuple
+base_text = """from typing import Any, Optional, List, Tuple, Dict
 import argparse
 
 sample_file_path = "test/{day}.sample"
@@ -19,7 +19,7 @@ def parse_file_day{day}(file_path, example: str = "") -> Any:
         with open(file_path, "r") as f:
             lines = f.readlines()
     for line in lines:
-        line.strip()
+        curr = line.strip()
     return None
 
 def solve_day{day}_part1(input: Setting{day}) -> int:
