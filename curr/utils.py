@@ -54,21 +54,22 @@ def solve_day{day}(input: Setting{day}, expected_pt1: Optional[int] = None, expe
     print(out_part2)
     print()
 
-def main_{day}(run_all: bool = False, example: Optional[str] = None):
-    if example:
-        print("Testing input from cmd line")
-        input = parse_file_day{day}("", example=example)
-        solve_day{day}(input)
-        exit(0)
+def main_{day}(run_all: bool = False, example: Optional[str] = None, answer_only: bool = False):
+    if not answer_only:
+        if example:
+            print("Testing input from cmd line")
+            input = parse_file_day{day}("", example=example)
+            solve_day{day}(input)
+            exit(0)
 
-    print("Running script for day {day}")
-    print("Sample input")
-    print("---------------------------------")
-    expected_out_part1 = None
-    expected_out_part2 = None
-    print("Input file:", sample_file_path)
-    input = parse_file_day{day}(sample_file_path)
-    solve_day{day}(input, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2)
+        print("Running script for day {day}")
+        print("Sample input")
+        print("---------------------------------")
+        expected_out_part1 = None
+        expected_out_part2 = None
+        print("Input file:", sample_file_path)
+        input = parse_file_day{day}(sample_file_path)
+        solve_day{day}(input, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2)
 
     if run_all:
         print("---------------------------------")
@@ -81,8 +82,10 @@ def main_{day}(run_all: bool = False, example: Optional[str] = None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-a', '--actual', action='store_true')
+    parser.add_argument('-e', '--example')
+    parser.add_argument('-o', '--answer-only', action='store_true')
     args = parser.parse_args()
-    main_{day}(run_all=args.actual)
+    main_{day}(run_all=args.actual, example=args.example, answer_only=args.answer_only)
 """
 
 def generate_files(day: int):

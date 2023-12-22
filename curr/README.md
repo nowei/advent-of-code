@@ -304,6 +304,34 @@ The first part was just simulation. The second part required analyzing the input
 
 ### day 21
 
+The first part can be done with simulation, we make it slightly faster by noticing that we only care about the new neighbors and the old ones will repeat.
+
+What I noticed before I looked for hints:
+
+- Once a single garden square was filled, it would just switch back and forth between two numbers depending on if we're on an even or odd number of steps.
+- We can duplicate the garden across infinity by doing a % of the row and col my the max row and max col
+- The number of steps was very large, simulating the solution likely isn't the right way to go about it because the number of edges grows really fast.
+- The given input left a square that was rotated 45 degrees empty, idk how this is relevant.
+
+I eventually looked for hints on reddit because I was confused about a programmatic solution, but it seems like people solved this analytically so I ended up just looking at their hints because I felt like this was a little over my head.
+
+Specifically, I saw: https://www.reddit.com/r/adventofcode/comments/18nol3m/2023_day_21_a_geometric_solutionexplanation_for/
+
+Things I didn't notice:
+
+- The grid was size 131 x 131
+- There was an empty row and column along the middle
+- S was at the very center of the grid
+- A walk from the center to the edge was a 65 step distance
+- full adjacent squares alternate between even or odd steps being full and the number of even or odd squares were squared numbers.
+- The number of squares we walk is (26501365 - 65) // 131 = 202300 squares away from the original square.
+  - This meant that the after filling all 202300 square in a single direction, we walk 65 more steps, which gets us to the end of that square, leaving behind only corners with squares > 65 away from the center being empty.
+
+Things I realized:
+
+- The diagonals that make up the empty, rotated square in the square were able to be filled in 65 steps, so the corners would always be the same amount of being unfilled.
+- Corners matched to create empty corners of full 65-step squares
+
 ### day 22
 
 ### day 23
