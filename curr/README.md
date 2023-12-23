@@ -340,6 +340,10 @@ Then for part two, I just copied the blocks and checked all the not-safe-to-disi
 
 ### day 23
 
+Part 1 was just a dfs with some extra encoded steps for handling forced movements `<,>,v,^` and getting the longest path
+
+Part 2 required summarizing the points into a smaller graph based on junctions as verticies and distances as edges. Specifically, the junctions were areas connecting at least 3 possible movements. After that, we just ran a dfs to find the longest path on the smaller junction graph.
+
 ### day 24
 
 ### day 25
