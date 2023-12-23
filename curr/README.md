@@ -334,6 +334,10 @@ Things I realized:
 
 ### day 22
 
+Blocks falling down. This was kind of fun when I realized that I could just do like a scan of (x, y) and see what it would fall on top of. Then we only care about the tallest things it landed on, which was nice. Then the rule for checking whether it was safe to disintegrate was whether all the blocks this block supported had at least two blocks supporting it or if there was nothing above it.
+
+Then for part two, I just copied the blocks and checked all the not-safe-to-disintegrate blocks and added the number of blocks that moved with each change together.
+
 ### day 23
 
 ### day 24
