@@ -50,12 +50,62 @@ def parse_file_day25(file_path, example: str = "") -> Any:
     return Setting25(wires, edges, vertices)
 
 def solve_day25_part1(input: Setting25) -> int: 
-    # networkx solution
-    G = nx.Graph()
-    for e in input.edges:
-        G.add_edge(*e)
-    cc = nx.spectral_bisection(G)
-    return len(cc[0]) * len(cc[1])
+    # https://en.wikipedia.org/wiki/Karger%27s_algorithm
+    # Karger's impl from: https://gist.github.com/pmetzger/52781cb9ce98a1e13ac2d3dc6ae93292
+    # I was accounting for the groups badly. I wanted to keep a set of the groups when it sufficed to keep the
+    # a count of the size
+    while True:
+        # clone vertices and edges
+        nodes = defaultdict(lambda: list())
+        edges = [list(e) for e in input.edges]
+        node_size = {v: 1 for v in input.vertices}
+        random.shuffle(edges)
+        
+        for edge in edges:
+            nodes[edge[0]].append(edge)
+            nodes[edge[1]].append(edge)
+        while len(nodes) > 2:
+            e = edges.pop()
+            u, v = e
+            if u == v: 
+                continue
+            
+            for edge in nodes[v]:
+                for i in range(2):
+                    if edge[i] == v:
+                        edge[i] = u
+                nodes[u].append(edge)
+            del nodes[v]
+
+            node_size[u] += node_size[v]
+            del node_size[v]
+
+            new_edges = []
+            for edge in nodes[u]:
+                up, vp = edge
+                if up != vp:
+                    new_edges.append(edge)
+            nodes[u] = new_edges
+        node_keys = list(nodes.keys())
+        if len(nodes[node_keys[0]]) <= 3:
+            break
+    return node_size[node_keys[0]] * node_size[node_keys[1]]
+
+    #     mult = 1
+    #     for v in vertex:
+    #         mult *= len(vertex_groups[v])
+
+    #         freq[mult] += 1
+        
+    # for k in freq:
+    #     print(k, freq[k])
+    
+    # # networkx solution
+    # G = nx.Graph()
+    # for e in input.edges:
+    #     G.add_edge(*e)
+    # cc = nx.spectral_bisection(G)
+    # return len(cc[0]) * len(cc[1])
 
 def solve_day25_part2(input: Setting25) -> int:
     return 0
