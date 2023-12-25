@@ -11,7 +11,7 @@ for _ in range(n *n * n *m):
     # clone vertices and edges
     vertex = {v for v in input.vertices}
     vertex_groups = {v:set([v]) for v in input.vertices}
-    edges = {e for e in input.edges}
+    edges = {list(e) for e in input.edges}
 
     while len(vertex) > 2:
         e = random.choice([*edges])
@@ -27,24 +27,12 @@ for _ in range(n *n * n *m):
             new_group = u_group | v_group
             for s in new_group:
                 vertex_groups[s] = new_group
-                if s in vertex:
-                    vertex.remove(s)
-            min_node = ""
-            if u < v:
-                min_node = u
-            else: # v < u
-                min_node = v
-            vertex.add(min_node)
-            to_remove = set()
-            to_add = set()
-            for up, vp in edges:
-                if vertex_groups[up] == new_group:
-                    to_remove.add((up, vp))
-                    to_add.add((min_node, vp))
-                elif vertex_groups[vp] == new_group:
-                    to_remove.add((up, vp))
-                    to_add.add((up, min_node))
-            edges = edges.difference(to_remove) | to_add
+            for e in edges:
+                if e[0] in new_group:
+                    e[0] = u
+                if e[1] in new_group:
+                    e[1] = u
+        vertex.remove(v)
     mult = 1
     for v in vertex:
         mult *= len(vertex_groups[v])

@@ -1,4 +1,3 @@
-ry combination of 3 wires.
     edges = input.edges
     C = {}
     id = 0
