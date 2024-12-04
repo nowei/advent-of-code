@@ -1,9 +1,10 @@
-from typing import Any, Optional, List, Tuple, Dict
+from typing import Any, Optional, List, Tuple
 import argparse
 import math
 
 sample_file_path = "test/24.sample"
 input_file_path = "test/24.input"
+
 
 class Hailstone24:
     x: int
@@ -20,9 +21,11 @@ class Hailstone24:
         self.dx = dx
         self.dy = dy
         self.dz = dz
-    
+
     def __repr__(self):
-        return f"stone(({self.x}, {self.y}, {self.z}), ({self.dx}, {self.dy}, {self.dz}))"
+        return (
+            f"stone(({self.x}, {self.y}, {self.z}), ({self.dx}, {self.dy}, {self.dz}))"
+        )
 
     def check_parallel_prop(self, other, xy=False) -> Optional[Tuple[int, int]]:
         # factor is the rate at which things are parallel
@@ -31,14 +34,30 @@ class Hailstone24:
             self_dx, self_dy = self.dx / self_gcd, self.dy / self_gcd
             other_gcd = math.gcd(other.dx, other.dy)
             other_dx, other_dy = other.dx / other_gcd, other.dy / other_gcd
-            if self_dx == other_dx and self_dy == other_dy or (-self_dx == other_dx and -self_dy == other_dy):
+            if (
+                self_dx == other_dx
+                and self_dy == other_dy
+                or (-self_dx == other_dx and -self_dy == other_dy)
+            ):
                 return (self_gcd, other_gcd)
         else:
             self_gcd = math.gcd(math.gcd(self.dx, self.dy), self.dz)
-            self_dx, self_dy, self_dz = self.dx / self_gcd, self.dy / self_gcd, self.dz / self_gcd
+            self_dx, self_dy, self_dz = (
+                self.dx / self_gcd,
+                self.dy / self_gcd,
+                self.dz / self_gcd,
+            )
             other_gcd = math.gcd(math.gcd(other.dx, other.dy), other.dz)
-            other_dx, other_dy, other_dz = other.dx / other_gcd, other.dy / other_gcd, other.dz / other_gcd
-            if (self_dx == other_dx and self_dy == other_dy and self_dz == other_dz) or (-self_dx == other_dx and -self_dy == other_dy and -self_dz == other_dz):
+            other_dx, other_dy, other_dz = (
+                other.dx / other_gcd,
+                other.dy / other_gcd,
+                other.dz / other_gcd,
+            )
+            if (
+                self_dx == other_dx and self_dy == other_dy and self_dz == other_dz
+            ) or (
+                -self_dx == other_dx and -self_dy == other_dy and -self_dz == other_dz
+            ):
                 return (self_gcd, other_gcd)
         return None
 
@@ -66,7 +85,7 @@ class Hailstone24:
             res_x = x
             res_y = x * m1 + b1
             # check if in the past for either stone
-            # a stone is in the past if the change (m) is positive and 
+            # a stone is in the past if the change (m) is positive and
             # the result is after the current position
             if res_x / self.dx < dt1:
                 return None
@@ -74,20 +93,24 @@ class Hailstone24:
                 return None
             res = (res_x, res_y)
         else:
-            if self.dx == other.dx and self.dy == other.dy and self.dz == other.dz: 
+            if self.dx == other.dx and self.dy == other.dy and self.dz == other.dz:
                 return None
         return res
 
     def dist(self, other):
-        return (abs(self.x - other.x) ** 2 + abs(self.y - other.y) ** 2 + abs(self.z - other.z) ** 2) ** 0.5
+        return (
+            abs(self.x - other.x) ** 2
+            + abs(self.y - other.y) ** 2
+            + abs(self.z - other.z) ** 2
+        ) ** 0.5
+
 
 class Setting24:
-
     stones: List[Hailstone24]
 
     def __init__(self, stones):
         self.stones = stones
-    
+
     def dist(self):
         total = 0
         for i in range(len(self.stones) - 1):
@@ -100,7 +123,16 @@ class Setting24:
     def step(self) -> "Setting24":
         new_stones = []
         for stone in self.stones:
-            new_stones.append(Hailstone24(stone.x + stone.dx, stone.y + stone.dy, stone.z + stone.dz, stone.dx, stone.dy, stone.dz))
+            new_stones.append(
+                Hailstone24(
+                    stone.x + stone.dx,
+                    stone.y + stone.dy,
+                    stone.z + stone.dz,
+                    stone.dx,
+                    stone.dy,
+                    stone.dz,
+                )
+            )
         return Setting24(new_stones)
 
     def get_perfect_stone(self) -> Hailstone24:
@@ -112,9 +144,9 @@ class Setting24:
         # p2 + v2 * t2 = ps + vs * t2 # 12 known, 8 unknowns
         # ...
         # pn + vn * tn = ps + vs * tn # 6n known, 6+n unknowns
-        # 
+        #
         # []
-        # 
+        #
         # p + v * t = ps + vs * t
         # p - ps = (vs - v) * t
         # (p - ps) / (vs - v) = t
@@ -134,33 +166,42 @@ class Setting24:
         # xs * (dz - dz') + zs * (dx' - dx) + dxs * (z' - z) + dzs * (x - x') = z'*dx' - x' * dz' + x*dx - z*dx
         # Then we can do this again with y,z and x,z pairs. So we have 6 unknowns and 3 equations, but we can
         # do this again with p'', so we can get 6 equations with 6 unknowns and solve.
-        import numpy as np 
+        import numpy as np
+
         # order of matrix is x, y, z, dx, dy, dz
         p0 = self.stones[0]
         p1 = self.stones[1]
         p2 = self.stones[2]
-        A = np.matrix([[p1.dy - p0.dy, p0.dx - p1.dx, 0, p0.y - p1.y, p1.x - p0.x, 0], 
-                        [0, p0.dz - p1.dz, p1.dy - p0.dy, 0, p1.z - p0.z, p0.y - p1.y], 
-                        [p0.dz - p1.dz, 0, p1.dx - p0.dx, p1.z - p0.z, 0, p0.x - p1.x],
-                        [p2.dy - p0.dy, p0.dx - p2.dx, 0, p0.y - p2.y, p2.x - p0.x, 0], 
-                        [0, p0.dz - p2.dz, p2.dy - p0.dy, 0, p2.z - p0.z, p0.y - p2.y], 
-                        [p0.dz - p2.dz, 0, p2.dx - p0.dx, p2.z - p0.z, 0, p0.x - p2.x], ])
-        y = np.matrix([p1.x * p1.dy - p1.y * p1.dx + p0.y * p0.dx - p0.x * p0.dy,
-                       p1.z * p1.dy - p1.y * p1.dz + p0.y * p0.dz - p0.z * p0.dy,
-                       p1.z * p1.dx - p1.x * p1.dz + p0.x * p0.dz - p0.z * p0.dx,
-                       p2.x * p2.dy - p2.y * p2.dx + p0.y * p0.dx - p0.x * p0.dy,
-                       p2.z * p2.dy - p2.y * p2.dz + p0.y * p0.dz - p0.z * p0.dy,
-                       p2.z * p2.dx - p2.x * p2.dz + p0.x * p0.dz - p0.z * p0.dx,]).T
+        A = np.matrix(
+            [
+                [p1.dy - p0.dy, p0.dx - p1.dx, 0, p0.y - p1.y, p1.x - p0.x, 0],
+                [0, p0.dz - p1.dz, p1.dy - p0.dy, 0, p1.z - p0.z, p0.y - p1.y],
+                [p0.dz - p1.dz, 0, p1.dx - p0.dx, p1.z - p0.z, 0, p0.x - p1.x],
+                [p2.dy - p0.dy, p0.dx - p2.dx, 0, p0.y - p2.y, p2.x - p0.x, 0],
+                [0, p0.dz - p2.dz, p2.dy - p0.dy, 0, p2.z - p0.z, p0.y - p2.y],
+                [p0.dz - p2.dz, 0, p2.dx - p0.dx, p2.z - p0.z, 0, p0.x - p2.x],
+            ]
+        )
+        y = np.matrix(
+            [
+                p1.x * p1.dy - p1.y * p1.dx + p0.y * p0.dx - p0.x * p0.dy,
+                p1.z * p1.dy - p1.y * p1.dz + p0.y * p0.dz - p0.z * p0.dy,
+                p1.z * p1.dx - p1.x * p1.dz + p0.x * p0.dz - p0.z * p0.dx,
+                p2.x * p2.dy - p2.y * p2.dx + p0.y * p0.dx - p0.x * p0.dy,
+                p2.z * p2.dy - p2.y * p2.dz + p0.y * p0.dz - p0.z * p0.dy,
+                p2.z * p2.dx - p2.x * p2.dz + p0.x * p0.dz - p0.z * p0.dx,
+            ]
+        ).T
         x = np.asarray(np.linalg.solve(A, y)).squeeze()
-
 
         # Alternatively
         # (x - xs) / (dxs - dx) = t = (x' - xs) / (dxs - dx')
         # (x - xs) * (dxs - dx') = (x' - xs) * (dxs - dx)
         # x * dxs - x * dx' - xs * dxs + xs * dx' = x' * dxs - x' * dx - xs * dxs + xs * dx
         # xs * (dx - dx') + dxs * (x - x') = x * dx' - x' * dx
-        
+
         return Hailstone24(x[0], x[1], x[2], x[3], x[4], x[5])
+
 
 def parse_file_day24(file_path, example: str = "") -> Any:
     if example:
@@ -174,8 +215,9 @@ def parse_file_day24(file_path, example: str = "") -> Any:
         pos, vel = curr.split(" @ ")
         x, y, z = [int(v) for v in pos.split(", ")]
         dx, dy, dz = [int(v) for v in vel.split(", ")]
-        hailstones.append(Hailstone24(x,y,z,dx,dy,dz))
+        hailstones.append(Hailstone24(x, y, z, dx, dy, dz))
     return Setting24(hailstones)
+
 
 def solve_day24_part1(input: Setting24, range_min, range_max) -> int:
     matches = 0
@@ -184,15 +226,23 @@ def solve_day24_part1(input: Setting24, range_min, range_max) -> int:
         for j in range(i + 1, len(input.stones)):
             hailstone_b = input.stones[j]
             intersect = hailstone_a.intersects(hailstone_b, xy=True)
-            if intersect and all([range_min <= v and v <= range_max for v in intersect]):
+            if intersect and all(
+                [range_min <= v and v <= range_max for v in intersect]
+            ):
                 matches += 1
     return matches
+
 
 def solve_day24_part2(input: Setting24) -> int:
     rock = input.get_perfect_stone()
     return rock.x + rock.y + rock.z
 
-def solve_day24(input: Setting24, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
+
+def solve_day24(
+    input: Setting24,
+    expected_pt1: Optional[int] = None,
+    expected_pt2: Optional[int] = None,
+):
     if expected_pt1:
         range_min = 7
         range_max = 27
@@ -224,7 +274,10 @@ def solve_day24(input: Setting24, expected_pt1: Optional[int] = None, expected_p
     print(out_part2)
     print()
 
-def main_24(run_all: bool = False, example: Optional[str] = None, answer_only: bool = False):
+
+def main_24(
+    run_all: bool = False, example: Optional[str] = None, answer_only: bool = False
+):
     if not answer_only:
         if example:
             print("Testing input from cmd line")
@@ -239,7 +292,9 @@ def main_24(run_all: bool = False, example: Optional[str] = None, answer_only: b
         expected_out_part2 = 47
         print("Input file:", sample_file_path)
         input = parse_file_day24(sample_file_path)
-        solve_day24(input, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2)
+        solve_day24(
+            input, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2
+        )
 
     if run_all:
         print("---------------------------------")
@@ -251,8 +306,8 @@ def main_24(run_all: bool = False, example: Optional[str] = None, answer_only: b
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
-    parser.add_argument('-e', '--example')
-    parser.add_argument('-o', '--answer-only', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
+    parser.add_argument("-e", "--example")
+    parser.add_argument("-o", "--answer-only", action="store_true")
     args = parser.parse_args()
     main_24(run_all=args.actual, example=args.example, answer_only=args.answer_only)

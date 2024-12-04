@@ -1,4 +1,3 @@
-
 from typing import Any, List, Tuple, Set
 import argparse
 
@@ -7,6 +6,7 @@ input_file_path = "test/03.input"
 expected_out_part1 = 4361
 expected_out_part2 = 467835
 
+
 def parse_file_day03(file_path) -> List[List[str]]:
     lines = []
     with open(file_path, "r") as f:
@@ -14,23 +14,30 @@ def parse_file_day03(file_path) -> List[List[str]]:
             lines.append([c for c in line.strip()])
     return lines
 
+
 def check_valid_part(input: List[List[str]], digits_set: Set[Tuple[int, int]]) -> bool:
     width = len(input[0])
     height = len(input)
-    for (curr_row, curr_col) in digits_set:
+    for curr_row, curr_col in digits_set:
         for i in range(-1, 2):
             for j in range(-1, 2):
                 check_row = curr_row + i
                 check_col = curr_col + j
-                if check_row < 0 or check_row >= height: continue
-                if check_col < 0 or check_col >= width: continue
-                if (check_row, check_col) in digits_set: continue
+                if check_row < 0 or check_row >= height:
+                    continue
+                if check_col < 0 or check_col >= width:
+                    continue
+                if (check_row, check_col) in digits_set:
+                    continue
                 val = input[check_row][check_col]
                 if not val.isdigit() and val != ".":
                     return True
     return False
 
-def check_next_digits(input: List[List[str]], check_digit: Tuple[int, int], seen: Set[Tuple[int, int]]) -> (bool, int):
+
+def check_next_digits(
+    input: List[List[str]], check_digit: Tuple[int, int], seen: Set[Tuple[int, int]]
+) -> (bool, int):
     row, col = check_digit
     if not input[row][col].isdigit():
         return False, 0
@@ -47,6 +54,7 @@ def check_next_digits(input: List[List[str]], check_digit: Tuple[int, int], seen
         for c in range(col, col_max):
             val = val * 10 + int(input[row][c])
     return valid, val
+
 
 def solve_day03_part1(input: List[List[str]]) -> Any:
     seen = set()
@@ -66,6 +74,7 @@ def solve_day03_part1(input: List[List[str]]) -> Any:
             seen.add((i, j))
     return ans
 
+
 def get_left_right_number(input: List[List[str]], check_digit: Tuple[int, int]) -> int:
     width = len(input[0])
     row, col = check_digit
@@ -74,14 +83,16 @@ def get_left_right_number(input: List[List[str]], check_digit: Tuple[int, int]) 
         left_col -= 1
     while right_col < width and input[row][right_col].isdigit():
         right_col += 1
-    
+
     val = 0
     for c in range(left_col + 1, right_col):
         val = val * 10 + int(input[row][c])
     return val
 
 
-def check_surrounding_for_nums(input: List[List[str]], check_digit: Tuple[int, int]) -> int:
+def check_surrounding_for_nums(
+    input: List[List[str]], check_digit: Tuple[int, int]
+) -> int:
     width = len(input[0])
     height = len(input)
     curr_row, curr_col = check_digit
@@ -98,8 +109,10 @@ def check_surrounding_for_nums(input: List[List[str]], check_digit: Tuple[int, i
         for j in range(-1, 2):
             check_row = curr_row + i
             check_col = curr_col + j
-            if check_row < 0 or check_row >= height: continue
-            if check_col < 0 or check_col >= width: continue
+            if check_row < 0 or check_row >= height:
+                continue
+            if check_col < 0 or check_col >= width:
+                continue
             val = input[check_row][check_col]
             if val.isdigit():
                 if not contiguous:
@@ -111,7 +124,7 @@ def check_surrounding_for_nums(input: List[List[str]], check_digit: Tuple[int, i
     if seen_numbers != 2:
         return 0
     val = 1
-    for (i, j) in seen_numbers_coords:
+    for i, j in seen_numbers_coords:
         val *= get_left_right_number(input, (i, j))
     return val
 
@@ -125,6 +138,7 @@ def solve_day03_part2(input: List[List[str]]) -> Any:
                 gear_ratio = check_surrounding_for_nums(input, (i, j))
                 ans += gear_ratio
     return ans
+
 
 def solve_day03(file_path: str, check_out: bool):
     input = parse_file_day03(file_path)
@@ -153,6 +167,7 @@ def solve_day03(file_path: str, check_out: bool):
     print(out_part2)
     print()
 
+
 def main_03(run_all: bool = False):
     print("Running script for day 03")
     print("Sample input")
@@ -165,6 +180,6 @@ def main_03(run_all: bool = False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
     args = parser.parse_args()
     main_03(run_all=args.actual)

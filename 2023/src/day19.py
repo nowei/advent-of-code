@@ -5,6 +5,7 @@ import argparse
 sample_file_path = "test/19.sample"
 input_file_path = "test/19.input"
 
+
 class Rule19:
     var: str
     comp: str
@@ -16,32 +17,34 @@ class Rule19:
         self.comp = comp
         self.i = i
         self.result = result
-    
+
     def process(self, part: Dict[str, int]) -> str:
         if self.comp == ">":
             if part[self.var] > self.i:
                 return self.result
             else:
                 return ""
-        elif self.comp == "<": 
+        elif self.comp == "<":
             if part[self.var] < self.i:
                 return self.result
             else:
                 return ""
         else:
             return self.result
-    
-    def process_splits(self, cand: List[Tuple[int, int]]) -> List[List[Tuple[int, int]]]:
+
+    def process_splits(
+        self, cand: List[Tuple[int, int]]
+    ) -> List[List[Tuple[int, int]]]:
         if not self.comp:
             return [], cand
         result = [c for c in cand]
-        ind = {"x":0, "m":1, "a": 2, "s": 3}[self.var]
+        ind = {"x": 0, "m": 1, "a": 2, "s": 3}[self.var]
         c_min, c_max = cand[ind]
         # all sats self.i < |-----------------|
         # split    |---------------->----------|
         # no sats  > |----------|
         if self.comp == ">":  # [c_min, c_max] > self.i
-            if c_min > self.i: # all sats
+            if c_min > self.i:  # all sats
                 return [], result
             elif c_max <= self.i:
                 return cand, []
@@ -49,7 +52,7 @@ class Rule19:
                 cand[ind] = (c_min, self.i)
                 result[ind] = (self.i + 1, c_max)
                 return cand, result
-        else: # self.comp == "<"
+        else:  # self.comp == "<"
             if c_max < self.i:
                 return [], result
             elif c_min >= self.i:
@@ -58,8 +61,10 @@ class Rule19:
                 cand[ind] = (self.i, c_max)
                 result[ind] = (c_min, self.i - 1)
                 return cand, result
+
     def __repr__(self):
         return f"({self.var} {self.comp} {self.i}: {self.result})"
+
 
 class Rules19:
     steps: List[Rule19]
@@ -73,6 +78,7 @@ class Rules19:
             if res != "":
                 return res
         return ""
+
 
 def process_rules(rules_str: str) -> List[Callable[[Dict[str, int]], str]]:
     funcs = []
@@ -90,6 +96,7 @@ def process_rules(rules_str: str) -> List[Callable[[Dict[str, int]], str]]:
         funcs.append(v)
     return funcs
 
+
 class Setting19:
     rules: Dict[str, Rules19]
     parts: List[Dict[str, int]]
@@ -97,7 +104,7 @@ class Setting19:
     def __init__(self, rules, parts):
         self.rules = rules
         self.parts = parts
-    
+
     def process(self) -> int:
         total = 0
         for p in self.parts:
@@ -129,13 +136,19 @@ class Setting19:
                     print()
             if "A" in next_cands:
                 for a, b, c, d in next_cands["A"]:
-                    # The +1 is for the inclusive range 
-                    total += (a[1] - a[0] + 1) * (b[1] - b[0] + 1) * (c[1] - c[0] + 1) * (d[1] - d[0] + 1)
+                    # The +1 is for the inclusive range
+                    total += (
+                        (a[1] - a[0] + 1)
+                        * (b[1] - b[0] + 1)
+                        * (c[1] - c[0] + 1)
+                        * (d[1] - d[0] + 1)
+                    )
                 next_cands.pop("A")
             if "R" in next_cands:
                 next_cands.pop("R")
             cands = next_cands
         return total
+
 
 def parse_file_day19(file_path, example: str = "") -> Any:
     if example:
@@ -159,13 +172,20 @@ def parse_file_day19(file_path, example: str = "") -> Any:
             parts.append({"x": x, "m": m, "a": a, "s": s})
     return Setting19(rules, parts)
 
+
 def solve_day19_part1(input: Setting19) -> int:
     return input.process()
+
 
 def solve_day19_part2(input: Setting19) -> int:
     return input.process_splits()
 
-def solve_day19(input: Setting19, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
+
+def solve_day19(
+    input: Setting19,
+    expected_pt1: Optional[int] = None,
+    expected_pt2: Optional[int] = None,
+):
     out_part1 = solve_day19_part1(input)
 
     if expected_pt1 is not None:
@@ -190,6 +210,7 @@ def solve_day19(input: Setting19, expected_pt1: Optional[int] = None, expected_p
     print("Part 2 result:")
     print(out_part2)
     print()
+
 
 def main_19(run_all: bool = False, example: Optional[str] = None):
     if example:
@@ -217,6 +238,6 @@ def main_19(run_all: bool = False, example: Optional[str] = None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
     args = parser.parse_args()
     main_19(run_all=args.actual)

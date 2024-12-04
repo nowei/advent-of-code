@@ -7,12 +7,14 @@ input_file_path = "test/01.input"
 expected_out_part1 = 142
 expected_out_part2 = 281
 
+
 def parse_file_day01(file_path) -> List[str]:
     input = []
     with open(file_path, "r") as f:
         for line in f:
             input.append(line.strip())
     return input
+
 
 def solve_day01_part1(input: List[str]) -> int:
     answer = 0
@@ -31,8 +33,7 @@ def solve_day01_part1(input: List[str]) -> int:
     return answer
 
 
-
-class Trie():
+class Trie:
     value: Optional[int]
     children: Dict[str, "Trie"]
     terminal: bool = False
@@ -41,7 +42,7 @@ class Trie():
         self.value = None
         self.children = {}
         self.terminal = False
-    
+
     def __repr__(self):
         inside = ""
         if self.children:
@@ -52,6 +53,7 @@ class Trie():
 
     def __str__(self):
         return "member of Trie"
+
 
 def build_trie(values: Dict[str, int]) -> Trie:
     start = Trie()
@@ -67,9 +69,21 @@ def build_trie(values: Dict[str, int]) -> Trie:
                 ptr.value = values[word]
     return start
 
-digit_strs = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9}
+
+digit_strs = {
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+}
 forward_trie = build_trie(digit_strs)
 backward_trie = build_trie({s[::-1]: digit_strs[s] for s in digit_strs})
+
 
 def check_trie(line: str, i: int, trie: Trie) -> Optional[int]:
     ptr = trie
@@ -80,7 +94,8 @@ def check_trie(line: str, i: int, trie: Trie) -> Optional[int]:
         return ptr.value
 
     return None
-    
+
+
 def solve_day01_part2(input: List[str]) -> int:
     answer = 0
     for line in input:
@@ -111,6 +126,7 @@ def solve_day01_part2(input: List[str]) -> int:
         answer += first_digit * 10 + second_digit
     return answer
 
+
 def solve_day01(file_path: str, check_out: bool = False):
     input = parse_file_day01(file_path)
     out_part1 = solve_day01_part1(input)
@@ -139,12 +155,12 @@ def solve_day01(file_path: str, check_out: bool = False):
     print(out_part2)
     print()
 
+
 def main_01(only_sample: bool = False):
     print("Running script for day 01")
     solve_day01(sample_file_path, check_out=True)
     if not only_sample:
         solve_day01(input_file_path, check_out=False)
-    
 
 
 if __name__ == "__main__":

@@ -7,13 +7,16 @@ sample_file_path = "test/20.sample"
 sample_2_file_path = "test/20.sample2"
 input_file_path = "test/20.input"
 
+
 class Energy20(Enum):
     LOW = 0
     HIGH = 1
 
+
 class Packet20(NamedTuple):
     sender: str
     energy: Energy20
+
 
 class Module20:
     name: str
@@ -24,7 +27,7 @@ class Module20:
         self.name = name
         self.destinations = destinations
         self.state = False
-    
+
     def receive(self, packet: Packet20) -> Optional[Packet20]:
         pass
 
@@ -33,12 +36,14 @@ class Module20:
         if res is None:
             return []
         return [(dest, res) for dest in self.destinations]
-    
+
     def reset(self):
         pass
 
+
 class FlipFlop20(Module20):
     state: bool
+
     def __init__(self, name, destinations):
         super().__init__(name, destinations)
         self.state = False
@@ -59,15 +64,17 @@ class FlipFlop20(Module20):
 
     def reset(self):
         self.state = False
-    
+
+
 class Conjunction20(Module20):
     inputs: Dict[str, Energy20]
+
     def __init__(self, name, destinations, inputs):
         super().__init__(name, destinations)
         self.inputs = {}
         for i in inputs:
             self.inputs[i] = Energy20.LOW
-    
+
     def receive(self, packet: Packet20) -> Optional[Packet20]:
         self.inputs[packet.sender] = packet.energy
         if all([self.inputs[m] == Energy20.HIGH for m in self.inputs]):
@@ -82,41 +89,46 @@ class Conjunction20(Module20):
     def reset(self):
         self.inputs = {k: Energy20.LOW for k in self.inputs}
 
+
 class Broadcast20(Module20):
     def __init__(self, name, destinations):
         super().__init__(name, destinations)
-    
+
     def receive(self, packet: Packet20) -> Optional[Packet20]:
         return Packet20(self.name, packet.energy)
 
     def __repr__(self):
         return "broadcast"
 
-class Setting20:
 
+class Setting20:
     mods: Dict[str, Module20]
     from_map: Dict[str, List[str]]
 
     def __init__(self, mods: Dict[str, Module20], from_map: Dict[str, List[str]]):
         self.mods = mods
         self.from_map = from_map
-    
-    def press(self, cond: Optional[Tuple[str, Energy20]] = None, debug: bool = False) -> (List[Tuple[int, int]], bool):
+
+    def press(
+        self, cond: Optional[Tuple[str, Energy20]] = None, debug: bool = False
+    ) -> (List[Tuple[int, int]], bool):
         packets = [("broadcaster", Packet20("button", Energy20.LOW))]
         packet_hash = []
         found = False
-        
+
         if debug:
-            print('start', self)
+            print("start", self)
         while packets:
-            if debug: 
+            if debug:
                 print(packets)
             new_packets = []
             num_low = 0
             num_high = 0
             for dest, packet in packets:
-                if packet.energy == Energy20.LOW: num_low += 1
-                elif packet.energy == Energy20.HIGH: num_high += 1
+                if packet.energy == Energy20.LOW:
+                    num_low += 1
+                elif packet.energy == Energy20.HIGH:
+                    num_high += 1
                 res = []
                 if dest in self.mods:
                     res = self.mods[dest].process(packet)
@@ -126,17 +138,17 @@ class Setting20:
             packet_hash.append((num_low, num_high))
             packets = new_packets
         if debug:
-            print('end', self)
+            print("end", self)
         packet_hash.append(hash(str(self)))
         return packet_hash, found
 
     def __repr__(self):
         return ";".join(str(self.mods[k]) for k in sorted(self.mods.keys()))
-    
+
     def reset(self):
         for k in self.mods:
             self.mods[k].reset()
-    
+
     def press_until(self, cond: Tuple[str, Energy20]) -> int:
         num_presses = 0
         print(cond)
@@ -145,7 +157,7 @@ class Setting20:
             _, found = self.press(cond=cond, debug=False)
             num_presses += 1
         return num_presses
-    
+
     def process_until_rx(self):
         # analyze cycles from rx
         prev = self.from_map["rx"][0]
@@ -163,13 +175,15 @@ class Setting20:
                         seen.add(prev)
                         curr_cycle.append(prev)
             seen.add(p)
-            subgraphs[p] = Setting20({k: self.mods[k] for k in seen}, {k: self.from_map[k] for k in seen})
+            subgraphs[p] = Setting20(
+                {k: self.mods[k] for k in seen}, {k: self.from_map[k] for k in seen}
+            )
             # need to determine when each subgraph is high
             # check that `p` gets a high signal
             num_presses *= subgraphs[p].press_until(("dt", Energy20.HIGH))
 
         return num_presses
-    
+
     def process_simple(self, num_presses=1000):
         low_presses = 0
         high_presses = 0
@@ -179,15 +193,15 @@ class Setting20:
                 low_presses += low
                 high_presses += high
         return low_presses * high_presses
-    
+
     def process(self, num_presses=1000):
         layers = []
         seen = set()
         # find the pattern for how many times things trip over before it starts to repeat
-        # kind of like hashing outputs 
+        # kind of like hashing outputs
         curr = None
         while curr not in seen:
-            if curr: 
+            if curr:
                 layers.append(curr)
                 seen.add(curr)
             curr = tuple(self.press())
@@ -198,7 +212,9 @@ class Setting20:
         # already_pressed = len(layers)
         cycle_length = len(layers[cycle_start:])
         remaining_presses = num_presses - cycle_start
-        remaining_cycles, remaining_cycle_presses = divmod(remaining_presses, cycle_length)
+        remaining_cycles, remaining_cycle_presses = divmod(
+            remaining_presses, cycle_length
+        )
         low_presses = 0
         high_presses = 0
         # To get to where it starts to cycle
@@ -224,7 +240,6 @@ class Setting20:
             low_presses += cycle_presses[i][0]
             high_presses += cycle_presses[i][1]
         return low_presses * high_presses
-        
 
 
 def parse_file_day20(file_path, example: str = "") -> Any:
@@ -255,15 +270,23 @@ def parse_file_day20(file_path, example: str = "") -> Any:
     for name, destinations in conjunct:
         mods[name] = Conjunction20(name, destinations, from_map[name])
 
-    return Setting20(mods,from_map)
+    return Setting20(mods, from_map)
+
 
 def solve_day20_part1(input: Setting20) -> int:
     return input.process_simple()
 
+
 def solve_day20_part2(input: Setting20) -> int:
     return input.process_until_rx()
 
-def solve_day20(input: Setting20, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None, only_pt1: bool = False):
+
+def solve_day20(
+    input: Setting20,
+    expected_pt1: Optional[int] = None,
+    expected_pt2: Optional[int] = None,
+    only_pt1: bool = False,
+):
     out_part1 = solve_day20_part1(input)
 
     if expected_pt1 is not None:
@@ -277,7 +300,7 @@ def solve_day20(input: Setting20, expected_pt1: Optional[int] = None, expected_p
     print(out_part1)
     print()
     input.reset()
-    
+
     if not only_pt1:
         out_part2 = solve_day20_part2(input)
         if expected_pt2 is not None:
@@ -290,6 +313,7 @@ def solve_day20(input: Setting20, expected_pt1: Optional[int] = None, expected_p
         print("Part 2 result:")
         print(out_part2)
         print()
+
 
 def main_20(run_all: bool = False, example: Optional[str] = None):
     if example:
@@ -305,7 +329,12 @@ def main_20(run_all: bool = False, example: Optional[str] = None):
     expected_out_part2 = None
     print("Input file:", sample_file_path)
     input = parse_file_day20(sample_file_path)
-    solve_day20(input, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2, only_pt1=True)
+    solve_day20(
+        input,
+        expected_pt1=expected_out_part1,
+        expected_pt2=expected_out_part2,
+        only_pt1=True,
+    )
     input = parse_file_day20(sample_2_file_path)
     solve_day20(input, expected_pt1=11687500, only_pt1=True)
 
@@ -321,6 +350,6 @@ def main_20(run_all: bool = False, example: Optional[str] = None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
     args = parser.parse_args()
     main_20(run_all=args.actual)

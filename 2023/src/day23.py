@@ -1,15 +1,16 @@
-from typing import Any, Optional, List, Tuple, Dict
+from typing import Any, Optional, List, Tuple
 from collections import defaultdict, deque
 import argparse
 
 import sys
+
 sys.setrecursionlimit(10000)
 
 sample_file_path = "test/23.sample"
 input_file_path = "test/23.input"
 
-class Setting23:
 
+class Setting23:
     grid: List[str]
     start: Tuple[int, int]
     end: Tuple[int, int]
@@ -22,12 +23,13 @@ class Setting23:
         self.end = end
         self.row_max = len(self.grid)
         self.col_max = len(self.grid[0])
-    
+
     def longest_path(self, steep=True):
         seen = set()
         path = [self.start]
         heuristic = {}
         curr_best = [0]
+
         def consider(path: List[Tuple[int, int]]):
             # check all directions for if we can go, left, right, up, or down, if v, go two in that direciton
             if path[-1] == self.end:
@@ -76,7 +78,7 @@ class Setting23:
                         checks.append([curr, (row, col - 2)])
                     else:
                         checks.append([curr])
-            
+
             best = 0
             for dir in checks:
                 for step in dir:
@@ -92,6 +94,7 @@ class Setting23:
                     path.pop()
                     seen.remove(step)
             return best
+
         best = consider(path)
         return best - 1
 
@@ -101,11 +104,16 @@ class Setting23:
         for row in range(1, self.row_max - 1):
             for col in range(1, self.col_max - 1):
                 # if at least 3 adjacent is not "#"
-                if self.grid[row][col] == "#": continue
-                adj = sum([self.grid[row][col - 1] != "#",
-                           self.grid[row][col + 1] != "#",
-                           self.grid[row - 1][col] != "#",
-                           self.grid[row + 1][col] != "#"])
+                if self.grid[row][col] == "#":
+                    continue
+                adj = sum(
+                    [
+                        self.grid[row][col - 1] != "#",
+                        self.grid[row][col + 1] != "#",
+                        self.grid[row - 1][col] != "#",
+                        self.grid[row + 1][col] != "#",
+                    ]
+                )
                 if adj >= 3:
                     junctions.add((row, col))
         junctions.add(self.end)
@@ -121,40 +129,77 @@ class Setting23:
             seen_junctions.add(curr_junction)
             while cand:
                 row, col, dist = cand.popleft()
-                if row < 0 or col < 0 or row >= self.row_max or col >= self.col_max: continue
+                if row < 0 or col < 0 or row >= self.row_max or col >= self.col_max:
+                    continue
                 if (row, col) in seen_junctions and (row, col) != curr_junction:
-                    if curr_junction not in pairwise_dist or (row, col) not in pairwise_dist[curr_junction] or pairwise_dist[curr_junction][(row, col)] < dist:
+                    if (
+                        curr_junction not in pairwise_dist
+                        or (row, col) not in pairwise_dist[curr_junction]
+                        or pairwise_dist[curr_junction][(row, col)] < dist
+                    ):
                         pairwise_dist[curr_junction][(row, col)] = dist
                         pairwise_dist[(row, col)][curr_junction] = dist
-                if (row, col) in seen and (row, col) not in seen_junctions: continue
+                if (row, col) in seen and (row, col) not in seen_junctions:
+                    continue
                 # check, north, east, south, west
                 if (row, col) in junctions and (row, col) != curr_junction:
                     main_cand.append((row, col))
                     pairwise_dist[curr_junction][(row, col)] = dist
                     pairwise_dist[(row, col)][curr_junction] = dist
                 else:
-                    if (row - 1, col) not in seen and row - 1 > 0 and self.grid[row - 1][col] != "#": cand.append((row - 1, col, dist + 1))
-                    if (row + 1, col) not in seen and row + 1 < self.row_max and self.grid[row + 1][col] != "#": cand.append((row + 1, col, dist + 1))
-                    if (row, col + 1) not in seen and col + 1 < self.col_max and self.grid[row][col + 1] != "#": cand.append((row, col + 1, dist + 1))
-                    if (row, col - 1) not in seen and col - 1 > 0 and self.grid[row][col - 1] != "#": cand.append((row, col - 1, dist + 1))
+                    if (
+                        (row - 1, col) not in seen
+                        and row - 1 > 0
+                        and self.grid[row - 1][col] != "#"
+                    ):
+                        cand.append((row - 1, col, dist + 1))
+                    if (
+                        (row + 1, col) not in seen
+                        and row + 1 < self.row_max
+                        and self.grid[row + 1][col] != "#"
+                    ):
+                        cand.append((row + 1, col, dist + 1))
+                    if (
+                        (row, col + 1) not in seen
+                        and col + 1 < self.col_max
+                        and self.grid[row][col + 1] != "#"
+                    ):
+                        cand.append((row, col + 1, dist + 1))
+                    if (
+                        (row, col - 1) not in seen
+                        and col - 1 > 0
+                        and self.grid[row][col - 1] != "#"
+                    ):
+                        cand.append((row, col - 1, dist + 1))
                     seen.add((row, col))
         for row in range(self.row_max):
-            print("".join([self.grid[row][col] if (row, col) not in seen else "O" for col in range(self.col_max)]))
+            print(
+                "".join(
+                    [
+                        self.grid[row][col] if (row, col) not in seen else "O"
+                        for col in range(self.col_max)
+                    ]
+                )
+            )
         vertices = junctions
         edges = pairwise_dist
         seen = set([self.start])
         print(self.end)
+
         def dfs(path, curr_val):
             if path[-1] == self.end:
                 return curr_val
             best = 0
             for cand in edges[path[-1]]:
-                if cand in seen: continue
+                if cand in seen:
+                    continue
                 seen.add(cand)
                 best = max(best, dfs(path + [cand], curr_val + edges[path[-1]][cand]))
                 seen.remove(cand)
             return best
+
         return dfs([self.start], 0)
+
 
 def parse_file_day23(file_path, example: str = "") -> Any:
     if example:
@@ -162,7 +207,7 @@ def parse_file_day23(file_path, example: str = "") -> Any:
     else:
         with open(file_path, "r") as f:
             lines = f.readlines()
-    
+
     map_list = []
     first = None
     for line in lines:
@@ -175,13 +220,20 @@ def parse_file_day23(file_path, example: str = "") -> Any:
     end = (len(map_list) - 1, last.index("."))
     return Setting23(map_list, start, end)
 
+
 def solve_day23_part1(input: Setting23) -> int:
     return input.longest_path()
+
 
 def solve_day23_part2(input: Setting23) -> int:
     return input.junction_search()
 
-def solve_day23(input: Setting23, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
+
+def solve_day23(
+    input: Setting23,
+    expected_pt1: Optional[int] = None,
+    expected_pt2: Optional[int] = None,
+):
     out_part1 = solve_day23_part1(input)
 
     if expected_pt1 is not None:
@@ -207,7 +259,10 @@ def solve_day23(input: Setting23, expected_pt1: Optional[int] = None, expected_p
     print(out_part2)
     print()
 
-def main_23(run_all: bool = False, example: Optional[str] = None, answer_only: bool = False):
+
+def main_23(
+    run_all: bool = False, example: Optional[str] = None, answer_only: bool = False
+):
     if not answer_only:
         if example:
             print("Testing input from cmd line")
@@ -222,7 +277,9 @@ def main_23(run_all: bool = False, example: Optional[str] = None, answer_only: b
         expected_out_part2 = 154
         print("Input file:", sample_file_path)
         input = parse_file_day23(sample_file_path)
-        solve_day23(input, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2)
+        solve_day23(
+            input, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2
+        )
 
     if run_all:
         print("---------------------------------")
@@ -234,8 +291,8 @@ def main_23(run_all: bool = False, example: Optional[str] = None, answer_only: b
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
-    parser.add_argument('-e', '--example')
-    parser.add_argument('-o', '--answer-only', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
+    parser.add_argument("-e", "--example")
+    parser.add_argument("-o", "--answer-only", action="store_true")
     args = parser.parse_args()
     main_23(run_all=args.actual, example=args.example, answer_only=args.answer_only)

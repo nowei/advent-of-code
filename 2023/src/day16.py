@@ -1,9 +1,10 @@
-from typing import Any, Optional, List, Dict, Tuple
+from typing import Any, Optional, List, Dict
 from collections import defaultdict
 import argparse
 
 sample_file_path = "test/16.sample"
 input_file_path = "test/16.input"
+
 
 class Direction16:
     seen: Dict[str, int]
@@ -22,13 +23,14 @@ class Direction16:
         else:
             return total
 
+
 class Setting16:
     map: List[List[str]]
 
     def __init__(self, map):
         self.map = map
         # Populate the energized list
-    
+
     def get_energy(self, init):
         beams = [init]
         energized_list = defaultdict(lambda: Direction16())
@@ -78,7 +80,7 @@ class Setting16:
                     col += 1
                 elif dir == "S":
                     row += 1
-                else: # dir == "W"
+                else:  # dir == "W"
                     col -= 1
                 if row < 0 or row >= len(self.map):
                     continue
@@ -91,6 +93,7 @@ class Setting16:
             beams = new_beams
         return len(energized_list)
 
+
 def parse_file_day16(file_path, example: str = "") -> Any:
     if example:
         lines = [example]
@@ -102,8 +105,10 @@ def parse_file_day16(file_path, example: str = "") -> Any:
         m.append([c for c in line.strip()])
     return Setting16(m)
 
+
 def solve_day16_part1(input: Setting16) -> int:
     return input.get_energy((0, -1, "E"))
+
 
 def solve_day16_part2(input: Setting16) -> int:
     best = 0
@@ -117,7 +122,10 @@ def solve_day16_part2(input: Setting16) -> int:
         best = max(best, input.get_energy(cand))
     return best
 
-def solve_day16(input: Any, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
+
+def solve_day16(
+    input: Any, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None
+):
     out_part1 = solve_day16_part1(input)
 
     if expected_pt1 is not None:
@@ -142,6 +150,7 @@ def solve_day16(input: Any, expected_pt1: Optional[int] = None, expected_pt2: Op
     print("Part 2 result:")
     print(out_part2)
     print()
+
 
 def main_16(run_all: bool = False, example: Optional[str] = None):
     if example:
@@ -169,6 +178,6 @@ def main_16(run_all: bool = False, example: Optional[str] = None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
     args = parser.parse_args()
     main_16(run_all=args.actual)

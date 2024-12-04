@@ -5,6 +5,7 @@ import argparse
 sample_file_path = "test/17.sample"
 input_file_path = "test/17.input"
 
+
 class Setting17:
     map: List[List[int]]
 
@@ -12,10 +13,16 @@ class Setting17:
         self.map = map
         self.max_row = len(map)
         self.max_col = len(map[0])
-    
-    def solve(self, start: Tuple[int, int], end: Tuple[int, int], min_straight: int = 1, max_straight: int = 3) -> int:
+
+    def solve(
+        self,
+        start: Tuple[int, int],
+        end: Tuple[int, int],
+        min_straight: int = 1,
+        max_straight: int = 3,
+    ) -> int:
         # tuples will be [cost, row, col, dir, straight]
-        heap = [(0, start, 'I', max_straight)]
+        heap = [(0, start, "I", max_straight)]
 
         new_dir_map = {
             "N": "WNE",
@@ -32,7 +39,9 @@ class Setting17:
             "W": [0, -1],
         }
 
-        def get_next(cand: Tuple[int, Tuple[int, int], str, int]) -> List[Tuple[int, Tuple[int, int], str, int]]:
+        def get_next(
+            cand: Tuple[int, Tuple[int, int], str, int],
+        ) -> List[Tuple[int, Tuple[int, int], str, int]]:
             cost, curr_pos, dir, curr_straight = cand
             curr_row, curr_col = curr_pos
             next_cands = []
@@ -71,7 +80,9 @@ class Setting17:
                     if curr_straight > 0:
                         next_cands.append((new_cost, new_pos, d, curr_straight - 1))
                 else:
-                    next_cands.append((new_cost, new_pos, d, max_straight - min_straight))
+                    next_cands.append(
+                        (new_cost, new_pos, d, max_straight - min_straight)
+                    )
             return next_cands
 
         seen = set()
@@ -84,7 +95,7 @@ class Setting17:
             if cand[1] == end:
                 break
             next_cands = get_next(cand)
-            
+
             for c in next_cands:
                 from_map[c] = cand
                 heapq.heappush(heap, c)
@@ -125,13 +136,20 @@ def parse_file_day17(file_path, example: str = "") -> Any:
         m.append([int(c) for c in line.strip()])
     return Setting17(m)
 
+
 def solve_day17_part1(input: Setting17) -> int:
     return input.solve((0, 0), (input.max_row - 1, input.max_col - 1))
 
-def solve_day17_part2(input: Setting17) -> int:
-    return input.solve((0, 0), (input.max_row - 1, input.max_col - 1), min_straight=4, max_straight=10)
 
-def solve_day17(input: Any, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
+def solve_day17_part2(input: Setting17) -> int:
+    return input.solve(
+        (0, 0), (input.max_row - 1, input.max_col - 1), min_straight=4, max_straight=10
+    )
+
+
+def solve_day17(
+    input: Any, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None
+):
     out_part1 = solve_day17_part1(input)
 
     if expected_pt1 is not None:
@@ -156,6 +174,7 @@ def solve_day17(input: Any, expected_pt1: Optional[int] = None, expected_pt2: Op
     print("Part 2 result:")
     print(out_part2)
     print()
+
 
 def main_17(run_all: bool = False, example: Optional[str] = None):
     if example:
@@ -183,6 +202,6 @@ def main_17(run_all: bool = False, example: Optional[str] = None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
     args = parser.parse_args()
     main_17(run_all=args.actual)

@@ -1,5 +1,6 @@
 from collections import defaultdict
 import random
+
 freq = defaultdict(lambda: 0)
 
 # https://en.wikipedia.org/wiki/Karger%27s_algorithm
@@ -7,10 +8,10 @@ freq = defaultdict(lambda: 0)
 n = len(input.vertices)
 m = len(input.edges)
 
-for _ in range(n *n * n *m):
+for _ in range(n * n * n * m):
     # clone vertices and edges
     vertex = {v for v in input.vertices}
-    vertex_groups = {v:set([v]) for v in input.vertices}
+    vertex_groups = {v: set([v]) for v in input.vertices}
     edges = {list(e) for e in input.edges}
 
     while len(vertex) > 2:
@@ -21,7 +22,7 @@ for _ in range(n *n * n *m):
         # v_group = get_origin(v, vertex_groups)
         u_group = vertex_groups[u]
         v_group = vertex_groups[v]
-        if u_group == v_group: 
+        if u_group == v_group:
             continue
         else:
             new_group = u_group | v_group
@@ -38,6 +39,6 @@ for _ in range(n *n * n *m):
         mult *= len(vertex_groups[v])
 
         freq[mult] += 1
-    
+
 for k in freq:
     print(k, freq[k])

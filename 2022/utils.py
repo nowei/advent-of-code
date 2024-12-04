@@ -3,6 +3,7 @@ import toml
 
 days = [25]
 
+
 def file_contents(d):
     string = """use std::fs;
 use regex::Regex;
@@ -90,6 +91,7 @@ mod tests {
     string = string.replace("DAYN", str(d))
     return string
 
+
 def generate_files(days):
     data = toml.load("Cargo.toml")
     seen = set(data["workspace"]["members"])
@@ -99,15 +101,17 @@ def generate_files(days):
         p = subprocess.run(["cargo", "new", "day{}".format(d), "--bin"])
 
         if p.returncode == 0:
-            with open(day + "/" + 'src/main.rs', 'w') as f:
+            with open(day + "/" + "src/main.rs", "w") as f:
                 f.write(file_contents(d))
 
             if day not in seen:
                 data["workspace"]["members"].append(day)
 
-            with open(day + "/" + "sample.txt", 'w') as f: pass
-            with open(day + "/" + "input.txt", 'wb') as f: pass
-    
+            with open(day + "/" + "sample.txt", "w") as f:
+                pass
+            with open(day + "/" + "input.txt", "wb") as f:
+                pass
+
     with open("Cargo.toml", "w") as toml_file:
         toml.dump(data, toml_file)
 
@@ -115,5 +119,6 @@ def generate_files(days):
 def main():
     generate_files(days)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

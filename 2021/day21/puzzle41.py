@@ -15,7 +15,7 @@ score = [0, 0]
 t = 0
 
 while score[0] < 1000 and score[1] < 1000:
-    curr = 0 
+    curr = 0
     for i in range(3):
         curr += dice
         dice += 1
@@ -34,4 +34,4 @@ print(rolls, score)
 ans = rolls * min(score)
 print(ans)
 if sample:
-    assert(ans == 739785)
+    assert ans == 739785

@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import List
 import argparse
 
 sample_file_path = "test/09.sample"
@@ -6,12 +6,13 @@ input_file_path = "test/09.input"
 expected_out_part1 = 114
 expected_out_part2 = 2
 
+
 class OasisReading:
     reading: List[int]
 
     def __init__(self, reading):
         self.reading = reading
-    
+
     def get_next(self, before: bool = False) -> int:
         per_layer_diffs = []
         layer = self.reading
@@ -32,6 +33,7 @@ class OasisReading:
                 prev_diff = layer[0] - prev_diff
         return prev_diff
 
+
 def parse_file_day09(file_path) -> List[OasisReading]:
     readings = []
     with open(file_path, "r") as f:
@@ -40,17 +42,20 @@ def parse_file_day09(file_path) -> List[OasisReading]:
             readings.append(OasisReading(reading))
     return readings
 
+
 def solve_day09_part1(input: List[OasisReading]) -> int:
     ans = 0
     for reading in input:
         ans += reading.get_next(before=False)
     return ans
 
+
 def solve_day09_part2(input: List[OasisReading]) -> int:
     ans = 0
     for reading in input:
         ans += reading.get_next(before=True)
     return ans
+
 
 def solve_day09(file_path: str, check_out: bool):
     input = parse_file_day09(file_path)
@@ -79,6 +84,7 @@ def solve_day09(file_path: str, check_out: bool):
     print(out_part2)
     print()
 
+
 def main_09(run_all: bool = False):
     print("Running script for day 09")
     print("Sample input")
@@ -91,6 +97,6 @@ def main_09(run_all: bool = False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
     args = parser.parse_args()
     main_09(run_all=args.actual)

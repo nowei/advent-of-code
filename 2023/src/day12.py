@@ -1,16 +1,18 @@
-from typing import Any, Optional, List
+from typing import Optional, List
 import argparse
 import itertools
-import functools 
+import functools
 
-debug=False
+debug = False
 
 sample_file_path = "test/12.sample"
 input_file_path = "test/12.input"
 
+
 def fill_possibilities(s):
-    for p in map(iter, itertools.product(".#", repeat=s.count('?'))):
-        yield ''.join(c if c != '?' else next(p) for c in s)
+    for p in map(iter, itertools.product(".#", repeat=s.count("?"))):
+        yield "".join(c if c != "?" else next(p) for c in s)
+
 
 class Record12:
     row: str
@@ -31,7 +33,7 @@ class Record12:
                     print("ayo", cand)
                 ans += 1
         return ans
-    
+
     def bfs_permutations(self):
         cands = [[[v for v in self.row.split(".") if v != ""], self.reqs, ""]]
         count = 0
@@ -61,7 +63,7 @@ class Record12:
                     curr_clone = curr.copy()
                     cands.append([curr_clone, req_clone, last_cand + "." + locked])
 
-        # actual = self.valid_permutations() 
+        # actual = self.valid_permutations()
         # if actual != count:
         #     print(actual, count)
         #     print(self.row, self.reqs,)
@@ -72,6 +74,7 @@ class Record12:
             print(self.row, self.reqs)
         char_array = [c for c in self.row]
         reqs = self.reqs.copy()
+
         @functools.lru_cache(maxsize=None)
         def go_deep(i, req_i, contiguous=False):
             # if more # than the amount of things in reqs, not feasible, return early
@@ -89,11 +92,15 @@ class Record12:
                     i += 1
                 return go_deep(i, req_i, contiguous=False)
             elif char_array[i] == "#":
-                if contiguous or i + reqs[req_i] > len(char_array) or "." in char_array[i:i+reqs[req_i]]:
+                if (
+                    contiguous
+                    or i + reqs[req_i] > len(char_array)
+                    or "." in char_array[i : i + reqs[req_i]]
+                ):
                     return 0
                 res = go_deep(i + reqs[req_i], req_i + 1, contiguous=True)
                 return res
-            else: # char_array[index] == "?"
+            else:  # char_array[index] == "?"
                 # Try both paths:
                 p_res = 0
                 # get next char that is not "."
@@ -102,36 +109,45 @@ class Record12:
                     next_p += 1
                 p_res = go_deep(next_p, req_i)
                 s_res = 0
-                if not (contiguous or i + reqs[req_i] > len(char_array) or "." in char_array[i:i+reqs[req_i]]):
+                if not (
+                    contiguous
+                    or i + reqs[req_i] > len(char_array)
+                    or "." in char_array[i : i + reqs[req_i]]
+                ):
                     s_res = go_deep(i + reqs[req_i], req_i + 1, contiguous=True)
 
                 return p_res + s_res
+
         result = go_deep(0, 0, False)
 
         if debug:
-            actual = self.valid_permutations() 
+            actual = self.valid_permutations()
             if actual != result:
                 print(actual, result)
-                print(self.row, self.reqs,)
+                print(
+                    self.row,
+                    self.reqs,
+                )
         return result
+
 
 class Springs12:
     records: List[Record12]
 
     def __init__(self, records):
         self.records = records
-    
+
     def solve_summed(self) -> int:
         permutations = 0
         i = 0
-        from multiprocessing.pool import ThreadPool
+
         for record in self.records:
             res = record.dfs_permutations()
             permutations += res
             i += 1
             print(i, record.row, res)
         return permutations
-        
+
 
 def parse_file_day12(file_path, example: str = "") -> Springs12:
     records = []
@@ -147,14 +163,21 @@ def parse_file_day12(file_path, example: str = "") -> Springs12:
         records.append(record)
     return Springs12(records)
 
+
 def solve_day12_part1(input: Springs12) -> int:
     return input.solve_summed()
+
 
 def solve_day12_part2(input: Springs12) -> int:
     # return 0
     return input.solve_summed()
 
-def solve_day12(input: Springs12, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
+
+def solve_day12(
+    input: Springs12,
+    expected_pt1: Optional[int] = None,
+    expected_pt2: Optional[int] = None,
+):
     out_part1 = solve_day12_part1(input)
 
     if expected_pt1 is not None:
@@ -187,6 +210,7 @@ def solve_day12(input: Springs12, expected_pt1: Optional[int] = None, expected_p
     print(out_part2)
     print()
 
+
 def main_12(run_all: bool = False, example: Optional[str] = None):
     if example:
         global debug
@@ -213,7 +237,7 @@ def main_12(run_all: bool = False, example: Optional[str] = None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
-    parser.add_argument("-e", '--example')
+    parser.add_argument("-a", "--actual", action="store_true")
+    parser.add_argument("-e", "--example")
     args = parser.parse_args()
     main_12(run_all=args.actual, example=args.example)

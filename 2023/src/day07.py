@@ -1,4 +1,4 @@
-from typing import Any, Tuple, List
+from typing import Tuple, List
 from collections import defaultdict
 import argparse
 
@@ -7,14 +7,17 @@ input_file_path = "test/07.input"
 expected_out_part1 = 6440
 expected_out_part2 = 5905
 
-class Hand07():
+
+class Hand07:
     bid: int
     hand: str
     rank: Tuple[int, int, int, int, int, int]
 
     # Note that we call the replacement of the Jack with the Joker `busted`,
     # not to be confused with running out of chips
-    def hand_rank(hand: str, busted: bool = False) -> Tuple[int, int, int, int, int, int]:
+    def hand_rank(
+        hand: str, busted: bool = False
+    ) -> Tuple[int, int, int, int, int, int]:
         bucket = defaultdict(lambda: 0)
         card_rankings = {
             "2": 2,
@@ -39,7 +42,7 @@ class Hand07():
         for c in hand:
             bucket[c] += 1
             card_ranking.append(card_rankings[c])
-        
+
         fives = False
         fours = False
         threes = False
@@ -59,40 +62,40 @@ class Hand07():
 
         rank = []
         if busted:
-        # For busted computations, handle Joker cards separately
+            # For busted computations, handle Joker cards separately
             jokers = bucket["J"]
             # 5s of the same, or 5 jokers, or 4 jokers + highcard or 3 jokers and a pair, or 2 jokers and a triple, or 1 joker and a fours
             # fours if of the same, 3 and a joker, a pair and two jokers, 1 and 3 jokers
             # full house if threes and pair, or 2 pairs and a joker
             # two pair if 2 pairs
-            if jokers == 5: # always five of a kind
+            if jokers == 5:  # always five of a kind
                 rank.append(6)
-            elif jokers == 4: # always 5 of a kind
+            elif jokers == 4:  # always 5 of a kind
                 rank.append(6)
-            elif jokers == 3: # two cards left
-                if pairs == 1: # 5 of a kind
+            elif jokers == 3:  # two cards left
+                if pairs == 1:  # 5 of a kind
                     rank.append(6)
-                else: # 2 cards different -> 4 of a kind
+                else:  # 2 cards different -> 4 of a kind
                     rank.append(5)
             elif jokers == 2:
-                if threes: # five of a kind
+                if threes:  # five of a kind
                     rank.append(6)
-                elif pairs == 1: # four of a kind
+                elif pairs == 1:  # four of a kind
                     rank.append(5)
-                else: # 3 cards different -> three of a kind
+                else:  # 3 cards different -> three of a kind
                     rank.append(3)
             elif jokers == 1:
-                if fours: # five of a kind
+                if fours:  # five of a kind
                     rank.append(6)
-                elif threes: # four of a kind
+                elif threes:  # four of a kind
                     rank.append(5)
-                elif pairs == 2: # full house
+                elif pairs == 2:  # full house
                     rank.append(4)
-                elif pairs == 1: # three of a kind
+                elif pairs == 1:  # three of a kind
                     rank.append(3)
-                else: # one pair
+                else:  # one pair
                     rank.append(1)
-            else: # jokers == 0
+            else:  # jokers == 0
                 if fives:
                     rank.append(6)
                 elif fours:
@@ -128,7 +131,7 @@ class Hand07():
                 rank.append(0)
         rank.extend(card_ranking)
         return tuple(rank)
-    
+
     def __init__(self, bid: int, hand: str):
         self.bid = bid
         self.hand = hand
@@ -145,19 +148,22 @@ def parse_file_day07(file_path) -> List[Hand07]:
             hands.append(Hand07(bid, hand))
     return hands
 
+
 def solve_day07_part1(input: List[Hand07]) -> int:
     input.sort(key=lambda x: x.rank)
     ans = 0
     for i in range(len(input)):
-        ans += (i+1)*input[i].bid
+        ans += (i + 1) * input[i].bid
     return ans
+
 
 def solve_day07_part2(input: List[Hand07]) -> int:
     input.sort(key=lambda x: x.busted_rank)
     ans = 0
     for i in range(len(input)):
-        ans += (i+1)*input[i].bid
+        ans += (i + 1) * input[i].bid
     return ans
+
 
 def solve_day07(file_path: str, check_out: bool):
     input = parse_file_day07(file_path)
@@ -186,6 +192,7 @@ def solve_day07(file_path: str, check_out: bool):
     print(out_part2)
     print()
 
+
 def main_07(run_all: bool = False):
     print("Running script for day 07")
     print("Sample input")
@@ -198,6 +205,6 @@ def main_07(run_all: bool = False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
     args = parser.parse_args()
     main_07(run_all=args.actual)

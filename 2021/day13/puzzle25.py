@@ -8,29 +8,30 @@ with open(file, "r") as f:
         if line.strip() == "":
             instruction_flag = True
         if instruction_flag:
-            if not line.strip(): continue
-            d, offset = line.strip().split()[2].split('=')
+            if not line.strip():
+                continue
+            d, offset = line.strip().split()[2].split("=")
             instructions.append((d, int(offset)))
         else:
-            x, y = line.strip().split(',')
+            x, y = line.strip().split(",")
             positions.add((int(x), int(y)))
 
 d, offset = instructions[0]
 move_cands = set()
 stay_cands = set()
 for x, y in positions:
-    if d == 'x':
+    if d == "x":
         if x > offset:
             move_cands.add((x, y))
         else:
             stay_cands.add((x, y))
-    else: # d == 'y'
+    else:  # d == 'y'
         if y > offset:
             move_cands.add((x, y))
         else:
             stay_cands.add((x, y))
 print(move_cands, stay_cands)
-if d == 'x':
+if d == "x":
     for x, y in move_cands:
         diff = x - offset
         stay_cands.add((offset - diff, y))
@@ -45,4 +46,4 @@ ans = len(stay_cands)
 print(ans)
 
 if sample:
-    assert(ans == 17)
+    assert ans == 17

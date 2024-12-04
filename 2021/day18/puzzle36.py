@@ -8,8 +8,10 @@ with open(file, "r") as f:
         else:
             problems[-1].append(eval(line))
 
+
 def snail_add(a, b):
     return snail_reduce([a, b])
+
 
 class NestedIterator:
     def __init__(self, p):
@@ -34,6 +36,7 @@ class NestedIterator:
                 break
         return curr, list(self.curr_inds)
 
+
 def explode_nested(p):
     ni = NestedIterator(p)
     prev, curr, next_v = None, ni.next(), ni.next()
@@ -48,7 +51,7 @@ def explode_nested(p):
             for i in curr[1][:-1]:
                 c = c[i]
             left, right = c[curr[1][-1]]
-            if curr[1][-1] == 1: # expand right ...[a, [b, c]]...
+            if curr[1][-1] == 1:  # expand right ...[a, [b, c]]...
                 c = p
                 for i in prev[1][:-1]:
                     c = c[i]
@@ -61,7 +64,7 @@ def explode_nested(p):
                     c[next_v[1][-1]][0] += right
                 else:
                     c[next_v[1][-1]] += right
-            else: # expand left ...[[a, b], c]...
+            else:  # expand left ...[[a, b], c]...
                 if prev:
                     c = p
                     for i in prev[1][:-1]:
@@ -70,7 +73,7 @@ def explode_nested(p):
                         c[prev[1][-1]][1] += left
                     else:
                         c[prev[1][-1]] += left
-                c = p 
+                c = p
                 for i in next_v[1][:-1]:
                     c = c[i]
                 if type(c[next_v[1][-1]]) == list:
@@ -98,6 +101,7 @@ def explode_nested(p):
         changed = True
     return changed
 
+
 def split_greater(p):
     ni = NestedIterator(p)
     curr = ni.next()
@@ -115,6 +119,7 @@ def split_greater(p):
         changed = True
     return changed
 
+
 def snail_reduce(p):
     changed = True
     while changed:
@@ -125,20 +130,24 @@ def snail_reduce(p):
         changed = split_greater(p)
     return p
 
+
 def snail_process(problems):
     curr = problems[0]
     for p in problems[1:]:
         curr = snail_add(curr, p)
     return curr
 
+
 def mag(a):
     left, right = a
     total = 0
     total += 3 * (mag(left) if type(left) == list else left)
     total += 2 * (mag(right) if type(right) == list else right)
-    return total 
+    return total
+
 
 import copy
+
 
 def get_best_mag(problem):
     best = 0
@@ -155,8 +164,10 @@ def get_best_mag(problem):
                 best = curr
                 print(problem[i], problem[j], best)
     return best
+
+
 problem = problems[-1]
 ans = get_best_mag(problem)
 print(ans)
 if sample:
-    assert(ans == 3993)
+    assert ans == 3993

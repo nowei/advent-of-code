@@ -34,7 +34,7 @@ for _ in range(100):
 
 if sample:
     print(ans)
-    assert(ans == 1656)
-    print('sample passed')
+    assert ans == 1656
+    print("sample passed")
 else:
     print(ans)

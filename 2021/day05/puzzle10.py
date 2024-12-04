@@ -1,12 +1,13 @@
 from collections import Counter
+
 sample = False
-file = 'sample5.txt' if sample else 'input5.txt' 
+file = "sample5.txt" if sample else "input5.txt"
 vents = []
-with open(file, 'r') as f:
+with open(file, "r") as f:
     for line in f:
-        a, b = line.strip().split(' -> ')
-        x1, y1 = a.split(',')
-        x2, y2 = b.split(',')
+        a, b = line.strip().split(" -> ")
+        x1, y1 = a.split(",")
+        x2, y2 = b.split(",")
         arr = [int(v) for v in [x1, y1, x2, y2]]
         vents.append(arr)
 
@@ -21,16 +22,16 @@ for x1, y1, x2, y2 in vents:
         for x in range(min(x1, x2), max(x1, x2) + 1):
             counts[(x, y)] += 1
     else:
-        if x2 > x1 and y2 > y1: # top left to bot right
+        if x2 > x1 and y2 > y1:  # top left to bot right
             x = True
             y = True
-        elif x2 > x1 and y2 < y1: # top right to bot left
+        elif x2 > x1 and y2 < y1:  # top right to bot left
             x = True
             y = False
-        elif x2 < x1 and y2 > y1: # bot left to top right
+        elif x2 < x1 and y2 > y1:  # bot left to top right
             x = False
             y = True
-        else: # x2 < x1 and y2 < y1 # bot right to top left
+        else:  # x2 < x1 and y2 < y1 # bot right to top left
             x = False
             y = False
         for i in range(abs(x2 - x1) + 1):
@@ -39,4 +40,4 @@ total = 0
 for c in counts:
     if counts[c] > 1:
         total += 1
-print('number of at least two overlap is: {}'.format(total))
+print("number of at least two overlap is: {}".format(total))

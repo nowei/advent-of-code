@@ -1,7 +1,7 @@
-from typing import Any, Optional, List, Tuple, Set, Dict
+from typing import Optional, List, Tuple, Set, Dict
 import argparse
 from collections import deque
-from enum import Enum 
+from enum import Enum
 
 sample_1_file_path = "test/10.sample"
 sample_2_file_path = "test/10.sample2"
@@ -9,7 +9,8 @@ sample_3_file_path = "test/10.sample3"
 sample_4_file_path = "test/10.sample4"
 sample_5_file_path = "test/10.sample5"
 input_file_path = "test/10.input"
-    
+
+
 class PipeMap10:
     max_row: int
     max_col: int
@@ -24,7 +25,7 @@ class PipeMap10:
             for col in range(len(pipe_map[0])):
                 if pipe_map[row][col] == "S":
                     self.starting_point = (col, row)
-    
+
     def get_valid_neighbors(self, coord: Tuple[int, int]) -> List[Tuple[int, int]]:
         col, row = coord
         char = self.pipe_map[row][col]
@@ -79,8 +80,14 @@ class PipeMap10:
                 valid_next.append(cand)
         return valid_next
 
-def domain_expansion(input: PipeMap10, valid_pipes: Set[Tuple[int, int]]) -> Tuple[PipeMap10, Set[Tuple[int, int]]]:
-    expanded_map = [["." for _ in range(len(input.pipe_map[0]) * 3)] for _ in range(len(input.pipe_map) * 3)]
+
+def domain_expansion(
+    input: PipeMap10, valid_pipes: Set[Tuple[int, int]]
+) -> Tuple[PipeMap10, Set[Tuple[int, int]]]:
+    expanded_map = [
+        ["." for _ in range(len(input.pipe_map[0]) * 3)]
+        for _ in range(len(input.pipe_map) * 3)
+    ]
     new_valid_pipes = set()
     for row in range(len(input.pipe_map)):
         for col in range(len(input.pipe_map[0])):
@@ -93,32 +100,56 @@ def domain_expansion(input: PipeMap10, valid_pipes: Set[Tuple[int, int]]) -> Tup
                 expanded_map[row_start + 0][col_start + 1] = "|"
                 expanded_map[row_start + 1][col_start + 1] = "|"
                 expanded_map[row_start + 2][col_start + 1] = "|"
-                new_valid_pipes |= {(row_start + 0, col_start + 1), (row_start + 1, col_start + 1), (row_start + 2, col_start + 1)}
+                new_valid_pipes |= {
+                    (row_start + 0, col_start + 1),
+                    (row_start + 1, col_start + 1),
+                    (row_start + 2, col_start + 1),
+                }
             elif char == "-":
                 expanded_map[row_start + 1][col_start + 0] = "-"
                 expanded_map[row_start + 1][col_start + 1] = "-"
                 expanded_map[row_start + 1][col_start + 2] = "-"
-                new_valid_pipes |= {(row_start + 1, col_start + 0), (row_start + 1, col_start + 1), (row_start + 1, col_start + 2)}
+                new_valid_pipes |= {
+                    (row_start + 1, col_start + 0),
+                    (row_start + 1, col_start + 1),
+                    (row_start + 1, col_start + 2),
+                }
             elif char == "L":
                 expanded_map[row_start + 0][col_start + 1] = "|"
                 expanded_map[row_start + 1][col_start + 1] = "L"
                 expanded_map[row_start + 1][col_start + 2] = "-"
-                new_valid_pipes |= {(row_start + 0, col_start + 1), (row_start + 1, col_start + 1), (row_start + 1, col_start + 2)}
+                new_valid_pipes |= {
+                    (row_start + 0, col_start + 1),
+                    (row_start + 1, col_start + 1),
+                    (row_start + 1, col_start + 2),
+                }
             elif char == "J":
                 expanded_map[row_start + 0][col_start + 1] = "|"
                 expanded_map[row_start + 1][col_start + 1] = "J"
                 expanded_map[row_start + 1][col_start + 0] = "-"
-                new_valid_pipes |= {(row_start + 0, col_start + 1), (row_start + 1, col_start + 1), (row_start + 1, col_start + 0)}
+                new_valid_pipes |= {
+                    (row_start + 0, col_start + 1),
+                    (row_start + 1, col_start + 1),
+                    (row_start + 1, col_start + 0),
+                }
             elif char == "7":
                 expanded_map[row_start + 1][col_start + 0] = "-"
                 expanded_map[row_start + 1][col_start + 1] = "7"
                 expanded_map[row_start + 2][col_start + 1] = "|"
-                new_valid_pipes |= {(row_start + 1, col_start + 0), (row_start + 1, col_start + 1), (row_start + 2, col_start + 1)}
+                new_valid_pipes |= {
+                    (row_start + 1, col_start + 0),
+                    (row_start + 1, col_start + 1),
+                    (row_start + 2, col_start + 1),
+                }
             elif char == "F":
                 expanded_map[row_start + 1][col_start + 1] = "F"
                 expanded_map[row_start + 1][col_start + 2] = "-"
                 expanded_map[row_start + 2][col_start + 1] = "|"
-                new_valid_pipes |= {(row_start + 1, col_start + 1), (row_start + 1, col_start + 2), (row_start + 2, col_start + 1)}
+                new_valid_pipes |= {
+                    (row_start + 1, col_start + 1),
+                    (row_start + 1, col_start + 2),
+                    (row_start + 2, col_start + 1),
+                }
             elif char == ".":
                 pass
             elif char == "S":
@@ -127,8 +158,17 @@ def domain_expansion(input: PipeMap10, valid_pipes: Set[Tuple[int, int]]) -> Tup
                 expanded_map[row_start + 1][col_start + 1] = "S"
                 expanded_map[row_start + 1][col_start + 2] = "-"
                 expanded_map[row_start + 2][col_start + 1] = "|"
-                new_valid_pipes |= {(row_start + 0, col_start + 1), (row_start + 1, col_start + 0), (row_start + 1, col_start + 1), (row_start + 1, col_start + 2), (row_start + 2, col_start + 1)}
-    return PipeMap10(["".join(row) for row in expanded_map], len(expanded_map), len(expanded_map[0])), new_valid_pipes
+                new_valid_pipes |= {
+                    (row_start + 0, col_start + 1),
+                    (row_start + 1, col_start + 0),
+                    (row_start + 1, col_start + 1),
+                    (row_start + 1, col_start + 2),
+                    (row_start + 2, col_start + 1),
+                }
+    return PipeMap10(
+        ["".join(row) for row in expanded_map], len(expanded_map), len(expanded_map[0])
+    ), new_valid_pipes
+
 
 def parse_file_day10(file_path) -> PipeMap10:
     with open(file_path, "r") as f:
@@ -161,12 +201,20 @@ def solve_day10_part1(input: PipeMap10) -> int:
             cands.append((dist + 1, v))
     return max_dist
 
+
 class StateEnum10(Enum):
     PIPE = 1
     INSIDE = 2
     OUTSIDE = 3
 
-def explore(cand: Tuple[int, int], input: PipeMap10, pipe_set: Set[Tuple[int, int]], seen_superset: Dict[int, StateEnum10], curr_set: Set[Tuple[int, int]]) -> Tuple[int, bool]:
+
+def explore(
+    cand: Tuple[int, int],
+    input: PipeMap10,
+    pipe_set: Set[Tuple[int, int]],
+    seen_superset: Dict[int, StateEnum10],
+    curr_set: Set[Tuple[int, int]],
+) -> Tuple[int, bool]:
     cands = deque([cand])
     valid = True
     visited = 0
@@ -188,12 +236,20 @@ def explore(cand: Tuple[int, int], input: PipeMap10, pipe_set: Set[Tuple[int, in
         cands.append((row + 1, col))
     return visited, valid
 
+
 def count_insides(input: PipeMap10, inside_set: Set[Tuple[int, int]]) -> int:
     val = 0
     for row in range(input.max_row // 3):
         for col in range(input.max_col // 3):
-            val += all([(row * 3 + i, col * 3 + j) in inside_set for i in range(3) for j in range(3)])
+            val += all(
+                [
+                    (row * 3 + i, col * 3 + j) in inside_set
+                    for i in range(3)
+                    for j in range(3)
+                ]
+            )
     return val
+
 
 def solve_day10_part2(input: PipeMap10, debug: bool = False) -> int:
     seen = set()
@@ -247,7 +303,12 @@ def solve_day10_part2(input: PipeMap10, debug: bool = False) -> int:
     num_inside = count_insides(new_input, inside_set)
     return num_inside
 
-def solve_day10(file_path: str, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
+
+def solve_day10(
+    file_path: str,
+    expected_pt1: Optional[int] = None,
+    expected_pt2: Optional[int] = None,
+):
     print("---------------------------------")
     print("Input file:", file_path)
     input = parse_file_day10(file_path)
@@ -276,6 +337,7 @@ def solve_day10(file_path: str, expected_pt1: Optional[int] = None, expected_pt2
     print(out_part2)
     print()
 
+
 def main_10(run_all: bool = False):
     print("Running script for day 10")
     print("Sample input")
@@ -295,6 +357,6 @@ def main_10(run_all: bool = False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
     args = parser.parse_args()
     main_10(run_all=args.actual)

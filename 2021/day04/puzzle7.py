@@ -1,8 +1,9 @@
-from collections import defaultdict 
+from collections import defaultdict
+
 # Process the lines
-with open('input4.txt', 'r') as f:
+with open("input4.txt", "r") as f:
     lines = f.readlines()
-inputs = [int(i) for i in lines[0].strip().split(',')]
+inputs = [int(i) for i in lines[0].strip().split(",")]
 boards = []
 for line in lines[1:]:
     if not line.strip():
@@ -52,5 +53,7 @@ chosen_board = board_map[chosen_ind]
 print(seen, len(seen), len(inputs))
 for line in chosen_board:
     print(line)
-total_unused = sum([sum([v for v in row if v not in seen] + [0]) for row in chosen_board])
+total_unused = sum(
+    [sum([v for v in row if v not in seen] + [0]) for row in chosen_board]
+)
 print("final score: {}".format(total_unused * chosen_val))

@@ -13,7 +13,8 @@ for i in range(1):
         for v in A:
             for child in input.wires[v]:
                 count = 0
-                if child in A: continue
+                if child in A:
+                    continue
                 for o in input.wires[child]:
                     if o in A:
                         count += 1

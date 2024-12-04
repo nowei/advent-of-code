@@ -1,6 +1,6 @@
 # advent-of-code-2021
 
-Answers written in Python3. Usually answers are what comes 
+Answers written in Python3. Usually answers are what comes
 to mind first. If it doesn't work, then something else is tried.
 All solutions are best-effort-with-reasonable-attempts.
 
@@ -19,7 +19,7 @@ day 06 - brute force list / dp/cohort counting; exponential growth -> dp
 
 day 07 - calculus with median / calculus with mean; math, brute force, math, then brute force again
 
-day 08 - counting unique / elimination rules; process of elimination 
+day 08 - counting unique / elimination rules; process of elimination
 
 day 09 - sum lowest points / multiply area of lowest basins; just a connected area search
 
@@ -65,10 +65,10 @@ day 25 - I just played it out, idk where the solution went, I forgot to commit i
 
 19 - directions are hard, even if limited to 3d and at 90 degree angles
 
-21 - Exponential combinations so using memory to store results, basically dp (tabulation) and expressing the state space, but there's a lot of state so it should be done carefully. Just keeps branching and adding on each step. 
+21 - Exponential combinations so using memory to store results, basically dp (tabulation) and expressing the state space, but there's a lot of state so it should be done carefully. Just keeps branching and adding on each step.
 
-22 - How do we keep track of space and what is the best way to split and keep track of split space? I just ended up splitting up intersected boxes by splitting top and bottom, then front and back, then left and right. - Something to keep in mind: If processing from reverse, if it's on, it'll always stay on. If it's off, then it will always stay off. So we only need to consider new volumes that haven't been carved out yet.  
+22 - How do we keep track of space and what is the best way to split and keep track of split space? I just ended up splitting up intersected boxes by splitting top and bottom, then front and back, then left and right. - Something to keep in mind: If processing from reverse, if it's on, it'll always stay on. If it's off, then it will always stay off. So we only need to consider new volumes that haven't been carved out yet.
 
 23 - Basically a search problem if you don't know what you're doing (me). I ended up doing an A* search with a heuristic being the cost to get out + cost to move to the right place + cost to get in. Runtime was a bit bad, but it worked.
 
-24 - It's easy to see that it performs operations. It's harder to trace what the operations actually do. Some conditions are impossible to fulfill, so we just have to let them happen. Always starting from 9s or 1s is a good idea. The trace becomes easier to debug after looking through it for a while. Smart way is to think of \*26 and /26 as pushing and popping and abstracting the parts between the equals checks. Stack should be empty by the end. Brute force after analysis is fine, but after the analysis it becomes arithmetic. Smartest way to solve this is to translate the instructions into another language rather than debugging instructions. Brute transcription -> Clean code is fine too. 
+24 - It's easy to see that it performs operations. It's harder to trace what the operations actually do. Some conditions are impossible to fulfill, so we just have to let them happen. Always starting from 9s or 1s is a good idea. The trace becomes easier to debug after looking through it for a while. Smart way is to think of \*26 and /26 as pushing and popping and abstracting the parts between the equals checks. Stack should be empty by the end. Brute force after analysis is fine, but after the analysis it becomes arithmetic. Smartest way to solve this is to translate the instructions into another language rather than debugging instructions. Brute transcription -> Clean code is fine too.

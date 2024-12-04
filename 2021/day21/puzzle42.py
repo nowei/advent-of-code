@@ -1,4 +1,4 @@
-from collections import defaultdict, Counter 
+from collections import Counter
 
 sample = False
 file = "sample21.txt" if sample else "input21.txt"
@@ -16,10 +16,10 @@ print(positions)
 # each score then needs to keep track of the number of ways to get to that score from that position
 # Any score greater than or equal to 21 gets added to universe wins
 outcomes = Counter()
-for i in range(1,4):
-    for j in range(1,4):
+for i in range(1, 4):
+    for j in range(1, 4):
         for k in range(1, 4):
-            outcomes[i+j+k] += 1
+            outcomes[i + j + k] += 1
 print(outcomes)
 
 
@@ -34,12 +34,12 @@ print(outcomes)
 #  (8,4;  8,4): 6,  (8,5; 8,5): 18,  (8,6; 8,6): 36,  (8,7: 8,7): 42,  (8,8; 8,8): 36,  (8,9; 8,9): 18,   (8,10; 8,10): 6
 #  (9,4;  9,4): 3,  (9,5; 9,5):  9,  (9,6; 9,6): 18,  (9,7: 9,7): 21,  (9,8; 9,8): 18,   (9,9; 9,9): 9,   (9,10; 9,10): 3
 # (10,4; 10,4): 1, (10,5; 10,5): 3, (10,6; 10,6): 6, (10,7: 10,7): 7, (10,8; 10,8): 6, (10,9; 10,9): 4, (10,10; 10,10): 1
-# Then for each of these outcomes, 
+# Then for each of these outcomes,
 
 # state[(s1, s2, p1, p2)] = count
 # score: 21 * 21, position: 10 * 10 = 441 * 100 <= 44100 comps per iteration
 # universe_wins = [0, 0]
-# 
+#
 
 # to get to 21 from pos 1,
 # 9 -> 10 lands on 10
@@ -48,23 +48,23 @@ print(outcomes)
 # min number of turns is 3 for a player to get results
 
 # minimum path to 21 from 1 is 9 moves
-# rolling 3 -> 4,4 ; 
-#         9 -> 7,3 ; 
-#         9 -> 9,2 ; 
-#         9 -> 10,1; 
-#         3 -> 14,4; 
-#         9 -> 17,3; 
-#         9 -> 19,2; 
-#         9 -> 20,1; 
+# rolling 3 -> 4,4 ;
+#         9 -> 7,3 ;
+#         9 -> 9,2 ;
+#         9 -> 10,1;
+#         3 -> 14,4;
+#         9 -> 17,3;
+#         9 -> 19,2;
+#         9 -> 20,1;
 #         # -> 21,#
-# so paths should end in at most 17 turns 
+# so paths should end in at most 17 turns
 
 turn = 0
 t = 0
 won_universes = [0, 0]
-state = {(0, 0, positions[0], positions[1]):1}
+state = {(0, 0, positions[0], positions[1]): 1}
 # state = {(0, 0, 0, 0):1}
-print('starting state', state)
+print("starting state", state)
 for _ in range(17):
     new_state = Counter()
     for s in state:
@@ -78,7 +78,7 @@ for _ in range(17):
             new_pos %= 10
             if turn:
                 new_score = s2 + new_pos + 1
-            else: 
+            else:
                 new_score = s1 + new_pos + 1
             # if new_score == 1:
             #     print('wtffff', new_pos, pos, outcome)
@@ -91,7 +91,7 @@ for _ in range(17):
                 won_universes[turn] += num_universes
             else:
                 # Note: We need to add num_universes because there's multiple ways
-                # to reach the same state from a previous state. 
+                # to reach the same state from a previous state.
                 # e.g. (9, 9) can be reached from (9, 4), (9, 5), (9, 6), (9, 7), (9, 8)
                 new_state[ns] += num_universes
     print(t, turn, won_universes)
@@ -104,5 +104,5 @@ print(won_universes)
 ans = max(won_universes)
 print(ans)
 if sample:
-    assert(ans == 444356092776315)
-    assert(min(won_universes) == 341960390180808)
+    assert ans == 444356092776315
+    assert min(won_universes) == 341960390180808

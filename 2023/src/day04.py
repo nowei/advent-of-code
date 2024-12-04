@@ -6,6 +6,7 @@ input_file_path = "test/04.input"
 expected_out_part1 = 13
 expected_out_part2 = 30
 
+
 class CardGame04:
     id: int
     winning_nums: Set[int]
@@ -24,12 +25,14 @@ class CardGame04:
         if seen == 0:
             return 0
         return 2 ** (seen - 1)
+
     def matches(self) -> int:
         seen = 0
         for v in self.actual_nums:
             if v in self.winning_nums:
                 seen += 1
         return seen
+
 
 def parse_file_day04(file_path) -> List[CardGame04]:
     games = []
@@ -51,6 +54,7 @@ def solve_day04_part1(input: List[CardGame04]) -> Any:
         ans += game.points()
     return ans
 
+
 def solve_day04_part2(input: List[CardGame04]) -> Any:
     # card(inality) map
     card_map = {}
@@ -66,6 +70,7 @@ def solve_day04_part2(input: List[CardGame04]) -> Any:
             if new_card_id in card_map:
                 card_map[new_card_id] += num_cards
     return sum([card_map[id] for id in card_map])
+
 
 def solve_day04(file_path: str, check_out: bool):
     input = parse_file_day04(file_path)
@@ -94,6 +99,7 @@ def solve_day04(file_path: str, check_out: bool):
     print(out_part2)
     print()
 
+
 def main_04(run_all: bool = False):
     print("Running script for day 04")
     print("Sample input")
@@ -106,6 +112,6 @@ def main_04(run_all: bool = False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
     args = parser.parse_args()
     main_04(run_all=args.actual)

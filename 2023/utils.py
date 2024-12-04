@@ -88,6 +88,7 @@ if __name__ == "__main__":
     main_{day}(run_all=args.actual, example=args.example, answer_only=args.answer_only)
 """
 
+
 def generate_files(day: int):
     day_dict = {"day": "{:02d}".format(day)}
     if os.path.isfile("src/day{day}.py".format_map(day_dict)):
@@ -103,6 +104,7 @@ def generate_files(day: int):
     with open("test/{day}.input".format_map(day_dict), "w") as f:
         pass
 
+
 def main():
     parser = argparse.ArgumentParser(prog="generate template")
     parser.add_argument("-d", "--day")
@@ -112,5 +114,6 @@ def main():
         exit()
     generate_files(int(args.day))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

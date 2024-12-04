@@ -1,4 +1,4 @@
-from typing import Any, Optional, List, Tuple, Dict, Set
+from typing import Any, Optional, Tuple, Dict, Set
 import argparse
 from collections import defaultdict
 import random
@@ -6,6 +6,7 @@ import networkx as nx
 
 sample_file_path = "test/25.sample"
 input_file_path = "test/25.input"
+
 
 class Setting25:
     wires: Dict[str, Set[str]]
@@ -17,6 +18,7 @@ class Setting25:
         self.edges = edges
         self.vertices = vertices
 
+
 class Community:
     id: int
     nodes: Set[int]
@@ -26,9 +28,10 @@ class Community:
         self.id = id
         self.nodes = nodes
         self.all = all
-    
+
     def __repr__(self):
         return f"Community({self.id}, nodes={self.nodes}, all={self.all_nodes})"
+
 
 def parse_file_day25(file_path, example: str = "") -> Any:
     if example:
@@ -51,8 +54,10 @@ def parse_file_day25(file_path, example: str = "") -> Any:
             vertices.add(child)
     return Setting25(wires, edges, vertices)
 
+
 def solve_day25_part1(input: Setting25) -> int:
     return solve_day25_part1_kargers_attmp2(input)
+
 
 def solve_day25_part1_louvain_almost(input: Setting25) -> int:
     edges = input.edges
@@ -90,7 +95,7 @@ def solve_day25_part1_louvain_almost(input: Setting25) -> int:
                 if o_id not in community_id_to_consider:
                     community_id_to_consider.append(o_id)
             changes = []
-            sum_in = 0 
+            sum_in = 0
             sum_tot = 0
             for c_id in community.nodes:
                 for o_id in A[c_id]:
@@ -99,15 +104,19 @@ def solve_day25_part1_louvain_almost(input: Setting25) -> int:
                     sum_tot += A[c_id][o_id]
             for n_id in community_id_to_consider:
                 neighbor = communities[n_id]
-                k_i = k[id] # weighted_degree of i
-                k_iin = 0 # the sum of the weights of the links between i and other nodes in the community that i is moving into
+                k_i = k[id]  # weighted_degree of i
+                k_iin = 0  # the sum of the weights of the links between i and other nodes in the community that i is moving into
                 for o_id in A[id]:
                     if o_id in neighbor.nodes:
                         k_iin += A[id][o_id]
-                change = ((sum_in + 2 * k_iin) / (2 * m) - ((sum_tot + k_i)/(2 * m)) ** 2) - ((sum_in / (2 * m)) - (sum_tot / (2 * m)) ** 2 - (k_i / (2 * m)) ** 2)
+                change = (
+                    (sum_in + 2 * k_iin) / (2 * m) - ((sum_tot + k_i) / (2 * m)) ** 2
+                ) - (
+                    (sum_in / (2 * m)) - (sum_tot / (2 * m)) ** 2 - (k_i / (2 * m)) ** 2
+                )
                 changes.append(change)
                 # take_best positive change
-            best = 0 
+            best = 0
             best_ind = -1
             for ind in range(len(changes)):
                 if changes[ind] < 0:
@@ -166,23 +175,24 @@ def solve_day25_part1_louvain_almost(input: Setting25) -> int:
         mult *= len(communities[c].all[c])
     return mult
 
-def solve_day25_part1_kargers_attmp1(input: Setting25) -> int: 
+
+def solve_day25_part1_kargers_attmp1(input: Setting25) -> int:
     while True:
         # clone vertices and edges
         nodes = defaultdict(lambda: list())
         edges = [list(e) for e in input.edges]
         node_size = {v: 1 for v in input.vertices}
         random.shuffle(edges)
-        
+
         for edge in edges:
             nodes[edge[0]].append(edge)
             nodes[edge[1]].append(edge)
         while len(nodes) > 2:
             e = edges.pop()
             u, v = e
-            if u == v: 
+            if u == v:
                 continue
-            
+
             for edge in nodes[v]:
                 for i in range(2):
                     if edge[i] == v:
@@ -205,7 +215,7 @@ def solve_day25_part1_kargers_attmp1(input: Setting25) -> int:
     return node_size[node_keys[0]] * node_size[node_keys[1]]
 
 
-def solve_day25_part1_kargers_attmp2(input: Setting25) -> int: 
+def solve_day25_part1_kargers_attmp2(input: Setting25) -> int:
     # https://en.wikipedia.org/wiki/Karger%27s_algorithm
     # Karger's impl from: https://gist.github.com/pmetzger/52781cb9ce98a1e13ac2d3dc6ae93292
     # I was accounting for the groups badly. I wanted to keep a set of the groups when it sufficed to keep the
@@ -213,22 +223,22 @@ def solve_day25_part1_kargers_attmp2(input: Setting25) -> int:
     while True:
         # clone vertices and edges
         vertex = {v for v in input.vertices}
-        vertex_groups = {v:set([v]) for v in input.vertices}
+        vertex_groups = {v: set([v]) for v in input.vertices}
         edges = [list(e) for e in input.edges]
-        nodes = {v:[] for v in input.vertices}
+        nodes = {v: [] for v in input.vertices}
 
         for e in edges:
             nodes[e[0]].append(e)
             nodes[e[1]].append(e)
-        
+
         random.shuffle(edges)
-        
+
         while len(vertex) > 2:
             e = edges.pop()
             u, v = e
             u_group = vertex_groups[u]
             v_group = vertex_groups[v]
-            if u_group == v_group: 
+            if u_group == v_group:
                 continue
             new_group = u_group | v_group
             for s in new_group:
@@ -251,7 +261,7 @@ def solve_day25_part1_kargers_attmp2(input: Setting25) -> int:
             mult *= len(vertex_groups[v])
         if all([len(nodes[v]) == 3 for v in vertex]):
             break
-            
+
     return mult
 
     #     mult = 1
@@ -259,11 +269,12 @@ def solve_day25_part1_kargers_attmp2(input: Setting25) -> int:
     #         mult *= len(vertex_groups[v])
 
     #         freq[mult] += 1
-        
+
     # for k in freq:
     #     print(k, freq[k])
-    
-def solve_day25_part1_nxg(input: Setting25) -> int: 
+
+
+def solve_day25_part1_nxg(input: Setting25) -> int:
     # networkx solution
     G = nx.Graph()
     for e in input.edges:
@@ -271,10 +282,16 @@ def solve_day25_part1_nxg(input: Setting25) -> int:
     cc = nx.spectral_bisection(G)
     return len(cc[0]) * len(cc[1])
 
+
 def solve_day25_part2(input: Setting25) -> int:
     return 0
 
-def solve_day25(input: Setting25, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
+
+def solve_day25(
+    input: Setting25,
+    expected_pt1: Optional[int] = None,
+    expected_pt2: Optional[int] = None,
+):
     out_part1 = solve_day25_part1(input)
 
     if expected_pt1 is not None:
@@ -300,7 +317,10 @@ def solve_day25(input: Setting25, expected_pt1: Optional[int] = None, expected_p
     print(out_part2)
     print()
 
-def main_25(run_all: bool = False, example: Optional[str] = None, answer_only: bool = False):
+
+def main_25(
+    run_all: bool = False, example: Optional[str] = None, answer_only: bool = False
+):
     if not answer_only:
         if example:
             print("Testing input from cmd line")
@@ -315,7 +335,9 @@ def main_25(run_all: bool = False, example: Optional[str] = None, answer_only: b
         expected_out_part2 = None
         print("Input file:", sample_file_path)
         input = parse_file_day25(sample_file_path)
-        solve_day25(input, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2)
+        solve_day25(
+            input, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2
+        )
 
     if run_all:
         print("---------------------------------")
@@ -327,8 +349,8 @@ def main_25(run_all: bool = False, example: Optional[str] = None, answer_only: b
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
-    parser.add_argument('-e', '--example')
-    parser.add_argument('-o', '--answer-only', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
+    parser.add_argument("-e", "--example")
+    parser.add_argument("-o", "--answer-only", action="store_true")
     args = parser.parse_args()
     main_25(run_all=args.actual, example=args.example, answer_only=args.answer_only)

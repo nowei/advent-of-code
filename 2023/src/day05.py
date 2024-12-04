@@ -7,6 +7,7 @@ input_file_path = "test/05.input"
 expected_out_part1 = 35
 expected_out_part2 = 46
 
+
 # Function that returns the amount of overlap
 def check_overlap(curr, other) -> Optional[Tuple[int, int]]:
     other_start, other_end = other
@@ -21,27 +22,34 @@ def check_overlap(curr, other) -> Optional[Tuple[int, int]]:
         return (max(start, other_start), min(end, other_end))
     return None
 
+
 class Conversion_05:
     from_type: str
     to_type: str
     ranges: List[Tuple[int, int, int]]
     converted_ranges: Dict[Tuple[int, int], int]
 
-    def __init__(self, from_type: str, to_type: str, ranges: List[Tuple[int, int, int]]) -> None:
+    def __init__(
+        self, from_type: str, to_type: str, ranges: List[Tuple[int, int, int]]
+    ) -> None:
         self.from_type = from_type
         self.to_type = to_type
         self.ranges = ranges
         self.converted_ranges = []
         for r in self.ranges:
             source, destination, range_length = r
-            self.converted_ranges.append((source, source + range_length - 1, destination - source))
+            self.converted_ranges.append(
+                (source, source + range_length - 1, destination - source)
+            )
         self.converted_ranges.sort()
 
     def convert(self, number: int):
         # Right binary search so that the index can be the number
         # We use filler numbers for the converted range and range length so it only pays attention
         # to the first number.
-        insert_index = bisect.bisect_left(self.ranges, (number, float('inf'), float('inf')))
+        insert_index = bisect.bisect_left(
+            self.ranges, (number, float("inf"), float("inf"))
+        )
         # return number as the index because there is no converted range
         if insert_index < 0:
             return number
@@ -53,14 +61,16 @@ class Conversion_05:
             diff = number - source
             ret = destination + diff
         return ret
-    
-    def convert_ranges(self, other_ranges: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
+
+    def convert_ranges(
+        self, other_ranges: List[Tuple[int, int]]
+    ) -> List[Tuple[int, int]]:
         other_ranges.sort()
         res = []
         for a, b in other_ranges:
             overlaps = []
             for c, d, shift in self.converted_ranges:
-                overlap = check_overlap((a, b), (c,d))
+                overlap = check_overlap((a, b), (c, d))
                 if overlap:
                     e, f = overlap
                     overlaps.append((e, f, shift))
@@ -79,26 +89,29 @@ class Conversion_05:
                 res.append((prev_end + 1, b))
         return res
 
-
     def __repr__(self):
-        inside = "from={},to={},ranges={}".format(self.from_type, self.to_type, self.ranges)
+        inside = "from={},to={},ranges={}".format(
+            self.from_type, self.to_type, self.ranges
+        )
         return "Conversion({})".format(inside)
 
     def __str__(self):
         return "member of Conversion"
+
 
 class Almanac_05:
     seed_list: List[int]
     seed_ranges: List[Tuple[int, int]]
     conversion_dict: Dict[str, Conversion_05]
 
-    def __init__(self, seed_list: List[int], conversion_dict: Dict[str, Conversion_05]) -> None:
+    def __init__(
+        self, seed_list: List[int], conversion_dict: Dict[str, Conversion_05]
+    ) -> None:
         self.seed_list = seed_list
         self.seed_ranges = []
         for i in range(0, len(seed_list), 2):
-            self.seed_ranges.append((seed_list[i], seed_list[i] + seed_list[i+1] - 1))
+            self.seed_ranges.append((seed_list[i], seed_list[i] + seed_list[i + 1] - 1))
         self.conversion_dict = conversion_dict
-
 
 
 def parse_file_day05(file_path) -> Almanac_05:
@@ -114,7 +127,9 @@ def parse_file_day05(file_path) -> Almanac_05:
             if stripped == "":
                 if len(ranges) > 0:
                     ranges.sort()
-                    conversion_dict[from_type] = Conversion_05(from_type, to_type, ranges)
+                    conversion_dict[from_type] = Conversion_05(
+                        from_type, to_type, ranges
+                    )
                 # Start new object tracking
                 ranges = []
             elif "map" in stripped:
@@ -129,6 +144,7 @@ def parse_file_day05(file_path) -> Almanac_05:
             conversion_dict[from_type] = Conversion_05(from_type, to_type, ranges)
     return Almanac_05(seed_list, conversion_dict)
 
+
 def solve_day05_part1(input: Almanac_05) -> int:
     curr = input.seed_list
     convert_type = "seed"
@@ -138,6 +154,7 @@ def solve_day05_part1(input: Almanac_05) -> int:
         convert_type = conversion.to_type
     return min(curr)
 
+
 def solve_day05_part2(input: Almanac_05) -> int:
     curr = input.seed_ranges
     convert_type = "seed"
@@ -146,6 +163,7 @@ def solve_day05_part2(input: Almanac_05) -> int:
         curr = conversion.convert_ranges(curr)
         convert_type = conversion.to_type
     return min(curr)[0]
+
 
 def solve_day05(file_path: str, check_out: bool):
     input = parse_file_day05(file_path)
@@ -174,6 +192,7 @@ def solve_day05(file_path: str, check_out: bool):
     print(out_part2)
     print()
 
+
 def main_05(run_all: bool = False):
     print("Running script for day 05")
     print("Sample input")
@@ -186,6 +205,6 @@ def main_05(run_all: bool = False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
     args = parser.parse_args()
     main_05(run_all=args.actual)

@@ -1,4 +1,4 @@
-from typing import Any, List, Dict
+from typing import Any, Dict
 import argparse
 import numpy as np
 
@@ -19,6 +19,7 @@ class Node08:
         self.left = left
         self.right = right
 
+
 class Map08:
     instructions: str
     nodes: Dict[str, Node08]
@@ -26,6 +27,7 @@ class Map08:
     def __init__(self, instructions: str, nodes: Dict[str, Node08]):
         self.instructions = instructions
         self.nodes = nodes
+
 
 def parse_file_day08(file_path) -> Any:
     nodes = {}
@@ -39,6 +41,7 @@ def parse_file_day08(file_path) -> Any:
             nodes[value] = node
     return Map08(instructions, nodes)
 
+
 def solve_day08_part1(input: Map08) -> int:
     steps = 0
     value = "AAA"
@@ -51,6 +54,7 @@ def solve_day08_part1(input: Map08) -> int:
         steps += 1
     return steps
 
+
 def solve_day08_part2(input: Map08) -> int:
     steps = 0
     values = set()
@@ -60,7 +64,7 @@ def solve_day08_part2(input: Map08) -> int:
     for k in input.nodes:
         if k.endswith("A"):
             values.add(k)
-    
+
     cycles = {}
     lcm_input = []
     for k in values:
@@ -87,10 +91,17 @@ def solve_day08_part2(input: Map08) -> int:
                 lcm_input.append(steps)
         # cycling starts with curr
         path_cycle_start = curr
-        print(path_cycle_start, path.index((step_index, curr)), len(path), len(seen), cycles[k])
+        print(
+            path_cycle_start,
+            path.index((step_index, curr)),
+            len(path),
+            len(seen),
+            cycles[k],
+        )
         # print(path)
 
     return np.lcm.reduce(lcm_input)
+
 
 def solve_day08(file_path: str, check_out: bool):
     input = parse_file_day08(file_path)
@@ -121,6 +132,7 @@ def solve_day08(file_path: str, check_out: bool):
     print(out_part2)
     print()
 
+
 def main_08(run_all: bool = False):
     print("Running script for day 08")
     print("Sample input")
@@ -133,6 +145,6 @@ def main_08(run_all: bool = False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
     args = parser.parse_args()
     main_08(run_all=args.actual)

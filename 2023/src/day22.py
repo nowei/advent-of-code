@@ -1,9 +1,10 @@
-from typing import Any, Optional, List, Tuple, Dict, Set
+from typing import Any, Optional, Tuple, Dict, Set
 from collections import defaultdict
 import argparse
 
 sample_file_path = "test/22.sample"
 input_file_path = "test/22.input"
+
 
 class Block22:
     block_id: int
@@ -18,9 +19,12 @@ class Block22:
         self.x1, self.y1, self.z1 = x1, y1, z1
         self.x2, self.y2, self.z2 = x2, y2, z2
         self.block_id = block_id
-    
+
     def clone(self):
-        return Block22(self.x1, self.y1, self.z1, self.x2, self.y2, self.z2, self.block_id)
+        return Block22(
+            self.x1, self.y1, self.z1, self.x2, self.y2, self.z2, self.block_id
+        )
+
 
 class Setting22:
     blocks: Dict[int, Block22]
@@ -29,7 +33,7 @@ class Setting22:
 
     def __init__(self, blocks):
         self.blocks = blocks
-    
+
     # returns the number of moved blocks
     def resolve(self) -> int:
         # fall down
@@ -56,7 +60,7 @@ class Setting22:
                         supported_cand_set.add(fallen_down[(x, y)])
                     fallen_down[(x, y)] = b.block_id
             max_z = max([self.blocks[ob].z2 for ob in supported_cand_set] + [0])
-            start_z = max_z + 1 # move block down from z1 to start_z
+            start_z = max_z + 1  # move block down from z1 to start_z
             if start_z != b.z1:
                 moved += 1
             z_diff = b.z2 - b.z1
@@ -102,7 +106,6 @@ class Setting22:
         return disintegrate_cands
 
 
-
 def parse_file_day22(file_path, example: str = "") -> Any:
     if example:
         lines = [example]
@@ -121,9 +124,11 @@ def parse_file_day22(file_path, example: str = "") -> Any:
         blocks[b.block_id] = b
     return Setting22(blocks)
 
+
 def solve_day22_part1(input: Setting22) -> int:
     input.resolve()
     return len(input.get_disintegrated_cands())
+
 
 def solve_day22_part2(input: Setting22) -> int:
     input.resolve()
@@ -137,7 +142,12 @@ def solve_day22_part2(input: Setting22) -> int:
         total += cand.resolve()
     return total
 
-def solve_day22(input: Setting22, expected_pt1: Optional[int] = None, expected_pt2: Optional[int] = None):
+
+def solve_day22(
+    input: Setting22,
+    expected_pt1: Optional[int] = None,
+    expected_pt2: Optional[int] = None,
+):
     out_part1 = solve_day22_part1(input)
 
     if expected_pt1 is not None:
@@ -163,7 +173,10 @@ def solve_day22(input: Setting22, expected_pt1: Optional[int] = None, expected_p
     print(out_part2)
     print()
 
-def main_22(run_all: bool = False, example: Optional[str] = None, answer_only: bool = False):
+
+def main_22(
+    run_all: bool = False, example: Optional[str] = None, answer_only: bool = False
+):
     if not answer_only:
         if example:
             print("Testing input from cmd line")
@@ -178,7 +191,9 @@ def main_22(run_all: bool = False, example: Optional[str] = None, answer_only: b
         expected_out_part2 = 7
         print("Input file:", sample_file_path)
         input = parse_file_day22(sample_file_path)
-        solve_day22(input, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2)
+        solve_day22(
+            input, expected_pt1=expected_out_part1, expected_pt2=expected_out_part2
+        )
 
     if run_all:
         print("---------------------------------")
@@ -191,8 +206,8 @@ def main_22(run_all: bool = False, example: Optional[str] = None, answer_only: b
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
-    parser.add_argument('-e', '--example')
-    parser.add_argument('-o', '--answer-only', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
+    parser.add_argument("-e", "--example")
+    parser.add_argument("-o", "--answer-only", action="store_true")
     args = parser.parse_args()
     main_22(run_all=args.actual, example=args.example, answer_only=args.answer_only)

@@ -1,11 +1,11 @@
-
-from typing import Any, Dict, List
+from typing import Dict, List
 import argparse
 
 sample_file_path = "test/02.sample"
 input_file_path = "test/02.input"
 expected_out_part1 = 8
 expected_out_part2 = 2286
+
 
 class Game02Instance:
     blue: int
@@ -16,7 +16,7 @@ class Game02Instance:
         self.red = red
         self.blue = blue
         self.green = green
-    
+
     def check_exceeds(self, game_rule: "Game02Instance") -> bool:
         if self.red > game_rule.red:
             return True
@@ -25,7 +25,8 @@ class Game02Instance:
         if self.green > game_rule.green:
             return True
         return False
-    
+
+
 class Game02:
     id: int
     game_instances: List[Game02Instance]
@@ -33,7 +34,7 @@ class Game02:
     def __init__(self, id: int, game_instances: List[Game02Instance]):
         self.id = id
         self.game_instances = game_instances
-    
+
     def check_exceeds(self, game_rule: Game02Instance) -> bool:
         for game in self.game_instances:
             if game.check_exceeds(game_rule):
@@ -46,7 +47,7 @@ class Game02:
             max_dict["red"] = max(max_dict["red"], game.red)
             max_dict["blue"] = max(max_dict["blue"], game.blue)
             max_dict["green"] = max(max_dict["green"], game.green)
-        
+
         return max_dict["red"] * max_dict["blue"] * max_dict["green"]
 
 
@@ -67,6 +68,7 @@ def parse_file_day02(file_path) -> Dict[int, Game02]:
             games_dict[game_id] = Game02(game_id, games)
     return games_dict
 
+
 def solve_day02_part1(input: Dict[int, Game02]) -> int:
     ans = 0
     game_rule = Game02Instance(red=12, green=13, blue=14)
@@ -75,11 +77,13 @@ def solve_day02_part1(input: Dict[int, Game02]) -> int:
             ans += id
     return ans
 
+
 def solve_day02_part2(input: Dict[int, Game02]) -> int:
     ans = 0
     for id in input:
         ans += input[id].power()
     return ans
+
 
 def solve_day02(file_path: str, check_out: bool):
     input = parse_file_day02(file_path)
@@ -108,6 +112,7 @@ def solve_day02(file_path: str, check_out: bool):
     print(out_part2)
     print()
 
+
 def main_02(run_all: bool = False):
     print("Running script for day 02")
     print("Sample input")
@@ -120,6 +125,6 @@ def main_02(run_all: bool = False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--actual', action='store_true')
+    parser.add_argument("-a", "--actual", action="store_true")
     args = parser.parse_args()
     main_02(run_all=args.actual)

@@ -1,8 +1,9 @@
-from collections import defaultdict 
+from collections import defaultdict
+
 # Process the lines
-with open('input4.txt', 'r') as f:
+with open("input4.txt", "r") as f:
     lines = f.readlines()
-inputs = [int(i) for i in lines[0].strip().split(',')]
+inputs = [int(i) for i in lines[0].strip().split(",")]
 boards = []
 for line in lines[1:]:
     if not line.strip():
@@ -34,7 +35,8 @@ cands = {i for i in range(len(boards))}
 for val in inputs:
     seen.add(val)
     for ind in count_map[val]:
-        if ind not in cands: continue
+        if ind not in cands:
+            continue
         i, j = tracker[ind][0][val]
         row_counts, col_counts = tracker[ind][1], tracker[ind][2]
         row_counts[i] += 1
@@ -55,5 +57,7 @@ chosen_board = board_map[chosen_ind]
 print(seen, len(seen), len(inputs))
 for line in chosen_board:
     print(line)
-total_unused = sum([sum([v for v in row if v not in seen] + [0]) for row in chosen_board])
+total_unused = sum(
+    [sum([v for v in row if v not in seen] + [0]) for row in chosen_board]
+)
 print("final score: {}".format(total_unused * chosen_val))

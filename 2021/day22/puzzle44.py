@@ -12,9 +12,9 @@ file = "sample22-b.txt" if sample else "input22.txt"
 #         self.children = []
 
 #     def __str__(self):
-#         return 'Octree(regions={}, is_val={}, val={}, contribution={})'.format(str(self.regions), self.is_val, self.val, self.get_volume()) 
+#         return 'Octree(regions={}, is_val={}, val={}, contribution={})'.format(str(self.regions), self.is_val, self.val, self.get_volume())
 #     def __repr__(self):
-#         return 'Octree(regions={}, is_val={}, val={}, contribution={})'.format(str(self.regions), self.is_val, self.val, self.get_volume()) 
+#         return 'Octree(regions={}, is_val={}, val={}, contribution={})'.format(str(self.regions), self.is_val, self.val, self.get_volume())
 
 #     def print_recursive(self, level=0):
 #         print('    ' * level, self)
@@ -22,7 +22,7 @@ file = "sample22-b.txt" if sample else "input22.txt"
 #             c.print_recursive(level + 1)
 
 #     def check_overlap(self, x, y, z):
-#         xr, yr, zr = self.regions 
+#         xr, yr, zr = self.regions
 #         if not (xr[0] <= x[0] <= xr[1] or xr[0] <= x[1] <= xr[1]):
 #             return False
 #         if not (yr[0] <= y[0] <= yr[1] or yr[0] <= y[1] <= yr[1]):
@@ -33,7 +33,7 @@ file = "sample22-b.txt" if sample else "input22.txt"
 #         return True
 
 #     def clamp_bounds(self, x, y, z):
-#         xr, yr, zr = self.regions 
+#         xr, yr, zr = self.regions
 #         xmin, xmax = max(xr[0], x[0]), min(xr[1], x[1])
 #         ymin, ymax = max(yr[0], y[0]), min(yr[1], y[1])
 #         zmin, zmax = max(zr[0], z[0]), min(zr[1], z[1])
@@ -42,8 +42,8 @@ file = "sample22-b.txt" if sample else "input22.txt"
 #     def set_value(self, val, x, y, z):
 #         if self.check_overlap(x, y, z):
 #             x, y, z = self.clamp_bounds(x, y, z)
-#             if self.is_val: 
-#                 xr, yr, zr = self.regions 
+#             if self.is_val:
+#                 xr, yr, zr = self.regions
 #                 if x[0] == xr[0] and x[1] == xr[1] and y[0] == yr[0] and y[1] == yr[1] and z[0] == zr[0] and z[1] == zr[1]:
 #                     self.val = val
 #                     return
@@ -87,8 +87,8 @@ file = "sample22-b.txt" if sample else "input22.txt"
 #             curr = 0
 #             for c in self.children:
 #                 curr += c.get_volume()
-#             return curr 
-# def next_power_of_2(x):  
+#             return curr
+# def next_power_of_2(x):
 #     return 1 if x == 0 else 2**(x - 1).bit_length()
 # best = next_power_of_2(best)
 # octree = Octree([-best, best], [-best, best], [-best, best], False)
@@ -103,6 +103,7 @@ file = "sample22-b.txt" if sample else "input22.txt"
 # octree.print_recursive()
 # ans = octree.get_volume()
 
+
 def check_within(x, y, z):
     if x[0] < -50 or x[1] > 50:
         return False
@@ -112,21 +113,22 @@ def check_within(x, y, z):
         return False
     return True
 
+
 boundaries = []
 # best = 0
 with open(file, "r") as f:
     for line in f:
-
-        instruction, coords = line.strip().split(' ')
-        x, y, z = coords.split(',')
-        x_min, x_max = (int(a) for a in x.split('=')[1].split('..'))
-        y_min, y_max = (int(a) for a in y.split('=')[1].split('..'))
-        z_min, z_max = (int(a) for a in z.split('=')[1].split('..'))
+        instruction, coords = line.strip().split(" ")
+        x, y, z = coords.split(",")
+        x_min, x_max = (int(a) for a in x.split("=")[1].split(".."))
+        y_min, y_max = (int(a) for a in y.split("=")[1].split(".."))
+        z_min, z_max = (int(a) for a in z.split("=")[1].split(".."))
         x = (x_min, x_max)
         y = (y_min, y_max)
         z = (z_min, z_max)
         # best = max(best, abs(x[0]),abs(x[1]), abs(y[0]), abs(y[1]),abs(z[0]), abs(z[1]))
-        boundaries.append([instruction, x,y,z])
+        boundaries.append([instruction, x, y, z])
+
 
 class VolumeTracker:
     def __init__(self):
@@ -135,7 +137,7 @@ class VolumeTracker:
     def add_box(self, val, x, y, z):
         num_boxes_changed = 0
         to_remove = set()
-        intercepted_boxes = self._get_intercepted_boxes(x,y,z)
+        intercepted_boxes = self._get_intercepted_boxes(x, y, z)
         if intercepted_boxes:
             for box in intercepted_boxes:
                 num_boxes_changed += 1
@@ -148,7 +150,7 @@ class VolumeTracker:
             for box in to_remove:
                 self.boxes.remove(box)
         if val:
-            self.boxes.add((x,y,z))
+            self.boxes.add((x, y, z))
             num_boxes_changed += 1
 
         # print('changed {} boxes'.format(num_boxes_changed))
@@ -178,58 +180,70 @@ class VolumeTracker:
         back = self._break_back(box, x, y, z)
         left = self._break_left(box, x, y, z)
         right = self._break_right(box, x, y, z)
-        if above: new_boxes.append(above)
-        if bottom: new_boxes.append(bottom)
-        if front: new_boxes.append(front)
-        if back: new_boxes.append(back)
-        if left: new_boxes.append(left)
-        if right: new_boxes.append(right)
+        if above:
+            new_boxes.append(above)
+        if bottom:
+            new_boxes.append(bottom)
+        if front:
+            new_boxes.append(front)
+        if back:
+            new_boxes.append(back)
+        if left:
+            new_boxes.append(left)
+        if right:
+            new_boxes.append(right)
         return new_boxes
 
     def _break_above(self, box, x, y, z):
         xr, yr, zr = box
-        if zr[1] <= z[1]: return None 
+        if zr[1] <= z[1]:
+            return None
         cand = (xr, yr, (z[1] + 1, zr[1]))
         # print('above', cand)
         return cand
 
     def _break_bottom(self, box, x, y, z):
         xr, yr, zr = box
-        if z[0] <= zr[0]: return None
+        if z[0] <= zr[0]:
+            return None
         cand = (xr, yr, (zr[0], z[0] - 1))
         # print('bottom', cand)
         return cand
 
     def _break_front(self, box, x, y, z):
         xr, yr, zr = box
-        if xr[1] <= x[1]: return None 
-        nz = (max(z[0], zr[0]),min(z[1], zr[1]))
+        if xr[1] <= x[1]:
+            return None
+        nz = (max(z[0], zr[0]), min(z[1], zr[1]))
         cand = ((x[1] + 1, xr[1]), yr, nz)
         # print('front', cand)
         return cand
 
     def _break_back(self, box, x, y, z):
         xr, yr, zr = box
-        if x[0] <= xr[0]: return None
-        nz = (max(z[0], zr[0]),min(z[1], zr[1]))
+        if x[0] <= xr[0]:
+            return None
+        nz = (max(z[0], zr[0]), min(z[1], zr[1]))
         cand = ((xr[0], x[0] - 1), yr, nz)
         # print('back', cand)
         return cand
 
     def _break_right(self, box, x, y, z):
         xr, yr, zr = box
-        if yr[1] <= y[1]: return None
-        nz = (max(z[0], zr[0]),min(z[1], zr[1]))
-        nx = (max(x[0], xr[0]),min(x[1], xr[1]))
+        if yr[1] <= y[1]:
+            return None
+        nz = (max(z[0], zr[0]), min(z[1], zr[1]))
+        nx = (max(x[0], xr[0]), min(x[1], xr[1]))
         cand = (nx, (y[1] + 1, yr[1]), nz)
         # print('right', cand)
         return cand
 
     def _break_left(self, box, x, y, z):
         xr, yr, zr = box
-        if y[0] <= yr[0]: return None
-        nz = (max(z[0], zr[0]),min(z[1], zr[1]))
-        nx = (max(x[0], xr[0]),min(x[1], xr[1]))
+        if y[0] <= yr[0]:
+            return None
+        nz = (max(z[0], zr[0]), min(z[1], zr[1]))
+        nx = (max(x[0], xr[0]), min(x[1], xr[1]))
         cand = (nx, (yr[0], y[0] - 1), nz)
         # print('left', cand)
         return cand
@@ -237,19 +251,20 @@ class VolumeTracker:
     def get_volume(self):
         total = 0
         for box in self.boxes:
-            x,y,z = box
+            x, y, z = box
             total += (x[1] - x[0] + 1) * (y[1] - y[0] + 1) * (z[1] - z[0] + 1)
         return total
 
     def get_cubes(self):
         cubes = set()
         for box in self.boxes:
-            x,y,z = box
+            x, y, z = box
             for i in range(x[0], x[1] + 1):
                 for j in range(y[0], y[1] + 1):
                     for k in range(z[0], z[1] + 1):
-                        cubes.add((i,j,k))
+                        cubes.add((i, j, k))
         return cubes
+
 
 cubes = set()
 
@@ -263,9 +278,9 @@ for instruction, x, y, z in boundaries:
     # else:
     #     cubes -= cand
     print(turn, instruction, x, y, z)
-    val = 1 if instruction == 'on' else 0
+    val = 1 if instruction == "on" else 0
     vt.add_box(val, x, y, z)
-    print('volume={}'.format(vt.get_volume()))
+    print("volume={}".format(vt.get_volume()))
     # print('cube_volume={}'.format(len(cubes)))
     turn += 1
 
@@ -277,4 +292,4 @@ ans = vt.get_volume()
 
 print(ans)
 if sample:
-    assert(ans == 2758514936282235)
+    assert ans == 2758514936282235

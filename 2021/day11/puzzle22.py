@@ -33,7 +33,7 @@ while True:
     round += 1
 if sample:
     print(ans)
-    assert(ans == 195)
-    print('sample passed')
+    assert ans == 195
+    print("sample passed")
 else:
     print(ans)
