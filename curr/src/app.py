@@ -11,11 +11,11 @@ import argparse
 # sys.path.append(current_dir)
 
 
-def run(day_to_run: int, execute=True):
+def run(day_to_run: int, part: int, execute=True):
     module_name = f"days.day{str(day_to_run).zfill(2)}.run"
     # TODO: Format by day
     mod = importlib.import_module(module_name)
-    result = mod.exec(execute)
+    result = mod.exec(part, execute)
     if execute:
         print("actual result...")
     else:
@@ -44,17 +44,34 @@ def main():
         default=False,
         action="store_true",
     )
+    parser.add_argument(
+        "--run-all",
+        dest="run_all",
+        help="run all",
+        default=False,
+        action="store_true",
+    )
+
+    parser.add_argument(
+        "--part",
+        dest="part",
+        help="which part to run",
+        type=int,
+        default=1,
+    )
     args = parser.parse_args()
     generate = args.generate
     day = args.day
     execute = args.execute
+    _run_all = args.run_all
+    part = args.part
     if generate:
         generate(day)
     else:
         if not day or (day < 1 or day > 25):
             print("please enter a day between [1, 25]")
         else:
-            run(day, execute)
+            run(day, part, execute)
 
 
 if __name__ == "__main__":

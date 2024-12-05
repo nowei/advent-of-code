@@ -14,6 +14,8 @@ uv run src/app.py --day 1 --execute
 
 ### day 01
 
+Just aligning the arrays after sorting or correlating with the count of each instance.
+
 ### day 02
 
 ### day 03
