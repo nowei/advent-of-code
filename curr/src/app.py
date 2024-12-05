@@ -1,18 +1,17 @@
 # TODO: dynamic imports based on which day we're running
 import importlib
 import argparse
+
 # import sys
-# import os
-
-# # Get the current directory
-# current_dir = os.getcwd()
-
-# # Add the current directory to the path
-# sys.path.append(current_dir)
+import os
 
 
-def run(day_to_run: int, part: int, execute=True):
-    module_name = f"days.day{str(day_to_run).zfill(2)}.run"
+def _get_day_str(day_to_run: int):
+    return str(day_to_run).zfill(2)
+
+
+def _run(day_to_run: int, part: int, execute=True):
+    module_name = f"days.day{_get_day_str(day_to_run)}.run"
     # TODO: Format by day
     mod = importlib.import_module(module_name)
     result = mod.exec(part, execute)
@@ -23,8 +22,18 @@ def run(day_to_run: int, part: int, execute=True):
     print(result)
 
 
-def generate(day_to_run: int):
-    pass
+def _generate(day_to_run: int):
+    day_str = _get_day_str(day_to_run)
+    parent = f"src/days/day{day_str}/"
+    if not os.path.isdir(parent):
+        os.mkdir(parent)
+    with open("src/days/day00/run.py", "r") as f:
+        with open(parent + "run.py", "w") as g:
+            g.write(f.read().format(day_str))
+    with open(parent + "input.txt", "w") as f:
+        pass
+    with open(parent + "sample.txt", "w") as f:
+        pass
 
 
 def main():
@@ -65,13 +74,17 @@ def main():
     execute = args.execute
     _run_all = args.run_all
     part = args.part
+
+    if not day or (day < 1 or day > 25):
+        print("please enter a day between [1, 25]")
+        exit(1)
+    if part <= 0 or part > 2:
+        print("please enter a part between [1, 2]")
+        exit(1)
     if generate:
-        generate(day)
+        _generate(day)
     else:
-        if not day or (day < 1 or day > 25):
-            print("please enter a day between [1, 25]")
-        else:
-            run(day, part, execute)
+        _run(day, part, execute)
 
 
 if __name__ == "__main__":

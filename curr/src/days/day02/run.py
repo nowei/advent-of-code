@@ -1,4 +1,4 @@
-parent_path = "src/days/day{}/"
+parent_path = "src/days/day02/"
 
 
 def _parse_input(sample: bool):
