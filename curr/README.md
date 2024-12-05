@@ -6,7 +6,9 @@ All solutions are best-effort-with-reasonable-attempts.
 
 To run; use
 
-`uv run`
+```
+uv run src/app.py --day 1 --execute
+```
 
 ## short summaries (some spoilers)
 
