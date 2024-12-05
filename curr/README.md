@@ -18,6 +18,8 @@ Just aligning the arrays after sorting or correlating with the count of each ins
 
 ### day 02
 
+Check ascending/descending + make sure it's not jumping by too much. The second part is checking if it's still okay after removing something.
+
 ### day 03
 
 ### day 04
