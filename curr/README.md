@@ -26,6 +26,8 @@ Just a regex thing.
 
 ### day 04
 
+Looking for a string in certain directions.
+
 ### day 05
 
 ### day 06
