@@ -34,6 +34,14 @@ Checking ordering + some swaps
 
 ### day 06
 
+Follow a path, rotate by 90 degrees if we face an obstruction; count number of squares visited.
+Part 2 replayed the path taken, but checks for potential loops we can create by adding an obstruction:
+
+- Can't be on the path that was already taken
+- Can't be out of bounds
+- Can't be a rock that's already there
+- Must follow-through to see if it loops or if it just exits the map
+
 ### day 07
 
 ### day 08
