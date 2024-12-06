@@ -22,6 +22,8 @@ Check ascending/descending + make sure it's not jumping by too much. The second 
 
 ### day 03
 
+Just a regex thing.
+
 ### day 04
 
 ### day 05
