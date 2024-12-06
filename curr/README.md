@@ -30,6 +30,8 @@ Looking for a string in certain directions.
 
 ### day 05
 
+Checking ordering + some swaps
+
 ### day 06
 
 ### day 07
