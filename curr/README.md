@@ -44,6 +44,12 @@ Part 2 replayed the path taken, but checks for potential loops we can create by 
 
 ### day 07
 
+Walking operators between operands to get to a target by \* or +.
+
+Then do the same for concatenating the numbers with ||.
+
+My :facepalm: for this one was that the target inputs could be repeated, which I didn't account for and got stuck initially.
+
 ### day 08
 
 ### day 09
