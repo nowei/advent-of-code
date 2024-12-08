@@ -52,6 +52,10 @@ My :facepalm: for this one was that the target inputs could be repeated, which I
 
 ### day 08
 
+Jumps between nodes of the same type in a 2D space.
+
+Then we extend the jumps between nodes of each group within the boundary.
+
 ### day 09
 
 ### day 10
