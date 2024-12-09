@@ -87,41 +87,25 @@ def consolidate_memory_pt2(blocks: List[Block]) -> List[Block]:
     # 00992111777.44.333....5555.6666.....8888..
     starting_ind = 0
     # Attempt to move every block from the right side to the left exactly 1 (one) time.
+
+    # Correct answer is: 6323761685944 (for my input)
     while j > starting_ind:
         # check if there are any freespace starting from the left of size cand_block.size
         cand_block = blocks[j]
         for i in range(starting_ind, j):
             if blocks[i].freespace >= cand_block.size:
-                # There are two cases to be aware of; when
-                # * the consolidating block is to the left of the candidate block
-                # * the consolidating block is at least 2 steps away from the candidate block
-
-                # On the left of the candidate block
+                # Simplified logic
+                # The new freespace that the candidate block will have after moving
                 if i == j - 1:
-                    # e.g. 333...444.
-                    # ---> 333444....
-                    # We need to move over the freespace
+                    # If it's right next to the block, then the candidate block gets all the free space
                     cand_block.freespace = cand_block.freespace + blocks[i].freespace
-                    # Zero out the consolidated block's freespace
-                    blocks[i].freespace = 0
                 else:
-                    # e.g. 222....333...444..
-                    # ---> 222444.333........
-                    # We need to:
-                    # * move over the free space + block size of the cand block -> the left of cand block
-                    # * shift over the candidate block to the gap + update its free space
-                    # * update the ordering to reflect the change
-                    #   * (evaluation index is updated due to shifting around)
-
-                    # current space occupied by candidate block (to be moved)
-                    cand_block_size = cand_block.size + cand_block.freespace
-                    # The new freespace that the candidate block will have after moving
-                    cand_block.freespace = blocks[i].freespace - cand_block.size
                     # Update the freespace of the left block
+                    cand_block_size = cand_block.size + cand_block.freespace
+                    # Free space is remaining space left by consolidating block
+                    cand_block.freespace = blocks[i].freespace - cand_block.size
                     left_of_cand_block = blocks[j - 1]
                     left_of_cand_block.freespace += cand_block_size
-                    # Zero out the consolidated block's freespace
-                    blocks[i].freespace = 0
                     # Move the blocks such that the candidate block is to the right of the consolidated block.
                     blocks = (
                         blocks[: i + 1]
@@ -131,6 +115,48 @@ def consolidate_memory_pt2(blocks: List[Block]) -> List[Block]:
                     )
                     # Increment j because we have shifted the blocks around
                     j += 1
+                # Zero out the consolidated block's freespace
+                blocks[i].freespace = 0
+
+                # Initial working logic
+                # There are two cases to be aware of; when
+                # * the consolidating block is to the left of the candidate block
+                # * the consolidating block is at least 2 steps away from the candidate block
+                # # On the left of the candidate block
+                # if i == j - 1:
+                #     # e.g. 333...444.
+                #     # ---> 333444....
+                #     # We need to move over the freespace
+                #     cand_block.freespace = cand_block.freespace + blocks[i].freespace
+                #     # Zero out the consolidated block's freespace
+                #     blocks[i].freespace = 0
+                # else:
+                #     # e.g. 222....333...444..
+                #     # ---> 222444.333........
+                #     # We need to:
+                #     # * move over the free space + block size of the cand block -> the left of cand block
+                #     # * shift over the candidate block to the gap + update its free space
+                #     # * update the ordering to reflect the change
+                #     #   * (evaluation index is updated due to shifting around)
+
+                #     # current space occupied by candidate block (to be moved)
+                #     cand_block_size = cand_block.size + cand_block.freespace
+                #     # The new freespace that the candidate block will have after moving
+                #     cand_block.freespace = blocks[i].freespace - cand_block.size
+                #     # Update the freespace of the left block
+                #     left_of_cand_block = blocks[j - 1]
+                #     left_of_cand_block.freespace += cand_block_size
+                #     # Zero out the consolidated block's freespace
+                #     blocks[i].freespace = 0
+                #     # Move the blocks such that the candidate block is to the right of the consolidated block.
+                #     blocks = (
+                #         blocks[: i + 1]
+                #         + [cand_block]
+                #         + blocks[i + 1 : j]
+                #         + blocks[j + 1 :]
+                #     )
+                #     # Increment j because we have shifted the blocks around
+                #     j += 1
                 # There was a consolidation, blocks[i] freespace should be 0
                 break
         j -= 1
