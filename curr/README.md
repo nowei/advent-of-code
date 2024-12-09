@@ -58,6 +58,26 @@ Then we extend the jumps between nodes of each group within the boundary.
 
 ### day 09
 
+The first one was just greedily filling space; I ended up using an array to represent the memory because using strings for ids kind of messed up and I ran into some edge cases with trying to use the characters and their ordinal values... But filling the space wasn't too bad because you could use two pointers. With the left, track empty space and with the right, track non-empty space. Then we can stop when the two pointers
+
+I ran into a hiccup on the second part because I didn't handle the case of the block moving directly to the left to consolidate the space. This ended up creating a cycle where it would swap the blocks back and forth when I tried to stitch together the moves... In any case, the prompt was generally straightforward, but I didn't handle the right-next-to-block case correctly.
+
+What I ended up doing was kind of like two pointers, but we just keep track of the block's id, size, and free space. The left pointer tracked the first block with an empty space available and the right pointer kept track of the current block we're trying to move. Then we iterate between the left and right pointer to figure out if there is a space we can move the current block into.
+
+If there isn't, then we just move the right pointer over.
+
+If there is a block we can consolidate the candidate block next to, then we:
+
+- move the block's size + free space to the block left of the candidate block
+- update the consolidating block's free space to 0 (for the candidate block moves next to it)
+- update the candidate block's free space to the consolidating block's free space - the candidate block's size
+- splice the array to move the block over
+- Keep the evaluation index the same because we shifted stuff over
+
+Then there is the special case where the consolidating block is already directly to the left of the candidate block, in which case
+
+- We wouldn't move the candidate block's size + free space to the block left of the candidate block (because it'll be set to 0), but we just give the consolidating block's free space to the candidate block and call it a day
+
 ### day 10
 
 ### day 11
