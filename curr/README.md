@@ -80,6 +80,12 @@ Then there is the special case where the consolidating block is already directly
 
 ### day 10
 
+We just do a bfs per trailhead.
+
+I just did a bfs to search to determine the number of distinct 9-height tiles we can reach. Note that the simplification that we can only make 1-level-difference moves and we can only increase the paths made it easier because that means that means we only need to consider the from layer n with value n, layers n + 1 with values n + 1, e.g. for layer 0, we only care about adjacent tiles with value 1 when making layer 1. This meant that the method for consolidating the layers is pretty straightforward.
+
+For the second part, it was just counting the number of different ways to reach the same points. We can do this by tracking: for each node in a new layer, the number of all the different ways to reach a node in the new layer from the current layer. This ends up just being the sum of the ways to reach the nodes in the previous layer. E.g. when two disjoint paths join together, we end up getting 1 + 1, so there are two ways to reach that intersection. Then since there is no backtracking, we can just carry these forward layer by layer until we reach the top of the trailhead.
+
 ### day 11
 
 ### day 12
