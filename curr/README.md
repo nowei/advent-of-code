@@ -88,6 +88,20 @@ For the second part, it was just counting the number of different ways to reach 
 
 ### day 11
 
+The first part I did it with like a simulation with arrays.
+
+Then I got confused about the second part because it mentioned something about how order was preserved, so I thought that order mattered or something or that there was some pattern with how the numbers split and that we can come up with an equation to model the pattern. During this effort, I found out that a lot of the numbers were repeated.
+
+It made sense that there needed to be a better data structure that could be used rather than just simulating the growing array on each step. While frustrated, I was looking at memes on AOC reddit and kind of spoiled the answer for myself when some comments were talking about how they could use a stack to only evaluate one stone at a time by tracking the step number for each evaluated stone (max stack depth of 75) or how they used memoization and lru caches with recursion or how the hint about how the rocks staying ordered didn't matter. I eventually read a comment that said that the rocks with the same number could be combined to be evaluated together in the next step, which is the solution I ended up with. Instead of trying to evaluate individual rocks for each layer, we can evaluate the group of rocks with all of the same numbers and move them to the next layer.
+
+So the key thing to remember is that if it takes too long to run, think about how can you reuse the work that you've done (memoization) or group the things you're trying to do the work of the group all at once instead of individually.
+
+The work per step is normally bounded by `O(d^s)` where `d` is the branching factor and `s` the number of steps. `d` is at least 1 (stays the same) and at most 2. We can easily say that `d` is at most 2 because during splits, it at most doubles. (Ostensibly, the real bound for `d` is `~1.5`).
+
+Let each number be `n`, we do a unit of `d_n` work per `n` depending on the rules given. Let there be `k` instances of the number `n` in step `s`. In which case the total number amount of work is `sum of d_n * k for n in layer`. When we evaluate it in groups, we only do `sum of d_n for n in layer`; so we reduce the amount of work by the number of instances per number. And the number of instances per number can grow exponentially, so we got rid of an exponential number of growth. The number of distinct numbers is bounded by the rule that if the number of digits is even, we divide the number by 2. Thus, numbers cannot grow too large. For when they grow too large; then there is a split and it becomes a number that is smaller. Once this happens enough times, eventually they consolidate down to the `n` distinct numbers.
+
+There is also an inherent pattern to the growth of the numbers due to the cyclical nature of the rules. The largest number I have seen so far is `409526509568`, so the counters should be bounded within it. The number of possible numbers the stones can take on is also limited by the rules to like single digit numbers and numbers that are a multiple of 2024, or have an odd number of digits.
+
 ### day 12
 
 ### day 13
