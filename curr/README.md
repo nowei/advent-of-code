@@ -104,6 +104,10 @@ There is also an inherent pattern to the growth of the numbers due to the cyclic
 
 ### day 12
 
+The first part was finding the area + perimeter of regions on a grid.
+
+The second part was finding the area + sides of regions on a grid. We did the sides by grouping the rows and columns of the same regions and then from those regions, detecting the surroundings on the parallels (left/right for columns; top/bot for rows). Then from there, we look for contiguous strips along the parallels that are not part of the region.
+
 ### day 13
 
 ### day 14
