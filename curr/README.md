@@ -110,6 +110,17 @@ The second part was finding the area + sides of regions on a grid. We did the si
 
 ### day 13
 
+I just ran it normally the first time by simulating 100 -> 1 button presses on B. I initially tried to some sort of double binary search, but I couldn't figure out how to solve the bounds properly.
+
+Eventually I realized that it was in the form of
+
+```
+a_x*a_c + b_x*b_c = p_x
+a_y*a_c + b_y*b_c = p_y
+```
+
+So I was able to just solve it using some math for solving for the unknowns (the number of times a is pressed and the number of times b is pressed). Then we just needed to round the solution (floating point issues) and confirm that it works (not all machines can reach the prize with integer button presses).
+
 ### day 14
 
 ### day 15
