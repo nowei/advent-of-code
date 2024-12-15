@@ -90,12 +90,12 @@ def part2(_input: InputType) -> int:
     visualize(grid, Counter([r.position for r in robots]))
     safety_factor = 0
     # tree - 7572
-    # for steps in range(98, 10000, 101):
-    #     final_positions: Dict[Tuple[int, int], int] = Counter()
-    #     for robot in robots:
-    #         final_positions[robot.walk(steps)] += 1
-    #     print(steps)
-    #     visualize(grid, final_positions)
+    for steps in range(98, 10000, 101):
+        final_positions: Dict[Tuple[int, int], int] = Counter()
+        for robot in robots:
+            final_positions[robot.walk(steps)] += 1
+        print(steps)
+        visualize(grid, final_positions)
 
     # Horizontal grouping
     # for steps in range(156, 10000, 103):

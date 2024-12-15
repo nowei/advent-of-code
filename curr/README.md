@@ -165,6 +165,12 @@ The second part was looking for a christmas tree. I ended up being able to find 
 
 ### day 15
 
+The first part was just simulation with moving boxes. Moves to "." are easy, we just swap the positions. Moves towards "#" are also easy. We just don't move. Moves towards "O" are a little harder because we just need to check if the direction we move it towards is blocked by a # or not. If it is, we know that we don't need to make a move. If it isn't, then we just move by swapping positions from the last block forward to the "@".
+
+For the second part, it was kind of like a domain expansion where everything became wider. The "O" characters became "[]". The other characters are the same. To handle left and right block moves, we can just keep going while there are "[" or "]" characters; if it stops by a "#", we don't need to move. Otherwise, we swap positions from the last block forward to the "@".
+
+For up and down movements, this was a little more involved because we need to propagate the movements to the "[" if we try to move a "]" and vice versa. Then we have to do that for the next layer of blocks that these blocks touch. If any such layer touches a "#", then we know that no move can be made. If there are only "." above, we can terminate looking for things to move and start moving things. We can move things starting from the last layer down to the first (the "@").
+
 ### day 16
 
 ### day 17
