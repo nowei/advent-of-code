@@ -173,6 +173,10 @@ For up and down movements, this was a little more involved because we need to pr
 
 ### day 16
 
+Just Dijkstra's to go from the start to end with the optimal cost.
+
+Then it's Dijkstra's but keeping track of multiple paths that have the same, optimal cost.
+
 ### day 17
 
 ### day 18
