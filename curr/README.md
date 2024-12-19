@@ -189,6 +189,10 @@ The second part was doing a search to figure out how to construct an input that 
 
 ### day 18
 
+Just a BFS to get from start to end.
+
+Keep adding obstructions until we can no longer get to the end. We make an optimization where we do not re-evaluate the path if the new obstruction does not fall onto the current path.
+
 ### day 19
 
 ### day 20
