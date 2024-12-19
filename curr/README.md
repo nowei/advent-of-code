@@ -195,6 +195,10 @@ Keep adding obstructions until we can no longer get to the end. We make an optim
 
 ### day 19
 
+The first part was just a search I did with bfs where I jumped the characters that matched usable towels and the next character to check.
+
+The second part wanted all the combinations, so it was just a simple dynamic programming setup where we take O(t \* c) time per towel where t is the length of the towel and c is the number of combinations to evaluate all the combinations. (We store the number of ways (count) to jump to a certain index starting from some previous index as long as they match).
+
 ### day 20
 
 ### day 21
