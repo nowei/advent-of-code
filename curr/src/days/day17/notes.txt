@@ -1,0 +1,37 @@
+[2, 4, -- bst -- B = A % 8
+ 1, 5, -- bxl -- B = B ^ 5
+ 7, 5, -- cdv -- C = A // (2 ** C)
+ 1, 6, -- bxl -- B = B ^ 6
+ 4, 2, -- bxc -- B = B ^ C
+ 5, 5, -- out -- C % 8 -> output
+ 0, 3, -- adv -- A = A // (2 ** 3)
+ 3, 0] -- jnz -- A == 0 ? jmp end : jmp 0
+
+
+[2, 4, -- bst -- B = A % 8
+ 1, 5, -- bxl -- B = B ^ 101
+ 7, 5, -- cdv -- C = A // (2 ** C)
+ 1, 6, -- bxl -- B = B ^ 110
+ 4, 2, -- bxc -- B = B ^ C
+ 5, 5, -- out -- C % 8 -> output
+ 0, 3, -- adv -- A = A // 8
+ 3, 0] -- jnz -- A == 0 ? jmp end : jmp 0
+
+~At most 8^16 possible entries?
+Obervations:
+B gets wiped on every restart
+C gets set to A // (2 ** C) on every step
+C is initially A // 2. Then it gets set to 0 on the next iteration (because A // 2 ** (A//2) ~ 0) and this keeps repeating...
+A needs to jump at least 16 times in order to print out 16 entries
+A only changes on the second to last step
+
+[2, 4, -- bst -- B = A % 8
+ 1, 5, -- bxl -- B = (A % 8) ^ 101
+ 7, 5, -- cdv -- C = A // (2 ** C)
+ 1, 6, -- bxl -- B = ((A % 8) ^ 101) ^ 110 // Doesn't matter because it gets wiped out
+ 4, 2, -- bxc -- B = (((A % 8) ^ 101) ^ 110) ^ (A // (2 ** C)) // Doesn't matter because it gets wiped out
+ 5, 5, -- out -- C = A // (2 ** C) % 8 -> output
+ 0, 3, -- adv -- A = A // 8
+ 3, 0] -- jnz -- A == 0 ? jmp end : jmp 0
+
+First character 4 +

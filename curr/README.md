@@ -179,6 +179,14 @@ Then it's Dijkstra's but keeping track of multiple paths that have the same, opt
 
 ### day 17
 
+Simulating some assembly instructions. The second part was a little wonky because we needed to replicate the program with the output.
+
+The second part was doing a search to figure out how to construct an input that reproduces the program that it gets run with. Several key observations were necessary for solving this:
+
+- Evaluating the instructions shows that the A register gets // 8 on every loop. This means that the minimum result should be some sum of factors of powers of 8, e.g. a\*8^1 + b\*8^2 + ... = A
+- We should evaluate the entries with more matches earlier on than the entries with less matches (to the given problem)
+- Heuristic: If the index we are searching for is greater than the number of matches available at that point, then we should give up because that means that there is no way to satisfy the entire program input (there are mismatches earlier on that cannot be resolved by going deeper).
+
 ### day 18
 
 ### day 19
