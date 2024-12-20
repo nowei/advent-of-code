@@ -201,6 +201,10 @@ The second part wanted all the combinations, so it was just a simple dynamic pro
 
 ### day 20
 
+Follow a single path + figure out how much time would be saved by skipping a one-width wall. We do this by first following the path so we have a list of tuples that represents the path. Then we determine at each step how far the current tuple is away from the end. Then to find the time saved, it's the distance from the end of the current location minus the distance from the end of the candidate location minus 2 (the time it takes to get across the one-width wall).
+
+Follow the single path, but now instead of skipping a one-width wall; we can have to figure out how much time we can save if we can travel to an unvisited part of the path that is within a manhattan distance of 20. We do this by following the path and at each step, iterating over candidate jump locations on the path and evaluating only those that are within 20 of the current location. Then the time saved is computed in a similar fashion - the distance from the end of the current location minus the distance from the end of the candidate location minus the (manhattan) distance between them (the time it takes to get to that location, while ignoring collisions).
+
 ### day 21
 
 ### day 22
