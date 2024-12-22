@@ -207,6 +207,122 @@ Follow the single path, but now instead of skipping a one-width wall; we can hav
 
 ### day 21
 
+This was a doozy. The question had essentially two grids. One keypad input and one directional input.
+
++---+---+---+
+| 7 | 8 | 9 |
++---+---+---+
+| 4 | 5 | 6 |
++---+---+---+
+| 1 | 2 | 3 |
++---+---+---+
+\ \ | 0 | A |
+\ \ +---+---+
+
+\ \ +---+---+
+\ \ | ^ | A |
++---+---+---+
+| < | v | > |
++---+---+---+
+
+I started by trying to create all the different optimal paths from one grid position to another grid location (for the keypad and directional grids separately). I did this with dijkstra's but allowing many paths to get from A -> B as long as they were all the same distance. Then eventually I realized that it's more optimal for the latter robots if all the same moves were consecutive, e.g. no `<^<^` but rather `<<^^` or `^^<<` because that would mean a downstream robot would have to switch between `<` and `^` more times than necessary. I considered each pair of `A -> B` a transition from one position to another and the path to be the set of moves to get from `A -> B`.
+
+There were some ties, e.g. `<<^^` and `^^<<`. I ended up optimizing the paths, saying that we preferred characters with a distance from the input key `A` at the end of the sequence such that the transition to the input key is only one step. I set up my order of preference like this
+
+```
+distance_from_a = {"<": 3, "^": 1, "v": 2, ">": 1}
+...
+if distance_from_a[candidate[-1]] < distance_from_a[best[-1]]:
+    best = candidate
+```
+
+The first part was easy enough to do because even though there were 3 levels of indirection (1 keypad, 2 direction robots, and you) you can still run everything as a string and you can append "A" at the very beginning (starting position) and iterate through every pair to generate the set of moves you need to make for the next level.
+
+To be honest, I was a little confused about how the robot was inputting the numbers by pressing A vs. the first level robot being able to just press the number.
+
+For the second part, instead of 3 levels of indirection, we had 26 (1 keypad, 25 direction robots, and you). This made the string grow quite large, generally exponentially. The first thought I had was to break this down into a counter so that we count the pairs that we cared about on each level to figure out what transitions we cared about on the next level. This worked fine for the first few levels.
+
+Eventually I ran into a snag with this implementation because while for the first few levels we can up with the optimal/correct number of steps, the correct number of steps eventually drifted starting from around the 5th level of indirection. So I gave up on this approach at this point.
+
+I looked at reddit and saw that there were several people who did it with DP where they cached the level and the path that is being evaluated. Then for each path, they try each pair (starting from `A` -> ending at `A`).
+
+One key observation was that every pair starting after the first level of indirection must start at `A` and end at `A` because we must press the `A` button to input the key.
+
+Additionally, instead of trying to find a better shortest path from A -> B, they tried all the paths. I also looked at another solution that used counters. These two solutions provided different results 👀
+
+I ended up trying the DP approach but I only tried the ~equivalent shortest paths from A -> B when there was more than one potential path. This ended up giving the correct answer. This meant that there was something wrong with my counter approach. Eventually, I refactored it a bit so that it doesn't try to build the count of transitions right away but does it in two steps. The first step is mapping the number of transitions `A -> B` to the number of paths (e.g. `>>^^`) that we need to consider. Then the next step is considering the pairs of transitions in the new path, e.g. `A + >>^^ + A = A>>^^A = [(A, >), (>, >), (>, ^), (^, ^), (^, A)]`. After that, for each pair, we add `count` to the value for each pair in the new transitions map. Then we pass this to the next evaluation. Generally, this logic seemed like it should work. But the results diverged after ~the 5th step. I wondered why this was and tried comparing the results to the DP setup, but the formulations were not exactly the most comparable because one was bottom-up (DP) vs. the other being top-down (Counter).
+
+Eventually I played around with the distance from A heuristic:
+
+```
+distance_from_a = {"<": 3, "^": 1.2, "v": 2, ">": 1}
+```
+
+and this ended up giving results that were consistent with the DP solution. It seems that `^` and `>` were not actually equally favorable. These were the following diffs (left is optimal, right is less)
+
+```
+5c5
+<   "v": { "<": "<A", ">": ">A", "^": "^A", "v": "A", "A": "^>A" },
+---
+>   "v": { "<": "<A", ">": ">A", "^": "^A", "v": "A", "A": ">^A" },
+27c27
+<     "3": "^>A",
+---
+>     "3": ">^A",
+30c30
+<     "6": "^^>A",
+---
+>     "6": ">^^A",
+33c33
+<     "9": "^^^>A",
+---
+>     "9": ">^^^A",
+42,43c42,43
+<     "5": "^>A",
+<     "6": "^>>A",
+---
+>     "5": ">^A",
+>     "6": ">>^A",
+45,46c45,46
+<     "8": "^^>A",
+<     "9": "^^>>A",
+---
+>     "8": ">^^A",
+>     "9": ">>^^A",
+56c56
+<     "6": "^>A",
+---
+>     "6": ">^A",
+59c59
+<     "9": "^^>A",
+---
+>     "9": ">^^A",
+84,85c84,85
+<     "8": "^>A",
+<     "9": "^>>A",
+---
+>     "8": ">^A",
+>     "9": ">>^A",
+98c98
+<     "9": "^>A",
+---
+>     "9": ">^A",
+```
+
+This actually made some sense, as in order to move up, we have to go left. This means that even though the end position is near A (1 away) on the current level, the downstream position would need to move left, which is 3(!!) blocks away. Compared to if it ended on a >, then it would need to move down (also near A (1 away) on the current level), but that is only 2(!!) steps on the next level. This means that every it would be preferable to end `>` over ending `^`.
+
+These were the optimal directions...
+
+```
+{
+  "<": { "<": "A", ">": ">>A", "^": ">^A", "v": ">A", "A": ">>^A" },
+  ">": { "<": "<<A", ">": "A", "^": "<^A", "v": "<A", "A": "^A" },
+  "^": { "<": "v<A", ">": "v>A", "^": "A", "v": "vA", "A": ">A" },
+  "v": { "<": "<A", ">": ">A", "^": "^A", "v": "A", "A": "^>A" },
+  "A": { "<": "v<<A", ">": "vA", "^": "<A", "v": "<vA" }
+}
+```
+
 ### day 22
 
 ### day 23
