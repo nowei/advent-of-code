@@ -325,6 +325,24 @@ These were the optimal directions...
 
 ### day 22
 
+Easier than day 21. The first part was just following a sequence that felt similar to hashing to generate pseudorandom numbers. The input was a list of numbers and the goal was to do this operation 2000 times on each number and then sum the results.
+
+The second part was a little more involved because it wanted us to track the one's digit for all these numbers over the 2000 iterations. After that, it wanted us to check the changes between these iterations. Then for these changes, it wanted us to track the first instance of every four consecutive changes at a time for every monkey and the associated amount after these 4 changes. Then at the end of evaluation, we carry this forward to a global tracker that tracks 4 changes -> sum of final amounts after the 4 consecutive changes shows up in each list (0 if it doesn't). Then we just return the best 4 changes we should keep track of in order to maximize the sum of final amounts.
+
+```
+create global quad tracker
+for each secret number:
+    generate list secret number and following 2000 pseudorandom numbers
+    get ones digit of every number in list
+    get changes between entries
+    for every quad of changes:
+        mark the first instance and the associated final ones digit in the list
+    for every quad of changes and associated amounts:
+        add quad to global quad tracker if it doesn't exist
+        add the associated amount
+return get max associated amount
+```
+
 ### day 23
 
 ### day 24
