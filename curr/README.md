@@ -345,6 +345,19 @@ return get max associated amount
 
 ### day 23
 
+The first part was just finding triplets of nodes, so for every node, we had to check every pair of edges that it was connected to. For the nodes on the other side of the edges, we know that it formed a triplet if they shared an edge.
+
+Then the second part wanted to find a maximal clique (a group of nodes where all nodes in the group have an edge between them). We could've started the problem off from the triplets, since the triplets should've been a part of a maximal clique (a clique of size n contains n cliques of size n - 1 (exclude one node and there are n many ways to exclude the nodes)). But that would've been a little more complicated with trying to reason about the data structures and procedures needed to find common neighboring triplets.
+
+In the end, I opted to do a recursive solution where I check every node. Then the maximal clique formed from every node would be all of its neighbors (if it was one, or something smaller (more likely)).
+
+So we start with a candidate set that is the current node. Then I considered each neighbor. If the neighbor was a node connected to all the nodes in the candidate set via an edge, then we could add it to the candidate set, remove it from the list of possible neighbors, and explore the remaining neighbors to see if they fit into the clique (have an edge that is connected to all current members of the clique). At each step, we track the best clique we have found and return that.
+
+We made two optimizations to this process.
+
+- If the neighbor was in the best clique we have seen so far, we don't need to reconsider the clique because the results will be the same + this will lead to a factorial of potential add orderings if not addressed.
+- If the neighbor has been visited (as a part of a clique) in some recursion, then this neighbor was not a part of the best clique (first case) and the clique it was in was already evaluated.
+
 ### day 24
 
 ### day 25
