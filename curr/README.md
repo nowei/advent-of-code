@@ -127,6 +127,7 @@ The first step was just doing the math to calculate the final position and then 
 
 The second part was looking for a christmas tree. I ended up being able to find a pattern with poles happened starting at step 98 and repeated every 101 steps. We only print these outputs and eventually found the tree pattern...
 
+```
 .....................................................................................................
 ....................................1111111111111111111111111111111............1....................1
 ....................................1.............................1..................................
@@ -162,6 +163,7 @@ The second part was looking for a christmas tree. I ended up being able to find 
 ....................................1.............................1..................................
 ....................................1111111111111111111111111111111..................................
 .....................................................................................................
+```
 
 ### day 15
 
@@ -208,7 +210,7 @@ Follow the single path, but now instead of skipping a one-width wall; we can hav
 ### day 21
 
 This was a doozy. The question had essentially two grids. One keypad input and one directional input.
-
+```
 +---+---+---+
 | 7 | 8 | 9 |
 +---+---+---+
@@ -224,6 +226,7 @@ This was a doozy. The question had essentially two grids. One keypad input and o
 +---+---+---+
 | < | v | > |
 +---+---+---+
+```
 
 I started by trying to create all the different optimal paths from one grid position to another grid location (for the keypad and directional grids separately). I did this with dijkstra's but allowing many paths to get from A -> B as long as they were all the same distance. Then eventually I realized that it's more optimal for the latter robots if all the same moves were consecutive, e.g. no `<^<^` but rather `<<^^` or `^^<<` because that would mean a downstream robot would have to switch between `<` and `^` more times than necessary. I considered each pair of `A -> B` a transition from one position to another and the path to be the set of moves to get from `A -> B`.
 
