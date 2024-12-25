@@ -381,3 +381,7 @@ becomes
 From there, we determine the pattern for the adder, which I should've remembered from my computer architecture classes 😅. In any case, we see that there should be only one `x_n XOR y_n` for `z_n`. And the rest should be like `XOR/OR/AND`s of the previous components. From there, I was able to deduce the registers that had the wrong precedents and find where the right precedents were and rewrite their equations s.t. they were correct. Eventually I had to try a few other inputs to make sure that it worked correctly for a few other inputs and it wasn't just happenstance that it was correct.
 
 ### day 25
+
+Part 1 was just checking if the key fit in the locks; so like if there were no overlaps between the keys and locks, then it was a fit. This isn't really how keys and locks should work in my opinion, but to each their own. I added up the columns and checked if they were below a number instead of if they didn't have an overlap, which still worked but it was sort of a cop-out since it wasn't clear if there wasn't an overlap or not. I guess another thing I could've done was overlap the keys and locks and checked if there was a `#` block in both at each row and column, which would've been more accurate since just adding the numbers column-wise loses the idea that one is hanging down and one is pointing up.
+
+In any case, I just checked that every column added up to `<=7`
