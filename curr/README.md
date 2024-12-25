@@ -210,6 +210,7 @@ Follow the single path, but now instead of skipping a one-width wall; we can hav
 ### day 21
 
 This was a doozy. The question had essentially two grids. One keypad input and one directional input.
+
 ```
 +---+---+---+
 | 7 | 8 | 9 |
@@ -362,5 +363,21 @@ We made two optimizations to this process.
 - If the neighbor has been visited (as a part of a clique) in some recursion, then this neighbor was not a part of the best clique (first case) and the clique it was in was already evaluated.
 
 ### day 24
+
+The first part was relatively straightforward, where we were just doing a topological sort on the dependency graph of XOR/AND/OR logic gates and the inputs then assemble the final output with the results of all the registers that start with z.
+
+The second part was a little rougher because it tells us that the logic gates are supposed to be an adder for the 44-bit numbers. We ended up solving this printing out the inputs, adding them together, and seeing what it's supposed to be and comparing that output with the actual output of the gates. Then the first location that there is an issue should ~roughly be the first digit that there is a mismatch starting from the right. Then we start to debug from there. To help with this, we worked backwards from every equation by replacing its precedents with their precedents until we had an equation that was made up of `y__`, `x__`, and `XOR`/`OR`/`AND` and parentheses. For example,
+
+```
+mbj XOR rnp = z03
+```
+
+becomes
+
+```
+(x03 XOR y03) XOR (((x02 XOR y02) AND ((x01 AND y01) OR ((x00 AND y00) AND (x01 XOR y01)))) OR (x02 AND y02)) = z03
+```
+
+From there, we determine the pattern for the adder, which I should've remembered from my computer architecture classes 😅. In any case, we see that there should be only one `x_n XOR y_n` for `z_n`. And the rest should be like `XOR/OR/AND`s of the previous components. From there, I was able to deduce the registers that had the wrong precedents and find where the right precedents were and rewrite their equations s.t. they were correct. Eventually I had to try a few other inputs to make sure that it worked correctly for a few other inputs and it wasn't just happenstance that it was correct.
 
 ### day 25
