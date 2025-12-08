@@ -45,3 +45,7 @@ Doing some math in columns, then reading the numbers in columns.
 ### day 07
 
 Splitting beams simulation, then memoization for the second part to consider possible states.
+
+### day 08
+
+Union find gang. Basically ranking connections based on distances between two points, making those connections and continuing to do that `n` times in part 1 and then doing that until everything is connected in part 2 and using the coordinates used for the last connection and doing some math with it.
