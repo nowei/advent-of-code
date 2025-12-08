@@ -41,3 +41,7 @@ The first part was just checking if things fit in a range. The second part was j
 ### day 06
 
 Doing some math in columns, then reading the numbers in columns.
+
+### day 07
+
+Splitting beams simulation, then memoization for the second part to consider possible states.
