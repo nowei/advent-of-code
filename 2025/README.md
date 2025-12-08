@@ -33,3 +33,7 @@ Part 1 was just finding the largest two-digit number in a string of numbers (res
 ### day 04
 
 The first part was counting locations that fit a certain criteria. Then the second part was using those locations and removing them iteratively.
+
+### day 05
+
+The first part was just checking if things fit in a range. The second part was just merging overlapping ranges.
