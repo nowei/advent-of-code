@@ -37,3 +37,7 @@ The first part was counting locations that fit a certain criteria. Then the seco
 ### day 05
 
 The first part was just checking if things fit in a range. The second part was just merging overlapping ranges.
+
+### day 06
+
+Doing some math in columns, then reading the numbers in columns.
