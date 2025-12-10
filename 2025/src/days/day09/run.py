@@ -90,7 +90,7 @@ def part2_bad(_input: InputType) -> int:
     return 0
 
 
-def part2(_input: InputType) -> int:
+def part2_ranges(_input: InputType) -> int:
     max_size = 12
     if _input[0][0] > 100:
         max_size = 100_000
@@ -255,6 +255,45 @@ def part2(_input: InputType) -> int:
             # 1574684850
 
     return best
+
+
+def part2(_input: InputType) -> int:  # wtf
+    x_coords = sorted(set([x for (x, _y) in _input]))
+    y_coords = sorted(set([y for (_x, y) in _input]))
+    x_mapping = {}
+    y_mapping = {}
+    x_reverse_mapping = {}
+    y_reverse_mapping = {}
+    for i in range(len(x_coords)):
+        x_mapping[i] = x_coords[i]
+        x_reverse_mapping[x_coords[i]] = i
+    for i in range(len(y_coords)):
+        y_mapping[i] = y_coords[i]
+        y_reverse_mapping[y_coords[i]] = i
+    total_spaces = []
+    mapped_input = [(x_reverse_mapping[x], y_reverse_mapping[y]) for x, y in _input]
+    for i in range(0, len(_input)):
+        x_i, y_i = mapped_input[i - 1]
+        x_j, y_j = mapped_input[i]
+
+        if x_i == x_j:
+            x = x_i
+            for y in range(min(y_i, y_j), max(y_i, y_j) + 1):
+                total_spaces.append((x, y))
+        else:
+            y = y_i
+            for x in range(min(x_i, x_j), max(x_i, x_j) + 1):
+                total_spaces.append((x, y))
+    total_spaces_set = set(total_spaces)
+    for y in range(0, len(y_coords) + 1):
+        s = ""
+        for x in range(0, len(x_coords) + 1):
+            if (x, y) in total_spaces_set:
+                s += "#"
+            else:
+                s += "."
+    # All that remains is figuring out the largest area within the shape and then mapping it back to the original coordinates...
+    return 0
 
 
 def exec(part: int, execute: bool) -> int:

@@ -71,3 +71,5 @@ Then what I did afterwards was take every two points and compare them (there are
 Then I added a heuristic where the pair of coordinates had to have an area at least as big as the largest pair we have seen so far. My final runtime was around 150s.
 
 I imagine that there's a way to do this by storing a representation of the shape in 90k rows and checking every possible pair of points. But what that is escapes me at the moment.
+
+Then I read a comment saying that you can compress the shape by mapping the x coordinates to the index of a sorted list of the x coordinates and the same for the y coordinates. The shape looks like a diamond with a part cut out.
