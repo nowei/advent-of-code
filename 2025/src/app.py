@@ -38,8 +38,15 @@ def _generate(day_to_run: int):
 
 def main():
     parser = argparse.ArgumentParser("aoc2024")
-    parser.add_argument("--day", dest="day", type=int, help="day of thing to run")
     parser.add_argument(
+        "-d",
+        "--day",
+        dest="day",
+        type=int,
+        help="day of thing to run",
+    )
+    parser.add_argument(
+        "-g",
         "--generate",
         dest="generate",
         help="generate files",
@@ -47,6 +54,7 @@ def main():
         action="store_true",
     )
     parser.add_argument(
+        "-e",
         "--execute",
         dest="execute",
         help="run actual test case",
@@ -62,6 +70,7 @@ def main():
     )
 
     parser.add_argument(
+        "-p",
         "--part",
         dest="part",
         help="which part to run",

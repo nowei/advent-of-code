@@ -49,3 +49,25 @@ Splitting beams simulation, then memoization for the second part to consider pos
 ### day 08
 
 Union find gang. Basically ranking connections based on distances between two points, making those connections and continuing to do that `n` times in part 1 and then doing that until everything is connected in part 2 and using the coordinates used for the last connection and doing some math with it.
+
+### day 09
+
+Kind of messed up. The first part was finding the largest area between two points.
+The second part was kind of messed up and asked for the largest rectangular area within the shape.
+How I originally wanted to do it was to visually inspect the coordinates of the points. But that proved to be not feasible because the size of the input data was around 100k x 100k, which would be ~10000000000 bytes -> which is around 10gb worth of data. So I was like, "Maybe I should just record every point that was within the shape, but then I did some napkin math and found out the min and max x and y coordinates of the shape and learned that the largest shape possible was around 8.1gb or around 8 billion numbers.
+
+So my next idea was to outline the shape by recording every point made by every connection. This was easy to do, but then querying what was inside of these points became difficult. So I decided to break the problem up, line by line. So for every line, I would try to figure out what was inside the shape vs. outside the shape. This proved to also be difficult because there were several cases. Like what happens if we have a mixture of the outline of the shape along with single lines, e.g.
+
+```
+....XXXXXX....X..X....
+```
+
+What I decided to do instead was build the inside of the shape layer by layer.
+The initial case is if the range is made up of the outline of the shape. Then afterwards,
+we check the posts of each crossing point and see if the range above it was also part of the shape. If so, this range between the posts is also part of the range. Then I merged the ranges in case there was overlap. This let me build up the mapping of the inside of the shape.
+
+Then what I did afterwards was take every two points and compare them (there are only ~500 points, so 250000 pairs). Then check along the y axis and make sure that every row had an inclusive range (within the shape) that covered the distance between the x coordinates of the two points.
+
+Then I added a heuristic where the pair of coordinates had to have an area at least as big as the largest pair we have seen so far. My final runtime was around 150s.
+
+I imagine that there's a way to do this by storing a representation of the shape in 90k rows and checking every possible pair of points. But what that is escapes me at the moment.
