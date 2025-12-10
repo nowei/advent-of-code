@@ -90,7 +90,7 @@ def part2_bad(_input: InputType) -> int:
     return 0
 
 
-def part2_ranges(_input: InputType) -> int:
+def part2_layers(_input: InputType) -> int:
     max_size = 12
     if _input[0][0] > 100:
         max_size = 100_000
@@ -292,8 +292,70 @@ def part2(_input: InputType) -> int:  # wtf
                 s += "#"
             else:
                 s += "."
+        print(s)
     # All that remains is figuring out the largest area within the shape and then mapping it back to the original coordinates...
-    return 0
+    # fill flood to get all the involved parts
+    inside_squares = set()
+    all_squares = set(total_spaces_set)
+
+    def flood_fill(x, y):
+        inside_squares.add((x, y))
+        from collections import deque
+
+        layers = deque([(x, y)])
+        while layers:
+            x, y = layers.popleft()
+            for cand in [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]:
+                if cand in total_spaces_set:
+                    continue
+                if cand in inside_squares:
+                    continue
+                inside_squares.add(cand)
+                layers.append(cand)
+
+    for y in range(0, len(y_coords) + 1):
+        for x in range(0, len(x_coords) + 1):
+            if (x, y) in inside_squares:
+                continue
+            if (
+                (x - 1, y) in all_squares
+                and (x, y - 1) in all_squares
+                and not inside_squares
+            ):
+                flood_fill(x, y)
+    all_squares |= inside_squares
+    for y in range(0, len(y_coords) + 1):
+        s = ""
+        for x in range(0, len(x_coords) + 1):
+            if (x, y) in all_squares:
+                s += "#"
+            else:
+                s += "."
+        print(s)
+    # brute force every pair...
+    best = 0
+    best_pair = [(0, 0), (0, 0)]
+    for i in range(len(mapped_input) - 1):
+        x_i, y_i = mapped_input[i]
+        for j in range(i + 1, len(mapped_input)):
+            x_j, y_j = mapped_input[j]
+            min_x, min_y = min(x_i, x_j), min(y_i, y_j)
+            max_x, max_y = max(x_i, x_j), max(y_i, y_j)
+            cand_area = (abs(max_x - min_x) + 1) * (abs(max_y - min_y) + 1)
+            if cand_area <= best:
+                continue
+            if all(
+                (x, y) in all_squares
+                for x in range(min_x, max_x + 1)
+                for y in range(min_y, max_y + 1)
+            ):
+                best = cand_area
+                best_pair = [(x_i, y_i), (x_j, y_j)]
+                print(i, j, cand_area)
+    x_i, y_i = x_mapping[best_pair[0][0]], y_mapping[best_pair[0][1]]
+    x_j, y_j = x_mapping[best_pair[1][0]], y_mapping[best_pair[1][1]]
+    print((x_i, y_i), (x_j, y_j))
+    return (abs(x_i - x_j) + 1) * (abs(y_i - y_j) + 1)
 
 
 def exec(part: int, execute: bool) -> int:

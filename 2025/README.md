@@ -73,3 +73,5 @@ Then I added a heuristic where the pair of coordinates had to have an area at le
 I imagine that there's a way to do this by storing a representation of the shape in 90k rows and checking every possible pair of points. But what that is escapes me at the moment.
 
 Then I read a comment saying that you can compress the shape by mapping the x coordinates to the index of a sorted list of the x coordinates and the same for the y coordinates. The shape looks like a diamond with a part cut out.
+
+Reworked: With reddit comment for coordinate compression + flood fill, we get the solution in a few seconds.
