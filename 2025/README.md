@@ -75,3 +75,9 @@ I imagine that there's a way to do this by storing a representation of the shape
 Then I read a comment saying that you can compress the shape by mapping the x coordinates to the index of a sorted list of the x coordinates and the same for the y coordinates. The shape looks like a diamond with a part cut out.
 
 Reworked: With reddit comment for coordinate compression + flood fill, we get the solution in a few seconds.
+
+### day 10
+
+Part 1 was easy, just a bfs to find the matching states.
+
+Part 2 made me cry inside. I first tried dijkstra's. Then I tried A* with my heuristic being the cost * the number of layers. Then I looked at reddit and saw linear algebra and Gaussian elimination so I tried doing it with numpy and scipy. But there were free variables so the matrices weren't square/or they were singular and it's been a while and I did not want to deal with it. Then I read about people using z3 to solve it. So praise z3 👀.
